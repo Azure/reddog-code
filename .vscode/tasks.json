@@ -1,7 +1,6 @@
 {
     "version": "2.0.0",
     "tasks": [
-        // ----- netcore tasks -----
         {
             "label": "Build OrderService",
             "command": "dotnet",
@@ -96,7 +95,6 @@
                 "isDefault": true
             }
         },
-        // ----- dapr tasks -----
         {
             "label": "Dapr OrderService",
             "command": "dapr",
@@ -215,140 +213,5 @@
             ],
             "problemMatcher": []
         },
-        // ----- netcore acr tasks -----
-        {
-            "label": "ACR Build OrderService",
-            "command": "az",
-            "type": "process",
-            "args": [
-                "acr",
-                "build",
-                "-r",
-                "${input:registry}",
-                "-f",
-                "${workspaceFolder}/RedDog.OrderService/Dockerfile",
-                "-t",
-                "${input:registry}/reddog/order-service:${input:tagname}",
-                "RedDog.OrderService"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "ACR Build MakeLineService",
-            "command": "az",
-            "type": "process",
-            "args": [
-                "acr",
-                "build",
-                "-r",
-                "${input:registry}",
-                "-f",
-                "${workspaceFolder}/RedDog.MakeLineService/Dockerfile",
-                "-t",
-                "${input:registry}/reddog/make-line-service:${input:tagname}",
-                "RedDog.MakeLineService"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "ACR Build ReceiptGenerationService",
-            "command": "az",
-            "type": "process",
-            "args": [
-                "acr",
-                "build",
-                "-r",
-                "${input:registry}",
-                "-f",
-                "${workspaceFolder}/RedDog.ReceiptGenerationService/Dockerfile",
-                "-t",
-                "${input:registry}/reddog/receipt-generation-service:${input:tagname}",
-                "RedDog.ReceiptGenerationService"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "ACR Build LoyaltyService",
-            "command": "az",
-            "type": "process",
-            "args": [
-                "acr",
-                "build",
-                "-r",
-                "${input:registry}",
-                "-f",
-                "${workspaceFolder}/RedDog.LoyaltyService/Dockerfile",
-                "-t",
-                "${input:registry}/reddog/loyalty-service:${input:tagname}",
-                "RedDog.LoyaltyService"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "ACR Build VirtualWorker",
-            "command": "az",
-            "type": "process",
-            "args": [
-                "acr",
-                "build",
-                "-r",
-                "${input:registry}",
-                "-f",
-                "${workspaceFolder}/RedDog.VirtualWorker/Dockerfile",
-                "-t",
-                "${input:registry}/reddog/virtual-worker:${input:tagname}",
-                "RedDog.VirtualWorker"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "ACR Build VirtualCustomers",
-            "command": "az",
-            "type": "process",
-            "args": [
-                "acr",
-                "build",
-                "-r",
-                "${input:registry}",
-                "-f",
-                "${workspaceFolder}/RedDog.VirtualCustomers/Dockerfile",
-                "-t",
-                "${input:registry}/reddog/virtual-customers:${input:tagname}",
-                "RedDog.VirtualCustomers"
-            ],
-            "problemMatcher": []
-        },
-        // ----- UI acr task -----
-        {
-            "label": "ACR Build UI",
-            "command": "az",
-            "type": "shell",
-            "args": [
-                "acr",
-                "build",
-                "-r",
-                "${input:registry}",
-                "-f",
-                "${workspaceFolder}/RedDog.UI/Dockerfile",
-                "-t",
-                "${input:registry}/reddog/ui:${input:tagname}",
-                "RedDog.UI"
-            ],
-            "problemMatcher": []
-        },        
-    ],
-    "inputs": [
-        {
-            "type": "promptString",
-            "id": "registry",
-            "description": "Azure Container Registry Name",
-            "default": "reddog.azurecr.io"
-        },
-        {
-            "type": "promptString",
-            "id": "tagname",
-            "description": "Image Tag Name",
-            "default": "1.0.0"
-        }
     ]
 }

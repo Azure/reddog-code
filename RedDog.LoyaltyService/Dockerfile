@@ -1,16 +1,21 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+ENV ASPNETCORE_URLS=http://+:80
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
+COPY ["RedDog.LoyaltyService/RedDog.LoyaltyService.csproj", "RedDog.LoyaltyService/"]
+RUN dotnet restore "RedDog.LoyaltyService/RedDog.LoyaltyService.csproj"
 COPY . .
-RUN dotnet build "Vigilantes.DaprWorkshop.LoyaltyService.csproj" -c Release -o /app
+WORKDIR "/src/RedDog.LoyaltyService"
+RUN dotnet build "RedDog.LoyaltyService.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Vigilantes.DaprWorkshop.LoyaltyService.csproj" -c Release -o /app
+RUN dotnet publish "RedDog.LoyaltyService.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Vigilantes.DaprWorkshop.LoyaltyService.dll"]
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "RedDog.LoyaltyService.dll"]

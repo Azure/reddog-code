@@ -108,7 +108,7 @@
                 "Debug MakeLineService",
                 "Debug ReceiptGenerationService",
                 "Debug LoyaltyService",
-                "Debug VirtualBarista",
+                "Debug VirtualWorker",
                 "Debug VirtualCustomers"
             ]
         },

@@ -1,16 +1,21 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+ENV ASPNETCORE_URLS=http://+:80
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
+COPY ["RedDog.VirtualWorker/RedDog.VirtualWorker.csproj", "RedDog.VirtualWorker/"]
+RUN dotnet restore "RedDog.VirtualWorker/RedDog.VirtualWorker.csproj"
 COPY . .
-RUN dotnet build "Vigilantes.DaprWorkshop.VirtualBarista.csproj" -c Release -o /app
+WORKDIR "/src/RedDog.VirtualWorker"
+RUN dotnet build "RedDog.VirtualWorker.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Vigilantes.DaprWorkshop.VirtualBarista.csproj" -c Release -o /app
+RUN dotnet publish "RedDog.VirtualWorker.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Vigilantes.DaprWorkshop.VirtualBarista.dll"]
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "RedDog.VirtualWorker.dll"]

@@ -1,16 +1,23 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
-EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
+COPY ["RedDog.VirtualCustomers/RedDog.VirtualCustomers.csproj", "RedDog.VirtualCustomers/"]
+RUN dotnet restore "RedDog.VirtualCustomers/RedDog.VirtualCustomers.csproj"
 COPY . .
-RUN dotnet build "Vigilantes.DaprWorkshop.VirtualCustomers.csproj" -c Release -o /app
+WORKDIR "/src/RedDog.VirtualCustomers"
+RUN dotnet build "RedDog.VirtualCustomers.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Vigilantes.DaprWorkshop.VirtualCustomers.csproj" -c Release -o /app
+RUN dotnet publish "RedDog.VirtualCustomers.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Vigilantes.DaprWorkshop.VirtualCustomers.dll"]
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "RedDog.VirtualCustomers.dll"]
