@@ -1,0 +1,85 @@
+@order-service = 127.0.0.1:5100
+@order-service-dapr = 127.0.0.1:5180
+@storeId = Redmond
+@pubsubName="reddog.pubsub"
+
+### Create an order via order-service POST
+POST http://{{order-service}}/order
+Content-Type: application/json
+ 
+{
+    "storeId": "{{storeId}}",
+    "firstName": "John 'Hannibal'",
+    "lastName": "Smith",
+    "loyaltyId": "42",
+    "orderItems": [
+        {
+            "menuItemId": 1,
+            "quantity": 1
+        },
+        {
+            "menuItemId": 2,
+            "quantity": 1
+        },
+        {
+            "menuItemId": 3,
+            "quantity": 3
+        }
+    ]
+}
+
+### Publish an order via order-service dapr sidecar
+POST http://{{order-service-dapr}}/v1.0/publish/{{pubsubName}}/orders
+Content-Type: application/json
+
+{
+    "orderId": "{{$guid }}",
+    "orderDate": "{{$datetime iso8601}}",
+    "storeId": "{{storeId}}",
+    "firstName": "John 'Hannibal'",
+    "lastName": "Smith",
+    "loyaltyId": "42",
+    "orderTotal": 2.99,
+    "orderItems": [{
+        "menuItemId": 1,
+        "menuItemName": "Americano",
+        "quantity": 1
+    }]
+}
+
+### Send receipt
+POST http://localhost:5380/v1.0/bindings/reddog.binding.receipt
+Content-Type: application/json
+
+{
+    "data": "{
+        "orderId": "42f79434-3d04-40e1-b1fa-d0875fe7a9e5",
+        "orderDate": 1601935128273,
+        "storeId": "Redmond",
+        "firstName": "John 'Hannibal'",
+        "lastName": "Smith",
+        "loyaltyId": "42",
+        "orderItems": [
+            {
+                "menuItemId": 1,
+                "menuItemName": "Americano",
+                "quantity": 1
+            },
+            {
+                "menuItemId": 2,
+                "menuItemName": "Caramel Macchiato",
+                "quantity": 1
+            },
+            {
+                "menuItemId": 3,
+                "menuItemName": "Latte",
+                "quantity": 3
+            }
+        ],
+        "orderTotal": 19.95
+    }",
+    "operation": "create",
+    "metadata": {
+        "key": "42f79434-3d04-40e1-b1fa-d0875fe7a9e5"
+    }
+}

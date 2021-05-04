@@ -1,0 +1,97 @@
+# Create encrypted secrets on GitHub:
+# 1. service_principal_password
+# 2. secret_store_pfx  -- if not using pod identity
+
+# You can trigger this workflow manually (in your own fork) by using curl.
+# curl -H "Accept: application/vnd.github.everest-preview+json" \                                                                                                                        ─╯
+#      -H "Authorization: token <YOUR PERSONAL ACCESS TOKEN>" \
+#      --request POST \
+#      --data '{"event_type": "dapr-components-action"}' \
+#      https://api.github.com/repos/<YOUR GITHUB USERNAME>/dapr-vigilantes-code/dispatches
+
+name: dapr-components-action
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "charts/dapr-components/**"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "charts/dapr-components/**"
+  repository_dispatch:
+    types: dapr-components-action
+
+env:
+  version: 1.0.${{ github.run_number }}
+  use_pod_identity: true
+  service_principal: 04ac02ed-aedd-44fc-84bb-a508f273bc28
+  tenant: 72f988bf-86f1-41af-91ab-2d7cd011db47
+  acr_name: vigilantes
+  aks_cluster_rg: vigilantes
+  aks_cluster_name: vigilantes
+  secretstore_vaultname: vigilantes
+  secretstore_spntenantid: 72f988bf-86f1-41af-91ab-2d7cd011db47
+  secretstore_spnclientid: bf6b0eb2-06e8-4880-bd45-06c585769c0d
+  statestore_makeline_redishost: redis-master.redis.svc.cluster.local:6379
+  statestore_loyalty_url: https://vigilantes.documents.azure.com:443/
+  binding_receipt_storageaccount: vigilantes
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install helm
+        working-directory: ${{ github.workspace }}
+        run: |
+          echo "Downloading and installing helm 3"
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+
+      - name: az login
+        working-directory: ${{ github.workspace }}
+        run: |
+          az login --service-principal -u ${{ env.service_principal }} -p ${{ secrets.service_principal_password }} --tenant ${{ env.tenant }}
+          az acr login --name ${{ env.acr_name }}
+
+      - name: az aks get-credentials
+        working-directory: ${{ github.workspace }}
+        run: |
+          az aks get-credentials --name ${{ env.aks_cluster_name }} --resource-group ${{ env.aks_cluster_rg }}
+
+      - name: kubectl create namespace
+        working-directory: ${{ github.workspace }}
+        run: |
+          kubectl apply -f deploy/namespace.yaml
+
+      - name: decode keyvault create
+        working-directory: ${{ github.workspace }}
+        if: env.use_pod_identity != 'true'
+        run: |
+          echo ${{ secrets.secretstore_pfx}} | base64 --decode > charts/dapr-components/kv-cert.pfx
+
+      - name: update helm chart appVersion
+        working-directory: ${{ github.workspace }}
+        run: |
+          sed -i 's/appVersion: 1.0.0/appVersion: ${{ env.version }}/g' charts/dapr-components/Chart.yaml
+
+      - name: helm upgrade install
+        working-directory: ${{ github.workspace }}
+        run: |
+          helm upgrade --install --version ${{ env.version }} dapr-components charts/dapr-components \
+          --namespace=reddog \
+          --set usePodIdentity=${{ env.use_pod_identity }} \
+          --set secretStore.vaultName=${{ env.secretstore_vaultname }} \
+          --set secretStore.spnTenantId=${{ env.secretstore_spntenantid }} \
+          --set secretStore.spnClientId=${{ env.secretstore_spnclientid }} \
+          --set stateStore.order.redisHost=${{ env.statestore_makeline_redishost}} \
+          --set stateStore.loyalty.url=${{ env.statestore_loyalty_url }} \
+          --set binding.receipt.storageAccount=${{ env.binding_receipt_storageaccount }} \
+          --set appVersion=${{env.version}}

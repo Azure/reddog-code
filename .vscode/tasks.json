@@ -1,0 +1,354 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // ----- netcore tasks -----
+        {
+            "label": "Build OrderService",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RedDog.OrderService",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Build MakeLineService",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RedDog.MakeLineService",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Build ReceiptGenerationService",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RedDog.ReceiptGenerationService",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Build LoyaltyService",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RedDog.LoyaltyService",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Build VirtualWorker",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RedDog.VirtualWorker",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Build VirtualCustomers",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RedDog.VirtualCustomers",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Build Solution",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        // ----- dapr tasks -----
+        {
+            "label": "Dapr OrderService",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "order-service",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--app-port",
+                "5100",
+                "--dapr-grpc-port",
+                "5101",
+                "--dapr-http-port",
+                "5180"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dapr MakeLineService",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "make-line-service",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--app-port",
+                "5200",
+                "--dapr-grpc-port",
+                "5201",
+                "--dapr-http-port",
+                "5280"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dapr ReceiptGenerationService",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "receipt-generation-service",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--app-port",
+                "5300",
+                "--dapr-grpc-port",
+                "5301",
+                "--dapr-http-port",
+                "5380"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dapr LoyaltyService",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "loyalty-service",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--app-port",
+                "5400",
+                "--dapr-grpc-port",
+                "5401",
+                "--dapr-http-port",
+                "5480"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dapr VirtualWorker",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "virtual-worker",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--app-port",
+                "5500",
+                "--dapr-grpc-port",
+                "5501",
+                "--dapr-http-port",
+                "5580"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dapr VirtualCustomers",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "virtual-customers",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--dapr-grpc-port",
+                "5601",
+                "--dapr-http-port",
+                "5680"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dapr (All Services)",
+            "dependsOn": [
+                "Dapr OrderService",
+                "Dapr MakeLineService",
+                "Dapr LoyaltyService",
+                "Dapr ReceiptGenerationService",
+                "Dapr VirtualWorker",
+                "Dapr VirtualCustomers"
+            ],
+            "problemMatcher": []
+        },
+        // ----- netcore acr tasks -----
+        {
+            "label": "ACR Build OrderService",
+            "command": "az",
+            "type": "process",
+            "args": [
+                "acr",
+                "build",
+                "-r",
+                "${input:registry}",
+                "-f",
+                "${workspaceFolder}/RedDog.OrderService/Dockerfile",
+                "-t",
+                "${input:registry}/reddog/order-service:${input:tagname}",
+                "RedDog.OrderService"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "ACR Build MakeLineService",
+            "command": "az",
+            "type": "process",
+            "args": [
+                "acr",
+                "build",
+                "-r",
+                "${input:registry}",
+                "-f",
+                "${workspaceFolder}/RedDog.MakeLineService/Dockerfile",
+                "-t",
+                "${input:registry}/reddog/make-line-service:${input:tagname}",
+                "RedDog.MakeLineService"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "ACR Build ReceiptGenerationService",
+            "command": "az",
+            "type": "process",
+            "args": [
+                "acr",
+                "build",
+                "-r",
+                "${input:registry}",
+                "-f",
+                "${workspaceFolder}/RedDog.ReceiptGenerationService/Dockerfile",
+                "-t",
+                "${input:registry}/reddog/receipt-generation-service:${input:tagname}",
+                "RedDog.ReceiptGenerationService"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "ACR Build LoyaltyService",
+            "command": "az",
+            "type": "process",
+            "args": [
+                "acr",
+                "build",
+                "-r",
+                "${input:registry}",
+                "-f",
+                "${workspaceFolder}/RedDog.LoyaltyService/Dockerfile",
+                "-t",
+                "${input:registry}/reddog/loyalty-service:${input:tagname}",
+                "RedDog.LoyaltyService"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "ACR Build VirtualWorker",
+            "command": "az",
+            "type": "process",
+            "args": [
+                "acr",
+                "build",
+                "-r",
+                "${input:registry}",
+                "-f",
+                "${workspaceFolder}/RedDog.VirtualWorker/Dockerfile",
+                "-t",
+                "${input:registry}/reddog/virtual-worker:${input:tagname}",
+                "RedDog.VirtualWorker"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "ACR Build VirtualCustomers",
+            "command": "az",
+            "type": "process",
+            "args": [
+                "acr",
+                "build",
+                "-r",
+                "${input:registry}",
+                "-f",
+                "${workspaceFolder}/RedDog.VirtualCustomers/Dockerfile",
+                "-t",
+                "${input:registry}/reddog/virtual-customers:${input:tagname}",
+                "RedDog.VirtualCustomers"
+            ],
+            "problemMatcher": []
+        },
+        // ----- UI acr task -----
+        {
+            "label": "ACR Build UI",
+            "command": "az",
+            "type": "shell",
+            "args": [
+                "acr",
+                "build",
+                "-r",
+                "${input:registry}",
+                "-f",
+                "${workspaceFolder}/RedDog.UI/Dockerfile",
+                "-t",
+                "${input:registry}/reddog/ui:${input:tagname}",
+                "RedDog.UI"
+            ],
+            "problemMatcher": []
+        },        
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "registry",
+            "description": "Azure Container Registry Name",
+            "default": "reddog.azurecr.io"
+        },
+        {
+            "type": "promptString",
+            "id": "tagname",
+            "description": "Image Tag Name",
+            "default": "1.0.0"
+        }
+    ]
+}

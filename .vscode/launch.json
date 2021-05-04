@@ -1,0 +1,116 @@
+{
+    // Use IntelliSense to find out which attributes exist for C# debugging
+    // Use hover for the description of the existing attributes
+    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug OrderService",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build OrderService",
+            "program": "${workspaceFolder}/RedDog.OrderService/bin/Debug/net5.0/RedDog.OrderService.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.OrderService",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://127.0.0.1:5100;https://127.0.0.1:5102",
+                "DAPR_HTTP_PORT": "5180",
+                "DAPR_GRPC_PORT": "5101"
+            }
+        },
+        {
+            "name": "Debug MakeLineService",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build MakeLineService",
+            "program": "${workspaceFolder}/RedDog.MakeLineService/bin/Debug/net5.0/RedDog.MakeLineService.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.MakeLineService",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://127.0.0.1:5200",
+                "DAPR_HTTP_PORT": "5280",
+                "DAPR_GRPC_PORT": "5201"
+            }
+        },
+        {
+            "name": "Debug ReceiptGenerationService",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build ReceiptGenerationService",
+            "program": "${workspaceFolder}/RedDog.ReceiptGenerationService/bin/Debug/net5.0/RedDog.ReceiptGenerationService.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.ReceiptGenerationService",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://127.0.0.1:5300",
+                "DAPR_HTTP_PORT": "5380",
+                "DAPR_GRPC_PORT": "5301"
+            }
+        },
+        {
+            "name": "Debug LoyaltyService",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build LoyaltyService",
+            "program": "${workspaceFolder}/RedDog.LoyaltyService/bin/Debug/net5.0/RedDog.LoyaltyService.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.LoyaltyService",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://127.0.0.1:5400",
+                "DAPR_HTTP_PORT": "5480",
+                "DAPR_GRPC_PORT": "5401"
+            }
+        },
+        {
+            "name": "Debug VirtualWorker",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build VirtualWorker",
+            "program": "${workspaceFolder}/RedDog.VirtualWorker/bin/Debug/net5.0/RedDog.VirtualWorker.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.VirtualWorker",
+            "stopAtEntry": false,
+            "env": {
+                "DOTNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://127.0.0.1:5500",
+                "DAPR_HTTP_PORT": "5580",
+                "DAPR_GRPC_PORT": "5501"
+            }
+        },
+        {
+            "name": "Debug VirtualCustomers",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build VirtualCustomers",
+            "program": "${workspaceFolder}/RedDog.VirtualCustomers/bin/Debug/net5.0/RedDog.VirtualCustomers.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.VirtualCustomers",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DAPR_HTTP_PORT": "5680",
+                "DAPR_GRPC_PORT": "5601"
+            }
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Debug All Services",
+            "configurations": [
+                "Debug OrderService",
+                "Debug MakeLineService",
+                "Debug ReceiptGenerationService",
+                "Debug LoyaltyService",
+                "Debug VirtualBarista",
+                "Debug VirtualCustomers"
+            ]
+        },
+    ]
+}

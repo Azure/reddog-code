@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Vigilantes.DaprWorkshop.OrderService": {
+      "commandName": "Project",
+      "applicationUrl": "https://127.0.0.1:5102;http://127.0.0.1:5100",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

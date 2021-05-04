@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Vigilantes.DaprWorkshop.VirtualBarista": {
+      "commandName": "Project",
+      "applicationUrl": "http://127.0.0.1:5500",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

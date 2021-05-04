@@ -1,0 +1,13 @@
+@makeline-service = 127.0.0.1:5200
+@storeId = Redmond
+
+### Get all orders waiting to be made via makeline-service
+//GET http://{{makeline-service}}/orders/{{storeId}}
+
+//GET http://127.0.0.1:5580/v1.0/invoke/make-line-service/method/orders/{{storeId}}
+
+GET http://0.0.0.0:5180/v1.0/invoke/order-service/method/orders/{{storeId}}
+
+
+### Complete (delete) an order via makeline-service (NOTE: replace the GUID with an actual orderId)
+DELETE http://{{makeline-service}}/orders/{{storeId}}/029a165d-2c3a-437f-989d-65e0e29e56b1
