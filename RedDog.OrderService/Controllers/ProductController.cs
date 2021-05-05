@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,20 +10,18 @@ namespace RedDog.OrderService.Controllers
     [ApiController]
     [EnableCors]
     [Route("[controller]")]
-    public class MenuItemController : ControllerBase
+    public class ProductController : ControllerBase
     {
-        private readonly ILogger<MenuItemController> _logger;
-
-        public MenuItemController(ILogger<MenuItemController> logger)
+        private readonly ILogger<ProductController> _logger;
+        public ProductController(ILogger<ProductController> logger)
         {
             _logger = logger;
         }
 
         [HttpGet]
-        public List<MenuItem> Get()
+        public async Task<List<Product>> Get()
         {
-            return MenuItem.GetAll();
-
+            return await Product.GetAllAsync();
         }
     }
 }

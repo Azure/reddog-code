@@ -32,7 +32,7 @@ namespace RedDog.OrderService.Controllers
         {
             _logger.LogInformation("Customer Order received: {@CustomerOrder}", order);
 
-            var orderSummary = CreateOrderSummary(order);
+            var orderSummary = await CreateOrderSummaryAsync(order);
             _logger.LogInformation("Created Order Summary: {@OrderSummary}", orderSummary);
 
             try
@@ -49,10 +49,10 @@ namespace RedDog.OrderService.Controllers
             return Ok();
         }
 
-        private static OrderSummary CreateOrderSummary(CustomerOrder order)
+        private async Task<OrderSummary> CreateOrderSummaryAsync(CustomerOrder order)
         {
-            // Retrieve all the menu items
-            var menuItems = MenuItem.GetAll();
+            // Retrieve all the items
+            var products = await Product.GetAllAsync();
 
             // Iterate through the list of ordered items to calculate
             // the total and compile a list of item summaries.
@@ -60,15 +60,17 @@ namespace RedDog.OrderService.Controllers
             var itemSummaries = new List<OrderItemSummary>();
             foreach (var orderItem in order.OrderItems)
             {
-                var menuItem = menuItems.FirstOrDefault(x => x.MenuItemId == orderItem.MenuItemId);
-                if (menuItem == null) continue;
+                var product = products.FirstOrDefault(x => x.ProductId == orderItem.ProductId);
+                if (product == null) continue;
 
-                orderTotal += (menuItem.Price * orderItem.Quantity);
+                orderTotal += (product.UnitPrice * orderItem.Quantity);
                 itemSummaries.Add(new OrderItemSummary
                 {
+                    ProductId = orderItem.ProductId,
+                    ProductName = product.ProductName,
                     Quantity = orderItem.Quantity,
-                    MenuItemId = orderItem.MenuItemId,
-                    MenuItemName = menuItem.Name
+                    UnitCost = product.UnitCost,
+                    UnitPrice = product.UnitPrice
                 });
             }
 

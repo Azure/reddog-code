@@ -60,11 +60,11 @@ namespace RedDog.VirtualWorker.Controllers
 
                             foreach (var orderItem in order.OrderItems)
                             {
-                                _logger.LogInformation($"The VirtualWorker ({StoreId}) is making {orderItem.Quantity} {orderItem.MenuItemName}.");
+                                _logger.LogInformation($"The VirtualWorker ({StoreId}) is making {orderItem.Quantity} {orderItem.ProductName}.");
 
                                 await Task.Delay(_random.Next(MinSecondsToCompleteItem * 1000, MaxSecondsToCompleteItem * 1000));
 
-                                _logger.LogInformation($"The VirtualWorker ({StoreId}) completed {orderItem.Quantity} {orderItem.MenuItemName}.");
+                                _logger.LogInformation($"The VirtualWorker ({StoreId}) completed {orderItem.Quantity} {orderItem.ProductName}.");
                             }
 
                             await CompleteOrder(order);
@@ -94,26 +94,26 @@ namespace RedDog.VirtualWorker.Controllers
 
         private async Task<List<OrderSummary>> GetOrders()
         {
-            var request = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, MakeLineServiceAppId, $"orders/{StoreId}");
-            var response = await _daprClient.InvokeMethodWithResponseAsync(request);
-            if(response.IsSuccessStatusCode)
+            try
             {
-                return JsonSerializer.Deserialize<List<OrderSummary>>(await response.Content.ReadAsStringAsync());
+                return await _daprClient.InvokeMethodAsync<List<OrderSummary>>(HttpMethod.Get, MakeLineServiceAppId, $"orders/{StoreId}");
             }
-            else
+            catch(Exception e)
             {
-                _logger.LogError("Error invoking make line service to retrieve orders. Message: {Message}",  await response.Content.ReadAsStringAsync());
+                _logger.LogError("Error invoking make line service to retrieve orders. Message: {Message}",  e.InnerException?.Message ?? e.Message);
                 return new List<OrderSummary>();
             }
         }
 
         private async Task CompleteOrder(OrderSummary orderSummary)
         {
-            var request = _daprClient.CreateInvokeMethodRequest(HttpMethod.Delete, MakeLineServiceAppId, $"orders/{orderSummary.StoreId}/{orderSummary.OrderId}");
-            var response = await _daprClient.InvokeMethodWithResponseAsync(request);
-            if(!response.IsSuccessStatusCode)
+            try
             {
-                _logger.LogError("Error invoking make line service to complete order. Message: {Message}",  await response.Content.ReadAsStringAsync());
+                await _daprClient.InvokeMethodAsync<OrderSummary>(HttpMethod.Delete, MakeLineServiceAppId, $"orders/{orderSummary.StoreId}/{orderSummary.OrderId}", orderSummary);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError("Error invoking make line service to complete order. Message: {Message}",  e.InnerException?.Message ?? e.Message);
             }
         }
     }

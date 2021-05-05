@@ -1,0 +1,24 @@
+OrderAggregates
+    Orders for day/week/month
+        By hour if day
+        By day if week/month
+        [Store][Hour/Day][Count(Order)][Count(OrderItem)][Avg(Count(OrderItem))][Sum(Cost)][Sum(Price)][Avg(OrderTime)]
+
+TopSellingItems
+    Day/Week/Month
+        TOP 10 [Store][Hour/Day][OrderItemId][OrderItemName][OrderItemDesc][OrderItemImageUrl][Count(OrderItem)]
+
+TopCustomers
+    Day/Week/Month 
+        TOP 10 [Store][Hour/Day][LoyaltyId][FirstName][LastName][Sum(Order)]
+
+
+Corporate 
+------------
+
+TopPerformingStoresByFullfmentTime
+    Day/Week/Month
+        [Store][Hour/Day]
+
+
+

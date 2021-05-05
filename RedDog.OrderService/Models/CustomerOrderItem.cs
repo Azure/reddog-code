@@ -4,8 +4,8 @@ namespace RedDog.OrderService.Models
 {
     public class CustomerOrderItem
     {
-        [JsonPropertyName("menuItemId")]
-        public int MenuItemId { get; set; }
+        [JsonPropertyName("productId")]
+        public int ProductId { get; set; }
         
         [JsonPropertyName("quantity")]
         public int Quantity { get; set; }

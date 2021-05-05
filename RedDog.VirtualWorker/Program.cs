@@ -18,7 +18,7 @@ namespace RedDog.VirtualWorker
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .Enrich.With(new UtcTimestampEnricher())
-                .Destructure.ByTransforming<OrderItemSummary>(ois => new { MenuItemId = ois.MenuItemId, MenuItemName = ois.MenuItemName, Quantity = ois.Quantity })
+                .Destructure.ByTransforming<OrderItemSummary>(ois => new { ProductId = ois.ProductId, ProductName = ois.ProductName, Quantity = ois.Quantity })
                 .Destructure.ByTransforming<OrderSummary>(os => new { OrderId = os.OrderId, StoreId = os.StoreId, FirstName = os.FirstName, LastName = os.LastName, LoyaltyId = os.LoyaltyId, OrderItemCount = os.OrderItems.Count, OrderTotal = os.OrderTotal })
                 .WriteTo.Console(outputTemplate: "[{UtcTimestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}")
                 .CreateLogger();

@@ -24,6 +24,7 @@ namespace RedDog.VirtualCustomers
         private readonly ILogger<VirtualCustomers> _logger;
         private readonly DaprClient _daprClient;
         private Task _ordersTask = Task.CompletedTask;
+        private List<Product> _products;
         private Random _random;
 
         private static readonly (int, string, string)[] customers = {
@@ -68,6 +69,7 @@ namespace RedDog.VirtualCustomers
             });
 
             int ordersCreated = 0;
+            _products = await _daprClient.InvokeMethodAsync<List<Product>>(HttpMethod.Get, OrderServiceDaprId, "product");
             do
             {
                 await Task.Delay(_random.Next(minSecondsBetweenOrders, maxSecondsBetweenOrders + 1) * 1000);
@@ -90,28 +92,27 @@ namespace RedDog.VirtualCustomers
             order.LoyaltyId = customers[custNum].Item1.ToString();
 
             // Get total number of menu items (t) and ramdomly choose a number of them to order (n)
-            var menuItems = MenuItem.GetAll();
-            int menuItemTotal = menuItems.Count;
-            int menuItemNum = _random.Next(1, menuItemTotal + 1); // Never order 0 items
+            int numProducts = _products.Count;
+            int productNum = _random.Next(1, numProducts + 1); // Never order 0 items
 
             // Randomly choose a number between (1-t), (n) times to get a random quantity of (n) items
             List<CustomerOrderItem> orderItems = new List<CustomerOrderItem>();
-            List<int> menuIndicies = new List<int>();
-            for (int i = 0; i < menuItemNum; i++)
+            List<int> productIndicies = new List<int>();
+            for (int i = 0; i < productNum; i++)
             {
-                int menuIndex = _random.Next(1, menuItemTotal + 1);
-                while (menuIndicies.Contains(menuIndex)) // Ensure no duplicate menu items within order
+                int productIndex = _random.Next(1, numProducts + 1);
+                while (productIndicies.Contains(productIndex)) // Ensure no duplicate menu items within order
                 {
-                    menuIndex = _random.Next(1, menuItemTotal + 1);
+                    productIndex = _random.Next(1, numProducts + 1);
                 }
 
-                menuIndicies.Add(menuIndex);
-                var menuItem = menuItems.Find(x => x.MenuItemId == menuIndex); // Assuming menuIds are numbered #1 to #menuItemTotal
+                productIndicies.Add(productIndex);
+                var menuItem = _products.Find(x => x.ProductId == productIndex); // Assuming menuIds are numbered #1 to #menuItemTotal
                 int quantity = _random.Next(1, maxItemQuantity + 1);
 
                 orderItems.Add(new CustomerOrderItem
                 {
-                    MenuItemId = menuIndex,
+                    ProductId = productIndex,
                     Quantity = quantity
                 });
             }

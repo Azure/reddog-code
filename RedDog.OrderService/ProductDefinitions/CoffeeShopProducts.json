@@ -1,0 +1,26 @@
+[
+    {
+        "productId": 1,
+        "productName": "Americano",
+        "description": "Americano",
+        "unitCost": 1.99,
+        "unitPrice": 2.99,
+        "imageUrl": "https://daprworkshop.blob.core.windows.net/images/americano.jpg"
+    },
+    {
+        "productId": 2,
+        "productName": "Caramel Macchiato",
+        "description": "Caramel Macchiato",
+        "unitCost": 2.99,
+        "unitPrice": 4.99,
+        "imageUrl": "https://daprworkshop.blob.core.windows.net/images/macchiato.jpg"
+    },
+    {
+        "productId": 3,
+        "productName": "Latte",
+        "description": "Latte",
+        "unitCost": 2.49,
+        "unitPrice": 3.99,
+        "imageUrl": "https://daprworkshop.blob.core.windows.net/images/latte.jpg"
+    }
+]

@@ -28,6 +28,9 @@ Content-Type: application/json
     ]
 }
 
+### Get Products
+GET http://{{order-service}}/product
+
 ### Publish an order via order-service dapr sidecar
 POST http://{{order-service-dapr}}/v1.0/publish/{{pubsubName}}/orders
 Content-Type: application/json

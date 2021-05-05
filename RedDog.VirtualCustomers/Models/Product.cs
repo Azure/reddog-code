@@ -1,22 +1,25 @@
 using System.Text.Json.Serialization;
 
-namespace RedDog.LoyaltyService.Models
+namespace RedDog.VirtualCustomers.Models
 {
-    public class OrderItemSummary
+    public class Product
     {
-        [JsonPropertyName("productId")]        
+        [JsonPropertyName("productId")]
         public int ProductId { get; set; }
-        
+
         [JsonPropertyName("productName")]
         public string ProductName { get; set; }
-        
-        [JsonPropertyName("quantity")]
-        public int Quantity { get; set; }
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
 
         [JsonPropertyName("unitCost")]
         public decimal UnitCost { get; set; }
 
         [JsonPropertyName("unitPrice")]
         public decimal UnitPrice { get; set; }
+
+        [JsonPropertyName("imageUrl")]
+        public string ImageUrl { get; set; }
     }
 }
