@@ -99,6 +99,37 @@
                 "DAPR_GRPC_PORT": "5601"
             }
         },
+        {
+            "name": "Debug AccountingService",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build AccountingService",
+            "program": "${workspaceFolder}/RedDog.AccountingService/bin/Debug/net5.0/RedDog.AccountingService.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.AccountingService",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://127.0.0.1:5700",
+                "DAPR_HTTP_PORT": "5780",
+                "DAPR_GRPC_PORT": "5701"
+            }
+        },
+        {
+            "name": "Debug Bootstrapper",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build Bootstrapper",
+            "program": "${workspaceFolder}/RedDog.Bootstrapper/bin/Debug/net5.0/RedDog.Bootstrapper.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.Bootstrapper",
+            "stopAtEntry": false,
+            "env": {
+                "DAPR_HTTP_PORT": "5880",
+                "DAPR_GRPC_PORT": "5801"
+            }
+
+        },
     ],
     "compounds": [
         {

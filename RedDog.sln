@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedDog.VirtualWorker", "Red
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedDog.AccountingService", "RedDog.AccountingService\RedDog.AccountingService.csproj", "{F8E0D2B2-5E21-4763-AC61-0074FA1297F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedDog.Bootstrapper", "RedDog.Bootstrapper\RedDog.Bootstrapper.csproj", "{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedDog.AccountingModel", "RedDog.AccountingModel\RedDog.AccountingModel.csproj", "{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,5 +118,29 @@ Global
 		{F8E0D2B2-5E21-4763-AC61-0074FA1297F9}.Release|x64.Build.0 = Release|Any CPU
 		{F8E0D2B2-5E21-4763-AC61-0074FA1297F9}.Release|x86.ActiveCfg = Release|Any CPU
 		{F8E0D2B2-5E21-4763-AC61-0074FA1297F9}.Release|x86.Build.0 = Release|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Debug|x64.Build.0 = Debug|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Debug|x86.Build.0 = Debug|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Release|x64.ActiveCfg = Release|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Release|x64.Build.0 = Release|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Release|x86.ActiveCfg = Release|Any CPU
+		{B2AE26A4-3A12-4BC8-824C-6C08F04A111F}.Release|x86.Build.0 = Release|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Debug|x64.Build.0 = Debug|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Debug|x86.Build.0 = Debug|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Release|x64.ActiveCfg = Release|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Release|x64.Build.0 = Release|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Release|x86.ActiveCfg = Release|Any CPU
+		{775EACDA-CD1B-41BC-A1CE-85E7CB8CDB63}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

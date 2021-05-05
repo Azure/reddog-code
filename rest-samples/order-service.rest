@@ -14,15 +14,15 @@ Content-Type: application/json
     "loyaltyId": "42",
     "orderItems": [
         {
-            "menuItemId": 1,
+            "productId": 1,
             "quantity": 1
         },
         {
-            "menuItemId": 2,
+            "productId": 2,
             "quantity": 1
         },
         {
-            "menuItemId": 3,
+            "productId": 3,
             "quantity": 3
         }
     ]

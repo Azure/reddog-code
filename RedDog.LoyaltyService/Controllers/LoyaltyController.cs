@@ -16,15 +16,17 @@ namespace RedDog.LoyaltyService.Controllers
         private const string PubSubName = "reddog.pubsub";
         private const string LoyaltyStateStoreName = "reddog.state.loyalty";
         private readonly ILogger<LoyaltyController> _logger;
+        private readonly DaprClient _daprClient;
 
-        public LoyaltyController(ILogger<LoyaltyController> logger)
+        public LoyaltyController(ILogger<LoyaltyController> logger, DaprClient daprClient)
         {
             _logger = logger;
+            _daprClient = daprClient;
         }
 
         [Topic(PubSubName, OrderTopic)]
         [HttpPost("orders")]
-        public async Task<IActionResult> UpdateLoyalty(OrderSummary orderSummary, [FromServices] DaprClient daprClient)
+        public async Task<IActionResult> UpdateLoyalty(OrderSummary orderSummary)
         {
             _logger.LogInformation("Received Order Summary: {@OrderSummary}", orderSummary);
 
@@ -34,7 +36,7 @@ namespace RedDog.LoyaltyService.Controllers
             StateEntry<LoyaltySummary> stateEntry = null;
             try
             {
-                stateEntry = await daprClient.GetStateEntryAsync<LoyaltySummary>(LoyaltyStateStoreName, orderSummary.LoyaltyId);
+                stateEntry = await _daprClient.GetStateEntryAsync<LoyaltySummary>(LoyaltyStateStoreName, orderSummary.LoyaltyId);
                 stateEntry.Value ??= new LoyaltySummary()
                 {
                     FirstName = orderSummary.FirstName,

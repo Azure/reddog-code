@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapr.Client;
+using Dapr.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +16,8 @@ namespace RedDog.AccountingService
 {
     public class Program
     {
+        private const string SecretStoreName = "reddog.secretstore";
+
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -44,6 +48,15 @@ namespace RedDog.AccountingService
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseSerilog()
+                .ConfigureAppConfiguration(config =>
+                {
+                    var daprClient = new DaprClientBuilder().Build();
+                    var secretDescriptors = new List<DaprSecretDescriptor>
+                    {
+                        new DaprSecretDescriptor("reddog-sql")
+                    };
+                    config.AddDaprSecretStore(SecretStoreName, secretDescriptors, daprClient);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

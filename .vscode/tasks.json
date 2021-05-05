@@ -80,6 +80,32 @@
             "group": "build"
         },
         {
+            "label": "Build AccountingService",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RedDog.AccountingService",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Build Bootstrapper",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RedDog.Bootstrapper",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
             "label": "Build Solution",
             "command": "dotnet",
             "type": "process",
@@ -168,6 +194,24 @@
             "problemMatcher": []
         },
         {
+            "label": "Dapr AccountingService",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "accounting-service",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--app-port",
+                "5700",
+                "--dapr-grpc-port",
+                "5701",
+                "--dapr-http-port",
+                "5780"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "Dapr VirtualWorker",
             "command": "dapr",
             "args": [
@@ -202,12 +246,29 @@
             "problemMatcher": []
         },
         {
+            "label": "Dapr Bootstrapper",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "bootstrapper",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--dapr-grpc-port",
+                "5801",
+                "--dapr-http-port",
+                "5880"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "Dapr (All Services)",
             "dependsOn": [
                 "Dapr OrderService",
                 "Dapr MakeLineService",
                 "Dapr LoyaltyService",
                 "Dapr ReceiptGenerationService",
+                "Dapr AccountingService",
                 "Dapr VirtualWorker",
                 "Dapr VirtualCustomers"
             ],
