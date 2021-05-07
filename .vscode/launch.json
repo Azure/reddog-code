@@ -139,6 +139,7 @@
                 "Debug MakeLineService",
                 "Debug ReceiptGenerationService",
                 "Debug LoyaltyService",
+                "Debug AccountingService",
                 "Debug VirtualWorker",
                 "Debug VirtualCustomers"
             ]

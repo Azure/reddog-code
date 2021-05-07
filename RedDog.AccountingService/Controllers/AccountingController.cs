@@ -17,6 +17,7 @@ namespace RedDog.AccountingService.Controllers
     {
         private const string PubSubName = "reddog.pubsub";
         private const string OrderTopic = "orders";
+        private const string OrderCompletedTopic = "ordercompleted";
         private readonly ILogger<AccountingController> _logger;
         private readonly DaprClient _daprClient;
 
@@ -35,9 +36,9 @@ namespace RedDog.AccountingService.Controllers
             Customer customer = dbContext.Customers.SingleOrDefault(c => c.LoyaltyId == orderSummary.LoyaltyId);
             customer ??= new Customer()
             {
-                    FirstName = orderSummary.FirstName,
-                    LastName = orderSummary.LastName,
-                    LoyaltyId = orderSummary.LoyaltyId
+                FirstName = orderSummary.FirstName,
+                LastName = orderSummary.LastName,
+                LoyaltyId = orderSummary.LoyaltyId
             };
 
             Order order = new Order()
@@ -49,7 +50,7 @@ namespace RedDog.AccountingService.Controllers
                 OrderTotal = orderSummary.OrderTotal
             };
 
-            foreach(var orderItemSummary in orderSummary.OrderItems)
+            foreach (var orderItemSummary in orderSummary.OrderItems)
             {
                 order.OrderItems.Add(new OrderItem()
                 {
@@ -62,6 +63,25 @@ namespace RedDog.AccountingService.Controllers
             }
 
             dbContext.Add(order);
+
+            await dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [Topic(PubSubName, OrderCompletedTopic)]
+        [HttpPost("ordercompleted")]
+        public async Task<IActionResult> MarkOrderComplete(OrderSummary orderSummary, [FromServices] AccountingContext dbContext)
+        {
+            _logger.LogInformation("Received Completed Order Summary: {@OrderSummary}", orderSummary);
+
+            Order order = dbContext.Orders.SingleOrDefault<Order>(o => o.OrderId == orderSummary.OrderId);
+            if(order == null)
+            {
+                return NotFound();
+            }
+
+            order.CompletedDate = orderSummary.OrderCompletedDate;
             await dbContext.SaveChangesAsync();
 
             return Ok();

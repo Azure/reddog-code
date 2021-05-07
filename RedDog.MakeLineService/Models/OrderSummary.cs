@@ -12,7 +12,11 @@ namespace RedDog.MakeLineService.Models
         [JsonPropertyName("orderDate")]
         public DateTime OrderDate { get; set; }
 
+        [JsonPropertyName("orderCompletedDate")]
+        public DateTime? OrderCompletedDate { get; set; }
+
         [JsonPropertyName("storeId")]
+        
         public string StoreId { get; set; }
 
         [JsonPropertyName("firstName")]

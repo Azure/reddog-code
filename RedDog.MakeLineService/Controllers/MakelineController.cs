@@ -17,6 +17,7 @@ namespace RedDog.MakeLineService.Controllers
     public class MakelineController : ControllerBase
     {
         private const string OrderTopic = "orders";
+        private const string OrderCompletedTopic = "ordercompleted";
         private const string PubSubName = "reddog.pubsub";
         private const string MakeLineStateStoreName = "reddog.state.makeline";
         private readonly ILogger<MakelineController> _logger;
@@ -73,7 +74,9 @@ namespace RedDog.MakeLineService.Controllers
                 orders.Remove(order);
                 try
                 {
+                    order.OrderCompletedDate = DateTime.UtcNow;
                     await _daprClient.SaveStateAsync<List<OrderSummary>>(MakeLineStateStoreName, storeId, orders);
+                    await _daprClient.PublishEventAsync<OrderSummary>(PubSubName, OrderCompletedTopic, order);
                     _logger.LogInformation("Completed Order: {@OrderSummary}", order);
                 }
                 catch(Exception e)

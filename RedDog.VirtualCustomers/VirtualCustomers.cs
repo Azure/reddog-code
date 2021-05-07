@@ -69,7 +69,19 @@ namespace RedDog.VirtualCustomers
             });
 
             int ordersCreated = 0;
-            _products = await _daprClient.InvokeMethodAsync<List<Product>>(HttpMethod.Get, OrderServiceDaprId, "product");
+            do
+            {
+                try
+                {
+                    _products = await _daprClient.InvokeMethodAsync<List<Product>>(HttpMethod.Get, OrderServiceDaprId, "product");
+                }
+                catch(Exception e)
+                {
+                    _logger.LogError("Error retrieving products. Retrying in 5 seconds. Message: {Message}", e.InnerException?.Message ?? e.Message);
+                    await Task.Delay(5000);
+                }
+            } while (!stoppingToken.IsCancellationRequested && _products == null);
+
             do
             {
                 await Task.Delay(_random.Next(minSecondsBetweenOrders, maxSecondsBetweenOrders + 1) * 1000);

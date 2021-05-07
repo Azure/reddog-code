@@ -1,4 +1,4 @@
-OrderAggregates
+OrderMetrics
     Orders for day/week/month
         By hour if day
         By day if week/month

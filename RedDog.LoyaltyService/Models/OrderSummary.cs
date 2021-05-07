@@ -12,6 +12,9 @@ namespace RedDog.LoyaltyService.Models
         [JsonPropertyName("orderDate")]
         public DateTime OrderDate { get; set; }
 
+        [JsonPropertyName("orderCompletedDate")]
+        public DateTime? OrderCompletedDate { get; set; }
+
         [JsonPropertyName("storeId")]
         public string StoreId { get; set; }
 
