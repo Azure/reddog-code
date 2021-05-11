@@ -16,9 +16,7 @@ npm run serve
 ```
 
 
-![Cloud Native GBB](./public/img/cngbb-wide-wt.png)
-
-## Team
+## Hand crafted by
 - [Lynn Orrell](https://github.com/lynn-orrell)
 - [Brian Redmond](https://github.com/chzbrgr71)
 - [Linda Nichols](https://github.com/lynnaloo)
@@ -28,6 +26,7 @@ npm run serve
 - [Joey Schluchter](https://github.com/jschluchter)
 
 
+![Cloud Native GBB](./public/img/cngbb-wide-wt.png)
 
 ---
 ##### Open Source Credit
