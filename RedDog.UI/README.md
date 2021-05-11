@@ -16,10 +16,9 @@ npm run serve
 ```
 
 
-![Huff & Doback](./public/img/cngbb-wide-wt.png | width=180)
-<!-- <img src="./public/img/cngbb-wide-wt.png" align="left" width="180"> -->
+![Cloud Native GBB](./public/img/cngbb-wide-wt.png)
 
-#### Team
+## Team
 - [Lynn Orrell](https://github.com/lynn-orrell)
 - [Brian Redmond](https://github.com/chzbrgr71)
 - [Linda Nichols](https://github.com/lynnaloo)
