@@ -1,0 +1,16 @@
+{
+  "name": "extensions-test",
+  "version": "1.0.0",
+  "description": "Azure Functions related to Rabbit MQ Trigger",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests yet...\"",
+    "lint": "eslint . --ext .js"
+  },
+  "author": "Brian Redmond",
+  "dependencies": {
+    "eslint": "^7.22.0",
+    "eslint-plugin-import": "^2.22.1"
+  },
+  "devDependencies": {}
+}

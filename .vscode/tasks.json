@@ -212,6 +212,24 @@
             "problemMatcher": []
         },
         {
+            "label": "Dapr AccountingService (Corp)",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "accounting-service-corp",
+                "--components-path",
+                "${workspaceFolder}/components/corporate",
+                "--app-port",
+                "6700",
+                "--dapr-grpc-port",
+                "6701",
+                "--dapr-http-port",
+                "6780"
+            ],
+            "problemMatcher": []
+        },        
+        {
             "label": "Dapr VirtualWorker",
             "command": "dapr",
             "args": [

@@ -3,9 +3,7 @@ import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
 import NotFound from "@/pages/NotFoundPage.vue";
 
 const Dashboard = () => import("@/pages/Dashboard.vue");
-const Kiosk = () => import("@/pages/Kiosk.vue");
 const Maps = () => import("@/pages/Maps.vue");
-const Orders = () => import("@/pages/Orders.vue");
 const Profile = () => import("@/pages/Profile.vue");
 
 const routes = [
@@ -15,9 +13,7 @@ const routes = [
     redirect: "/dashboard",
     children: [
       { path: "dashboard", name: "dashboard", component: Dashboard },
-      { path: "kiosk", name: "kiosk", component: Kiosk },
       { path: "maps", name: "maps", component: Maps },
-      { path: "orders", name: "orders", component: Orders },
       { path: "profile", name: "profile", component: Profile }
     ],
   },
