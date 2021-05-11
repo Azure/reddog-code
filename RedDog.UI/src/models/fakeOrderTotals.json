@@ -1,0 +1,72 @@
+[
+  {
+    "storeId": "Redmond",
+    "orderDate": "5/11/2021",
+    "orderHour": 8,
+    "orderCount": 20,
+    "avgFulfillmentSec": 92,
+    "orderItemCount": 50,
+    "totalCost": 65.25,
+    "totalPrice": 91.0
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "5/11/2021",
+    "orderHour": 9,
+    "orderCount": 40,
+    "avgFulfillmentSec": 102,
+    "orderItemCount": 50,
+    "totalCost": 85.25,
+    "totalPrice": 101.0
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "5/11/2021",
+    "orderHour": 10,
+    "orderCount": 55,
+    "avgFulfillmentSec": 122,
+    "orderItemCount": 90,
+    "totalCost": 95.25,
+    "totalPrice": 131.0
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "5/11/2021",
+    "orderHour": 11,
+    "orderCount": 20,
+    "avgFulfillmentSec": 92,
+    "orderItemCount": 50,
+    "totalCost": 65.25,
+    "totalPrice": 91.0
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "5/11/2021",
+    "orderHour": 12,
+    "orderCount": 20,
+    "avgFulfillmentSec": 92,
+    "orderItemCount": 50,
+    "totalCost": 65.25,
+    "totalPrice": 91.0
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "5/11/2021",
+    "orderHour": 13,
+    "orderCount": 20,
+    "avgFulfillmentSec": 92,
+    "orderItemCount": 50,
+    "totalCost": 65.25,
+    "totalPrice": 91.0
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "5/11/2021",
+    "orderHour": 14,
+    "orderCount": 20,
+    "avgFulfillmentSec": 92,
+    "orderItemCount": 50,
+    "totalCost": 65.25,
+    "totalPrice": 91.0
+  }
+]

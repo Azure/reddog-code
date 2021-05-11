@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "extends": [
+    "plugin:vue/essential"
+  ],
+  "rules": {
+    "vue/no-mutating-props": "warn",
+    "vue/no-use-v-if-with-v-for": "warn",
+    "vue/return-in-computed-property": "warn"
+  }
+}

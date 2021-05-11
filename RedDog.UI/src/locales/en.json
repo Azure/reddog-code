@@ -1,0 +1,167 @@
+{
+  "dashboard": {
+    "currentOrderTotal": "Current Orders",
+    "totalSales": "Total Sales",
+    "inflightSales": "Inflight Orders",
+    "dailySales": "Daily Sales",
+    "averageMakeTime": "Average Make Time"
+
+  },
+  "sidebar": {
+    "title": "Red Dog",
+    "shortTitle": "RD",
+    "dashboard": "dashboard",
+    "userProfile": "User Profile",
+    "sales": "Sales",
+    "maps": "Locations",
+    "orders": "Current Orders",
+    "kiosk": "Kiosk",
+    "inventory": "Inventory",
+    "traffic": "Traffic"
+  },
+  "orders": {
+    "title": "Orders in Progress",
+    "columns": [
+      "Item",
+      "Customer",
+      "Price",
+      "Quantity",
+      "Total",
+      "Store",
+      "Loyalty"
+    ],
+    "data": [
+      {
+        "id": 1,
+        "item": "Fried Chicken Snack",
+        "customer": "Walter Sobchak",
+        "price": "$5.99",
+        "quantity": "1",
+        "total": "$5.99",
+        "store": "Tampa Bay",
+        "loyalty": "100200"
+      },
+      {
+        "id": 2,
+        "item": "BBQ Ribs",
+        "customer": "Minnie McNeil",
+        "price": "$10.99",
+        "quantity": "1",
+        "total": "$10.99",
+        "store": "Redmond",
+        "loyalty": "100201"
+      },
+      {
+        "id": 3,
+        "item": "California Roll",
+        "customer": "Jon Porter",
+        "price": "$8.99",
+        "quantity": "1",
+        "total": "$8.99",
+        "store": "Redmond",
+        "loyalty": "100202"
+      },
+      {
+        "id": 4,
+        "item": "Boston Roll",
+        "customer": "Barbara Ann Minnerva",
+        "price": "$9.99",
+        "quantity": "1",
+        "total": "$9.99",
+        "store": "Norfolk",
+        "loyalty": "100203"
+      },
+      {
+        "id": 5,
+        "item": "BBQ Ribs",
+        "customer": "Mason Porter",
+        "price": "$5.99",
+        "quantity": "1",
+        "total": "$5.99",
+        "store": "Brooklyn",
+        "loyalty": "100204"
+      },
+      {
+        "id": 6,
+        "customer": "Melissa Rogers",
+        "item": "Surf N Turf Special",
+        "price": "$19.99",
+        "quantity": "1",
+        "total": "$19.99",
+        "store": "Toronto",
+        "loyalty": "100205"
+      },
+      {
+        "id": 7,
+        "customer": "Jackie Treehorn",
+        "item": "Caesar Salad",
+        "price": "$7.99",
+        "quantity": "1",
+        "total": "$7.99",
+        "store": "Calgary",
+        "loyalty": "100206"
+      }
+    ]
+  },
+  "items": {
+    "title": "Inventory",
+    "type": "striped",
+    "columns": [
+      "Name",
+      "Description",
+      "Price",
+      "Quantity"
+    ],
+    "data": [
+      {
+        "id": 1,
+        "name": "Frozen Chicken Wings",
+        "description": "Frozen Chicken Wings",
+        "price": "$5.99",
+        "quantity": "100"
+      },
+      {
+        "id": 2,
+        "name": "Frozen Meatballs",
+        "description": "Frozen Meatballs",
+        "price": "$7.99",
+        "quantity": "500"
+      },
+      {
+        "id": 3,
+        "name": "Frozen French Fries",
+        "description": "Frozen French Fries",
+        "price": "$3.99",
+        "quantity": "100"
+      },
+      {
+        "id": 4,
+        "name": "Ramen Noodles",
+        "description": "Ramen Noodles",
+        "price": "$0.99",
+        "quantity": "1000000"
+      },
+      {
+        "id": 5,
+        "name": "Mashed Potato Mix",
+        "description": "Mashed Potato Mix",
+        "price": "$0.99",
+        "quantity": "1000"
+      },
+      {
+        "id": 6,
+        "name": "Plastic Forks",
+        "description": "Plastic Forks",
+        "price": "$1.99",
+        "quantity": "100"
+      },
+      {
+        "id": 7,
+        "name": "Paper Plates",
+        "description": "Paper Plates",
+        "price": "$2.99",
+        "quantity": "100"
+      }
+    ]
+  }
+}
