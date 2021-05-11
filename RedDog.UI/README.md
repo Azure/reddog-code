@@ -16,8 +16,9 @@ npm run serve
 ```
 
 
-<img src="./public/img/cngbb-wide-wt.png" align="left" width="180">
--
+![Huff & Doback](./public/img/cngbb-wide-wt.png | width=180)
+<!-- <img src="./public/img/cngbb-wide-wt.png" align="left" width="180"> -->
+
 #### Team
 - [Lynn Orrell](https://github.com/lynn-orrell)
 - [Brian Redmond](https://github.com/chzbrgr71)
