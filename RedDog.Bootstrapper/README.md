@@ -1,11 +1,11 @@
 create user reddog with password = [PASSWORD];
-go;
+go
 
 grant create table to reddog;
-go;
+go
 
 grant control on schema::dbo to reddog;
-go;
+go
 
 
 Running migrations

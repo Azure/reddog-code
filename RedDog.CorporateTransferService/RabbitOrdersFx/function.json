@@ -1,0 +1,19 @@
+{
+  "bindings": [
+      {
+          "name": "ordersQueueItem",
+          "type": "RabbitMQTrigger",
+          "direction": "in",
+          "queueName": "corp-transfer-orders",
+          "connectionStringSetting": "rabbitMQConnectionAppSetting",
+          "port": 5672
+      },
+      {
+        "name": "outputSbQueue",
+        "type": "serviceBus",
+        "queueName": "orders",
+        "connection": "MyServiceBusConnection",
+        "direction": "out"
+    }
+  ]
+}

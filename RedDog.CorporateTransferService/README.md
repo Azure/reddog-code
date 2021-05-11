@@ -44,8 +44,8 @@ OR
 # create deployment yml
 func kubernetes deploy --name corp-transfer-service --registry ghcr.io/cloudnativegbb/paas-vnext --polling-interval 20 --cooldown-period 300 --dry-run > func-deployment.yaml
 
-docker build -t ghcr.io/cloudnativegbb/paas-vnext/corp-transfer-service .
-docker push ghcr.io/cloudnativegbb/paas-vnext/corp-transfer-service
+docker build -t ghcr.io/cloudnativegbb/paas-vnext/corp-transfer-service:0.3 .
+docker push ghcr.io/cloudnativegbb/paas-vnext/corp-transfer-service:0.3
 
 kubectl apply -f func-deployment.yaml
 ```

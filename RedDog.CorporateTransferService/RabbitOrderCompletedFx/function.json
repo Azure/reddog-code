@@ -4,14 +4,14 @@
           "name": "ordersQueueItem",
           "type": "RabbitMQTrigger",
           "direction": "in",
-          "queueName": "corp-transfer-orders",
+          "queueName": "corp-transfer-ordercompleted",
           "connectionStringSetting": "rabbitMQConnectionAppSetting",
           "port": 5672
       },
       {
         "name": "outputSbQueue",
         "type": "serviceBus",
-        "queueName": "corp-orders",
+        "queueName": "ordercompleted",
         "connection": "MyServiceBusConnection",
         "direction": "out"
     }
