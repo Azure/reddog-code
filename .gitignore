@@ -653,7 +653,7 @@ yarn-error.log
 !components/local/
 !components/local/.keep
 # workshop-end-cut
-!Vigilantes.DaprWorkshop.UI/src/components
+!RedDog.UI/src/components
 **/*.pfx
 
 **/__debug_bin
