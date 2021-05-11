@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RedDog.AccountingModel;
 using RedDog.AccountingService.Models;
@@ -87,9 +88,59 @@ namespace RedDog.AccountingService.Controllers
             return Ok();
         }
 
-        [HttpGet("OrderMetrics")]
-        public async Task<List<OrderMetric>> GetOrderMetricsAsync()
+        [HttpGet("/OrderMetrics")]
+        public async Task<List<OrderMetric>> GetOrderMetricsAsync(string storeId, [FromServices] AccountingContext dbContext)
         {
+            var calcOrderItems = from oi in dbContext.OrderItems
+                                 select new
+                                 {
+                                    OrderItemId = oi.OrderItemId,
+                                    OrderId = oi.OrderId,
+                                    ProductId = oi.ProductId,
+                                    ProductName = oi.ProductName,
+                                    Quantity = oi.Quantity,
+                                    UnitCost = oi.UnitCost,
+                                    UnitPrice = oi.UnitPrice,
+                                    TotalUnitCost = oi.UnitCost * oi.Quantity,
+                                    TotalUnitPrice = oi.UnitPrice * oi.Quantity
+                                };
+
+            var calcOrderItemsWithOrders = from o in dbContext.Orders
+                                            join oi in calcOrderItems on o.OrderId equals oi.OrderId
+                                            select new
+                                            {
+                                                Order = o,
+                                                OrderItem = oi
+                                            };
+
+            var calcOrderItemsByHour = from c in calcOrderItemsWithOrders
+                                       group c by new { c.Order.StoreId, OrderHour = c.Order.PlacedDate.Hour }
+                                       into g
+                                       select new
+                                       {
+                                            StoreId = g.Key.StoreId,
+                                            OrderHour = g.Key.OrderHour,
+                                            OrderItemCount = g.Count(),
+                                            TotalCost = g.Sum(i => i.OrderItem.TotalUnitCost),
+                                            TotalPrice = g.Sum(i => i.OrderItem.TotalUnitPrice)
+                                       };
+
+            // var calcOrderItemsByHour = calcOrderItems.Join()
+
+            // var calcOrders = dbContext.Orders.Select(o => new
+            // {
+            //     OrderId = o.OrderId,
+            //     StoreId = o.StoreId,
+            //     PlacedDate = o.PlacedDate,
+            //     CompletedDate = o.CompletedDate,
+            //     FulfillmentTime = EF.Functions.DateDiffMinute(o.PlacedDate, o.CompletedDate)
+            // });
+// (select o.StoreId, cast(o.PlacedDate as date) PlacedDate, DATEPART(hh, o.PlacedDate) Hour, count(o.OrderId) OrderCount, avg(o.FullfillmentTime) AvgFullfillmentTime
+// 	from
+// 		(select StoreId, OrderId, PlacedDate, CompletedDate, DATEDIFF(s, PlacedDate, CompletedDate) FullfillmentTime
+// 		from [Order]) o
+// 	group by o.StoreId, cast(o.PlacedDate as date), DATEPART(hh, o.PlacedDate)) o
+            var v = calcOrderItemsByHour.ToList();
             return null;
         }
     }
