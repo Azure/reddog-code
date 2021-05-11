@@ -116,6 +116,22 @@
             }
         },
         {
+            "name": "Debug AccountingService (Corp)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build AccountingService",
+            "program": "${workspaceFolder}/RedDog.AccountingService/bin/Debug/net5.0/RedDog.AccountingService.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedDog.AccountingService",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://127.0.0.1:6700",
+                "DAPR_HTTP_PORT": "6780",
+                "DAPR_GRPC_PORT": "6701"
+            }
+        },        
+        {
             "name": "Debug Bootstrapper",
             "type": "coreclr",
             "request": "launch",

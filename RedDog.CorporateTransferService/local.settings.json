@@ -1,0 +1,9 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+      "FUNCTIONS_WORKER_RUNTIME": "node",
+      "rabbitMQConnectionAppSetting": "amqp://reddog:Bronx10465Y8dpwmxq@20.84.25.56:5672",
+      "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+      "MyServiceBusConnection": "Endpoint=sb://briarreddogdemo.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XTilDmS04gc+IbAVLnzCQRyNXSZnJl8YsHabZXVQ3CI="
+    }
+  }
