@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           # context: RedDog.${{ steps.service-split.outputs._0 }}/
-          context: /
+          context: .
           file: RedDog.${{ steps.service-split.outputs._0 }}/Dockerfile
           push: true
           tags: |
