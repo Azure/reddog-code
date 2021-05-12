@@ -8,8 +8,6 @@ USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["RedDog.VirtualCustomers/RedDog.VirtualCustomers.csproj", "RedDog.VirtualCustomers/"]
-RUN dotnet restore "RedDog.VirtualCustomers/RedDog.VirtualCustomers.csproj"
 COPY . .
 WORKDIR "/src/RedDog.VirtualCustomers"
 RUN dotnet build "RedDog.VirtualCustomers.csproj" -c Release -o /app/build

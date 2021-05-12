@@ -6,8 +6,6 @@ ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["RedDog.LoyaltyService/RedDog.LoyaltyService.csproj", "RedDog.LoyaltyService/"]
-RUN dotnet restore "RedDog.LoyaltyService/RedDog.LoyaltyService.csproj"
 COPY . .
 WORKDIR "/src/RedDog.LoyaltyService"
 RUN dotnet build "RedDog.LoyaltyService.csproj" -c Release -o /app/build

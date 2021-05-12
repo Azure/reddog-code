@@ -56,7 +56,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: RedDog.${{ steps.service-split.outputs._0 }}/
+          # context: RedDog.${{ steps.service-split.outputs._0 }}/
+          context: /
           file: RedDog.${{ steps.service-split.outputs._0 }}/Dockerfile
           push: true
           tags: |
