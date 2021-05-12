@@ -1,0 +1,20 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: reddog.pubsub
+  namespace: reddog-branch
+spec:
+  type: pubsub.azure.servicebus
+  metadata:
+    - name: connectionString
+      secretKeyRef:
+        name: sb-root-connectionstring
+        key: sb-root-connectionstring
+scopes:
+  - order-service
+  - make-line-service
+  - loyalty-service
+  - receipt-generation-service
+  - accounting-service
+auth:
+  secretStore: reddog.secretstore

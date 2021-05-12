@@ -649,17 +649,14 @@ yarn-error.log
 **/csharp/[Bb]in/
 
 
-# workshop-begin-cut
-**/components/**/*
+**/components/local
 !RedDog.UI/src/components/*
 !RedDog.UI/src/components/Cards/*
 !RedDog.UI/src/components/Charts/*
 !RedDog.UI/src/components/Inputs/*
 !RedDog.UI/src/components/NotificationPlugin/*
 !RedDog.UI/src/components/SidebarPlugin/*
-!components/local/
 !components/local/.keep
-# workshop-end-cut
 
 **/*.pfx
 
