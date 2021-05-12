@@ -16,8 +16,8 @@ module.exports = {
       new webpack.DefinePlugin({
         "process.env": {
           // put environment variables needed here
-          'MAKELINE_SERVICE_ROOT': 'http://0.0.0.0::5200/',
-          'ACCOUNTING_SERVICE_ROOT': 'http://0.0.0.0::5200/orders/Redmond',
+          'MAKELINE_SERVICE_ROOT': 'http://0.0.0.0:5200/',
+          'ACCOUNTING_SERVICE_ROOT': 'http://0.0.0.0:5700/OrderMetrics',
         }
       })
     ]
@@ -38,6 +38,14 @@ module.exports = {
       
       app.get('/orders/inflight', (req, res)=>{
         fetch('http://0.0.0.0:5200/orders/Redmond')
+        .then(response => response.json())
+        .then(data => {
+          res.json(data).status(200)
+        })
+      })
+
+      app.get('/orders/metrics', (req, res)=>{
+        fetch('http://0.0.0.0:5700/OrderMetrics')
         .then(response => response.json())
         .then(data => {
           res.json(data).status(200)

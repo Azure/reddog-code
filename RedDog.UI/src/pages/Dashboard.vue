@@ -120,7 +120,7 @@
 <script>
 import chart from "chart.js";
 
-import fakeOrders from "../models/fakeOrderTotals.json";
+// import fakeOrders from "../models/fakeOrderTotals.json";
 chart.defaults.font.family = "'Exo', sans-serif";
 chart.defaults.font.size = 12;
 chart.defaults.font.weight = 700;
@@ -131,16 +131,13 @@ export default {
   data() {
     return {
       ctx: null,
-      // count of inflight orders
       unfulfilledOrders: 0,
-      // average make time and total make time for orders
       avgFulfillmentSec: null,
       totalFulfillmentTime: null,
-      // fulfilled order count
       fulfilledOrders: null,
-      fakeOrders,
       currentDateTime: "",
-      polling: null,
+      pollingInFlightOrders: null,
+      pollingOrderMetrics: null,
       totalOrders: null,
       currentOrders: 0,
       InFlightSales: 666.1, // Dynamic values to be updated
@@ -162,36 +159,41 @@ export default {
       var current = new Date();
       this.currentDateTime = current.toLocaleString();
     },
-    getOrderMetrics(){
-      //console.log(fakeOrders)
-      fakeOrders.forEach((ord, index)=>{
-        this.fulfilledOrders = this.fulfilledOrders + ord.orderCount
-        this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec)
-        if (index===fakeOrders.length-1){
-          this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders)
-          this.avgFulfillmentSec = this.avgFulfillmentSec.toFixed(0);
-          console.log(this.avgFulfillmentSec)
-        }
-      })
-
-
-
+    getAccountingOrderMetrics(){
+      
+      this.pollingOrderMetrics = setInterval(() => {
+        fetch("/orders/metrics")
+        .then((response) => response.json())
+        .then((data) => {
+          // zero out the metrics
+          this.fulfilledOrders = 0;
+          this.avgFulfillmentSec = 0;
+          this.totalFulfillmentTime = 0;
+          data.forEach((ord, index)=>{
+            this.fulfilledOrders = this.fulfilledOrders + ord.orderCount
+            this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec)
+            if (index===data.length-1){
+              this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders)
+              this.avgFulfillmentSec = this.avgFulfillmentSec.toFixed(0);
+              console.log(this.avgFulfillmentSec)
+            }
+          })
+        });
+      }, 5000);
     },
-    pollOrderCount() {
-      // this.currentOrders = 12;
-      this.polling = setInterval(() => {
+    getInFlightOrderMetrics() {
+      this.pollingInFlightOrders = setInterval(() => {
         fetch("/orders/inflight")
           .then((response) => response.json())
           .then((data) => {
             this.unfulfilledOrders = data.length;
             this.getCurrentDateTime();
           });
-      }, 3000);
+      }, 5000);
     },
   },
   mounted() {
-    // this.completedOrders();
-    this.getOrderMetrics();
+    
 
     this.i18n = this.$i18n;
     if (this.enableRTL) {
@@ -199,16 +201,10 @@ export default {
       this.$rtl.enableRTL();
     }
 
-
-
-    this.i18n = this.$i18n;
-    if (this.enableRTL) {
-      this.i18n.locale = "ar";
-      this.$rtl.enableRTL();
-    }
   },
   beforeDestroy() {
-    clearInterval(this.polling);
+    clearInterval(this.pollingInFlightOrders);
+    clearInterval(this.pollingOrderMetrics);
 
     if (this.$rtl.isRTL) {
       this.i18n.locale = "en";
@@ -216,7 +212,8 @@ export default {
     }
   },
   created() {
-    this.pollOrderCount();
+    this.getInFlightOrderMetrics();
+    this.getAccountingOrderMetrics();
   },
 };
 </script>
