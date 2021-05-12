@@ -121,6 +121,7 @@ namespace RedDog.AccountingService.Controllers
                                        };
 
             var calcOrders = from o in dbContext.Orders
+                             where o.CompletedDate != null
                              select new
                              {
                                  OrderId = o.OrderId,
