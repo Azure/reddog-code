@@ -157,7 +157,7 @@ namespace RedDog.AccountingService.Controllers
                           };
 
             
-            return metrics.ToList();
+            return await metrics.ToListAsync();
         }
     }
 }
