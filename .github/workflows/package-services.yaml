@@ -61,8 +61,8 @@ jobs:
           file: RedDog.${{ steps.service-split.outputs._0 }}/Dockerfile
           push: true
           tags: |
-            ${{ matrix.repository }}/${{ steps.service-split.outputs._1 }}:latest
-            ${{ matrix.repository }}/${{ steps.service-split.outputs._1 }}:${{ needs.set-env.outputs.version }}
+            ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:latest
+            ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:${{ needs.set-env.outputs.version }}
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
