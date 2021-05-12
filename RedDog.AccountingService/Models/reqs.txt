@@ -21,4 +21,24 @@ TopPerformingStoresByFullfmentTime
         [Store][Hour/Day]
 
 
+-- [Store][Hour/Day][Count(Order)][Count(OrderItem)][Avg(Count(OrderItem))][Sum(Cost)][Sum(Price)][Avg(OrderTime)]
+
+select o.StoreId, cast(o.PlacedDate as date ) [Date], o.Hour, o.OrderCount, o.AvgFullfillmentTime, oi.OrderItemCount, oi.TotalCost, oi.TotalPrice
+from
+	(select o.StoreId, cast(o.PlacedDate as date) PlacedDate, DATEPART(hh, o.PlacedDate) Hour, count(o.OrderId) OrderCount, avg(o.FullfillmentTime) AvgFullfillmentTime
+	from
+		(select StoreId, OrderId, PlacedDate, CompletedDate, DATEDIFF(s, PlacedDate, CompletedDate) FullfillmentTime
+		from [Order]) o
+	group by o.StoreId, cast(o.PlacedDate as date), DATEPART(hh, o.PlacedDate)) o
+inner join
+	(select o.StoreId, DATEPART(hh, o.PlacedDate) Hour, count(oi.OrderItemId) OrderItemCount, sum(oi.TotalCost) TotalCost, sum(oi.TotalPrice) TotalPrice
+	from [Order] o
+	inner join
+		(select *, Quantity * UnitCost TotalCost, Quantity * UnitPrice TotalPrice
+		from [OrderItem]) oi 
+	on o.OrderId = oi.OrderId
+	group by o.StoreId, DATEPART(hh, o.PlacedDate)) oi
+on o.StoreId = oi.StoreId and o.Hour = oi.Hour
+where o.StoreId = 'Redmond'
+
 
