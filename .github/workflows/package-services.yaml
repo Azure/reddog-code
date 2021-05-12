@@ -16,7 +16,6 @@ jobs:
     outputs:
       version: ${{ steps.main.outputs.version }}
       created: ${{ steps.main.outputs.created }}
-      languages: ${{ steps.main.outputs.languages }}
       services: ${{ steps.main.outputs.services }}
       repositories: ${{ steps.main.outputs.repositories }}  
     steps:
@@ -28,9 +27,8 @@ jobs:
           fi
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-          echo ::set-output name=languages::[\"csharp\", \"golang\", \"java\", \"node\"]
-          echo ::set-output name=services::[\"LoyaltyService loyalty-service\", \"MakeLineService make-line-service\", \"OrderService order-service\", \"ReceiptGenerationService receipt-generation-service\", \"VirtualBarista virtual-barista\"]
-          echo ::set-output name=repositories::[\"ghcr.io/azurevigilantes/reddog\", \"ghcr.io/cloudnativegbb/paas-vnext\"]
+          echo ::set-output name=services::[\"AccountingService accounting-service\", \"LoyaltyService loyalty-service\", \"MakeLineService make-line-service\", \"OrderService order-service\", \"ReceiptGenerationService receipt-generation-service\", \"VirtualWorker virtual-worker\", \"VirtualCustomers virtual-customers\", \"Bootstrapper bootstrapper\", \"UI ui\"]
+          echo ::set-output name=repositories::[\"ghcr.io/lynn-orrell/reddog\", \"ghcr.io/cloudnativegbb/paas-vnext\"]
 
   package-services:
     name: Package Services
@@ -38,7 +36,6 @@ jobs:
     needs: set-env
     strategy:
       matrix:
-        language: ${{ fromJSON(needs.set-env.outputs.languages) }}
         service: ${{ fromJSON(needs.set-env.outputs.services) }}
         repository: ${{ fromJSON(needs.set-env.outputs.repositories) }}
     steps:
@@ -59,42 +56,14 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: Vigilantes.DaprWorkshop.${{ steps.service-split.outputs._0 }}/${{ matrix.language }}/
-          file: Vigilantes.DaprWorkshop.${{ steps.service-split.outputs._0 }}/${{ matrix.language }}/Dockerfile
+          context: .
+          file: RedDog.${{ steps.service-split.outputs._0 }}/Dockerfile
           push: true
           tags: |
-            ${{ matrix.repository }}/${{ matrix.language }}/${{ steps.service-split.outputs._1 }}:latest
-            ${{ matrix.repository }}/${{ matrix.language }}/${{ steps.service-split.outputs._1 }}:${{ needs.set-env.outputs.version }}
+            ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:latest
+            ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:${{ needs.set-env.outputs.version }}
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
-            
-  package-ui:
-    name: Package UI
-    runs-on: ubuntu-latest
-    needs: set-env
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1 
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.CR_PAT }}
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: Vigilantes.DaprWorkshop.UI/
-          file: Vigilantes.DaprWorkshop.UI/Dockerfile
-          push: true
-          tags: |
-            ghcr.io/azurevigilantes/reddog/node/ui:latest
-            ghcr.io/azurevigilantes/reddog/node/ui:${{ needs.set-env.outputs.version }}
-          labels: |
-            org.opencontainers.image.source=${{ github.event.repository.html_url }}
-            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-            org.opencontainers.image.revision=${{ github.sha }}
+

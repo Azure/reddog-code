@@ -148,7 +148,7 @@
                 "DAPR_HTTP_PORT": "6780",
                 "DAPR_GRPC_PORT": "6701"
             }
-        },        
+        },
         {
             "name": "Debug Bootstrapper",
             "type": "coreclr",
@@ -162,8 +162,7 @@
                 "DAPR_HTTP_PORT": "5880",
                 "DAPR_GRPC_PORT": "5801"
             }
-
-        },
+        }
     ],
     "compounds": [
         {

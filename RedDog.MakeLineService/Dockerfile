@@ -6,8 +6,6 @@ ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["RedDog.MakeLineService/RedDog.MakeLineService.csproj", "RedDog.MakeLineService/"]
-RUN dotnet restore "RedDog.MakeLineService/RedDog.MakeLineService.csproj"
 COPY . .
 WORKDIR "/src/RedDog.MakeLineService"
 RUN dotnet build "RedDog.MakeLineService.csproj" -c Release -o /app/build

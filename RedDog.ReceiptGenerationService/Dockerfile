@@ -6,8 +6,6 @@ ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["RedDog.ReceiptGenerationService/RedDog.ReceiptGenerationService.csproj", "RedDog.ReceiptGenerationService/"]
-RUN dotnet restore "RedDog.ReceiptGenerationService/RedDog.ReceiptGenerationService.csproj"
 COPY . .
 WORKDIR "/src/RedDog.ReceiptGenerationService"
 RUN dotnet build "RedDog.ReceiptGenerationService.csproj" -c Release -o /app/build

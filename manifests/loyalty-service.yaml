@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loyalty-service
+  namespace: reddog
+  labels:
+    app: loyalty-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loyalty-service
+  template:
+    metadata:
+      labels:
+        app: loyalty-service
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "loyalty-service"
+        dapr.io/app-port: "80"
+        dapr.io/config: "reddog.config"
+    spec:
+      containers:
+        - name: loyalty-service
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-loyalty-service:latest"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
