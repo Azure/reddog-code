@@ -144,41 +144,6 @@
                 "DAPR_HTTP_PORT": "5880",
                 "DAPR_GRPC_PORT": "5801"
             }
-        },
-        {
-            "name": ".NET Core Launch (web)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/RedDog.MakeLineService/bin/Debug/net5.0/RedDog.MakeLineService.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/RedDog.MakeLineService",
-            "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
-        },
-        {
-            "name": "Docker .NET Core Launch",
-            "type": "docker",
-            "request": "launch",
-            "preLaunchTask": "docker-run: debug",
-            "netCore": {
-                "appProject": "${workspaceFolder}/RedDog.Bootstrapper/RedDog.Bootstrapper.csproj"
-            }
         }
     ],
     "compounds": [

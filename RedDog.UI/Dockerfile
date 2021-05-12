@@ -4,12 +4,9 @@ LABEL org.opencontainers.image.source='https://github.com/cloudnativegbb/paas-vn
 LABEL org.opencontainers.image.url='https://github.com/cloudnativegbb/paas-vnext'
 
 WORKDIR /usr/src/app
-
-COPY package*.json ./
-RUN npm ci
-
 COPY . .
-
+WORKDIR "/usr/src/app/RedDog.UI"
+RUN npm ci
 RUN npm run build
 
 ENV NODE_ENV "development"
