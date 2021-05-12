@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounting-service
+  namespace: reddog
+  labels:
+    app: accounting-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: accounting-service
+  template:
+    metadata:
+      labels:
+        app: accounting-service
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "accounting-service"
+        dapr.io/app-port: "80"
+        dapr.io/config: "reddog.config"
+    spec:
+      containers:
+        - name: accounting-service
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:latest"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always

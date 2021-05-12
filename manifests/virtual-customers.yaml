@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-customers
+  namespace: reddog
+  labels:
+    app: virtual-customers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtual-customers
+  template:
+    metadata:
+      labels:
+        app: virtual-customers
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "virtual-customers"
+        dapr.io/config: "tracing"
+    spec:
+      containers:
+        - name: virtual-customers
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-virtual-customers:latest"
+          imagePullPolicy: Always

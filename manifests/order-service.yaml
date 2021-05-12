@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+  namespace: reddog
+  labels:
+    app: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "order-service"
+        dapr.io/app-port: "80"
+        dapr.io/config: "reddog.config"
+    spec:
+      containers:
+        - name: order-service
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-order-service:latest"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always

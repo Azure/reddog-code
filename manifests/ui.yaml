@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+  namespace: reddog
+  labels:
+    app: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "ui"
+        dapr.io/config: "reddog.config"
+    spec:
+      containers:
+        - name: ui
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-ui:latest"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
