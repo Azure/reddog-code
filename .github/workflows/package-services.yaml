@@ -30,40 +30,58 @@ jobs:
           echo ::set-output name=services::[\"AccountingService accounting-service\", \"LoyaltyService loyalty-service\", \"MakeLineService make-line-service\", \"OrderService order-service\", \"ReceiptGenerationService receipt-generation-service\", \"VirtualWorker virtual-worker\", \"VirtualCustomers virtual-customers\", \"Bootstrapper bootstrapper\", \"UI ui\"]
           echo ::set-output name=repositories::[\"ghcr.io/lynn-orrell/reddog\", \"ghcr.io/cloudnativegbb/paas-vnext\"]
 
-  package-services:
-    name: Package Services
+#   package-services:
+#     name: Package Services
+#     runs-on: ubuntu-latest
+#     needs: set-env
+#     strategy:
+#       matrix:
+#         service: ${{ fromJSON(needs.set-env.outputs.services) }}
+#         repository: ${{ fromJSON(needs.set-env.outputs.repositories) }}
+#     steps:
+#       - uses: jungwinter/split@v1
+#         id: service-split
+#         with:
+#           msg: ${{ matrix.service }}
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v1
+#       - name: Login to GitHub Container Registry
+#         uses: docker/login-action@v1 
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.CR_PAT }}
+#       - name: Build and push
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: .
+#           file: RedDog.${{ steps.service-split.outputs._0 }}/Dockerfile
+#           push: true
+#           tags: |
+#             ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:latest
+#             ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:${{ needs.set-env.outputs.version }}
+#           labels: |
+#             org.opencontainers.image.source=${{ github.event.repository.html_url }}
+#             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+#             org.opencontainers.image.revision=${{ github.sha }}
+            
+  copy-manifests:
     runs-on: ubuntu-latest
-    needs: set-env
-    strategy:
-      matrix:
-        service: ${{ fromJSON(needs.set-env.outputs.services) }}
-        repository: ${{ fromJSON(needs.set-env.outputs.repositories) }}
     steps:
-      - uses: jungwinter/split@v1
-        id: service-split
-        with:
-          msg: ${{ matrix.service }}
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1 
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.CR_PAT }}
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: RedDog.${{ steps.service-split.outputs._0 }}/Dockerfile
-          push: true
-          tags: |
-            ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:latest
-            ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:${{ needs.set-env.outputs.version }}
-          labels: |
-            org.opencontainers.image.source=${{ github.event.repository.html_url }}
-            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-            org.opencontainers.image.revision=${{ github.sha }}
+    - name: Checkout
+      uses: actions/checkout@v2
 
+    - name: Pushes manifests to the target repo
+      uses: dmnemec/copy_file_to_another_repo_action@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
+      with:
+        source_file: 'components/'
+        destination_repo: 'cloudnativegbb/paas-vnext'
+        destination_branch: 'ghactions-manifests'
+#         destination_folder: 'test-dir'
+        user_email: 'noreply-cloudnativegbb@microsoft.com'
+        user_name: 'cloudnativegbb'
+#         commit_message: 'A custom message for the commit'
