@@ -359,6 +359,10 @@
         }
     }
 
+    .logo-img img{
+      height: 20px !important;
+    }
+
     &[data="blue"]{
       @include linear-gradient($info-states, $info);
     }
@@ -472,9 +476,10 @@
 
 
     
-    border-top: 2px solid #a90000;
+    border-top: 2px solid #d56464;
     // background: linear-gradient(rgba(21, 15, 15, 0.962), rgb(11, 8, 8));
-    background: linear-gradient(rgba(38, 37, 47, 0.96), #0b0808);
+    background: linear-gradient(rgba(69, 65, 66, 0.96), #121826);
+    
     @include transitions (0.50s, cubic-bezier(0.685, 0.0473, 0.346, 1));
 
     &[data="blue"]{

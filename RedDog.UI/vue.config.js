@@ -1,5 +1,21 @@
 const webpack = require("webpack");
 const fetch = require("node-fetch");
+// const axios = require('axios').default;
+
+
+let MAKELINE_SERVICE = "http://0.0.0.0:5980/v1.0/invoke/make-line-service/method/orders/Redmond"
+let ACCOUNTING_SERVICE = "http://0.0.0.0:5980/v1.0/invoke/accounting-service/method/OrderMetrics"
+
+if (process.env.NODE_ENV === 'production'){
+  console.log('setting prod environment variables')
+  MAKELINE_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/make-line-service/method/orders/Redmond"
+  ACCOUNTING_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/accounting-service/method/OrderMetrics"
+}else{
+  console.log('setting dev environment variables')
+  console.log(MAKELINE_SERVICE)
+  console.log(ACCOUNTING_SERVICE)
+}
+
 
 module.exports = {
   lintOnSave: false,
@@ -15,9 +31,6 @@ module.exports = {
       }),
       new webpack.DefinePlugin({
         "process.env": {
-          // put environment variables needed here
-          'MAKELINE_SERVICE_ROOT': 'http://0.0.0.0:5200/',
-          'ACCOUNTING_SERVICE_ROOT': 'http://0.0.0.0:5700/OrderMetrics',
         }
       })
     ]
@@ -34,22 +47,26 @@ module.exports = {
     public: "0.0.0.0:8080",
     port: 8080,
 
-    before: function(app) {
-      
+    before: (app)=> {
+
       app.get('/orders/inflight', (req, res)=>{
-        fetch('http://0.0.0.0:5200/orders/Redmond')
+
+        fetch(MAKELINE_SERVICE)
         .then(response => response.json())
         .then(data => {
           res.json(data).status(200)
         })
+
       })
 
       app.get('/orders/metrics', (req, res)=>{
-        fetch('http://0.0.0.0:5700/OrderMetrics')
+        
+        fetch(ACCOUNTING_SERVICE)
         .then(response => response.json())
         .then(data => {
           res.json(data).status(200)
         })
+
       })
      
     }

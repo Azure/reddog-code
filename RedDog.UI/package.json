@@ -1,6 +1,6 @@
 {
   "name": "reddog.ui",
-  "version": "1.0.0",
+  "version": "0.16.80",
   "private": true,
   "description": "RedDog Dashboard UI",
   "author": "Joey Schluchter",
@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "async": "^2.6.3",
-    "axios": "^0.21.1",
     "cache-loader": "^4.1.0",
     "chart.js": "^3.2.1",
     "node-fetch": "^2.6.1",

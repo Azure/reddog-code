@@ -12,7 +12,7 @@ COPY . .
 
 RUN npm run build
 
-ENV NODE_ENV "development"
+ENV NODE_ENV "production"
 EXPOSE 8080
 
 CMD [ "npm", "run", "container" ]

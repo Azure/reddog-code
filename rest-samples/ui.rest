@@ -25,3 +25,8 @@ Content-Type: application/json
         }
     ]
 }
+
+
+###
+GET http://{{ui-dapr}}/v1.0/invoke/accounting-service/method/OrderMetrics
+Content-Type: application/json

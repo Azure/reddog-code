@@ -1,1 +1,52 @@
-[{"storeId":"Redmond","orderDate":"2021-05-11T00:00:00","orderHour":15,"orderCount":96,"avgFulfillmentSec":4973,"orderItemCount":248,"totalCost":1793.3100,"totalPrice":2874.8100},{"storeId":"Redmond","orderDate":"2021-05-11T00:00:00","orderHour":19,"orderCount":288,"avgFulfillmentSec":641,"orderItemCount":571,"totalCost":4308.8100,"totalPrice":6915.8100},{"storeId":"Redmond","orderDate":"2021-05-11T00:00:00","orderHour":20,"orderCount":303,"avgFulfillmentSec":986,"orderItemCount":626,"totalCost":4483.3700,"totalPrice":7171.8700},{"storeId":"Redmond","orderDate":"2021-05-11T00:00:00","orderHour":21,"orderCount":225,"avgFulfillmentSec":1318,"orderItemCount":426,"totalCost":3148.7800,"totalPrice":5038.2800},{"storeId":"Redmond","orderDate":"2021-05-12T00:00:00","orderHour":15,"orderCount":22,"avgFulfillmentSec":47,"orderItemCount":248,"totalCost":1793.3100,"totalPrice":2874.8100}]
+[
+  {
+    "storeId": "Redmond",
+    "orderDate": "2021-05-11T00:00:00",
+    "orderHour": 15,
+    "orderCount": 96,
+    "avgFulfillmentSec": 4973,
+    "orderItemCount": 248,
+    "totalCost": 1793.31,
+    "totalPrice": 2874.81
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "2021-05-11T00:00:00",
+    "orderHour": 19,
+    "orderCount": 288,
+    "avgFulfillmentSec": 641,
+    "orderItemCount": 571,
+    "totalCost": 4308.81,
+    "totalPrice": 6915.81
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "2021-05-11T00:00:00",
+    "orderHour": 20,
+    "orderCount": 303,
+    "avgFulfillmentSec": 986,
+    "orderItemCount": 626,
+    "totalCost": 4483.37,
+    "totalPrice": 7171.87
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "2021-05-11T00:00:00",
+    "orderHour": 21,
+    "orderCount": 225,
+    "avgFulfillmentSec": 1318,
+    "orderItemCount": 426,
+    "totalCost": 3148.78,
+    "totalPrice": 5038.28
+  },
+  {
+    "storeId": "Redmond",
+    "orderDate": "2021-05-12T00:00:00",
+    "orderHour": 15,
+    "orderCount": 22,
+    "avgFulfillmentSec": 47,
+    "orderItemCount": 248,
+    "totalCost": 1793.31,
+    "totalPrice": 2874.81
+  }
+]

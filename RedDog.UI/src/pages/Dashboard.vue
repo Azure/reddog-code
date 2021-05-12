@@ -29,7 +29,9 @@
                 ORDERS
               </div>
               <div class="card-body">
-                <div class="card-big-detail text-center">{{ fulfilledOrders }}</div>
+                <div class="card-big-detail text-center">
+                  {{ fulfilledOrders }}
+                </div>
                 <div class="card-footer-title text-right">
                   <!-- Footer stuff here -->
                 </div>
@@ -47,7 +49,9 @@
                 ORDER TIME
               </div>
               <div class="card-body">
-                <div class="card-big-detail text-center">{{ avgFulfillmentSec }}s</div>
+                <div class="card-big-detail text-center">
+                  {{ avgFulfillmentSec }}s
+                </div>
                 <div class="card-footer-title text-right">
                   <!-- Footer stuff here -->
                 </div>
@@ -63,13 +67,32 @@
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                <i class="tim-icons icon-satisfied text-info"></i>FULFILLMENT
-                GOAL
+                <i class="tim-icons icon-money-coins text-success"></i>TOTAL
+                SALES
               </div>
-              <div class="card-body chart-doughnut-canvas">
-                <!-- <canvas id="compOrdersChart" width="40vh" height="40vh"></canvas> -->
-                <canvas id="compOrdersChart"></canvas>
-                <!-- <doughnut-chart chart-id="white-doughnut" :chart-data="doChart.chartData"></doughnut-chart> -->
+              <div class="card-body">
+                <div class="card-big-detail text-center">${{ totalSales }}</div>
+                <div class="card-footer-title text-right">
+                  <!-- Footer stuff here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="col-lg-4">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card card-trans-base">
+              <div class="card-header-title">
+                <i class="tim-icons icon-money-coins text-success"></i>TOTAL
+                PROFIT
+              </div>
+              <div class="card-body">
+                <div class="card-big-detail text-center">${{ totalProfit }}</div>
+                <div class="card-footer-title text-right">
+                  <!-- Footer stuff here -->
+                </div>
               </div>
             </div>
           </div>
@@ -80,39 +103,17 @@
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                <i class="tim-icons icon-camera-18 text-danger"></i>IN-STORE
-                TRAFFIC
+                <i class="tim-icons icon-money-coins text-success"></i>PROFIT PER ORDER
               </div>
               <div class="card-body">
-                <div class="card-big-detail text-center">12</div>
+                <div class="card-big-detail text-center">${{ profitPerOrder }}</div>
                 <div class="card-footer-title text-right">
-                  <i class="tim-icons icon-refresh-01"></i>
+                  <!-- Footer stuff here -->
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-4" :class="{ 'text-right': isRTL }">
-        <!-- <card type="chart">
-            <template slot="header">
-              <h5 class="card-category">{{ $t("dashboard.averageMakeTime") }}</h5>
-              <h3 class="card-title">
-                <i class="tim-icons icon-send text-warning"></i>
-                {{ AverageMakeTime }} seconds
-              </h3>
-            </template>
-            <div class="chart-area">
-              <line-chart
-                style="height: 100%"
-                chart-id="orange-line-chart"
-                :chart-data="orangeLineChart.chartData"
-                :gradient-stops="orangeLineChart.gradientStops"
-                :extra-options="orangeLineChart.extraOptions"
-              >
-              </line-chart>
-            </div>
-          </card> -->
       </div>
     </div>
   </div>
@@ -135,15 +136,13 @@ export default {
       avgFulfillmentSec: null,
       totalFulfillmentTime: null,
       fulfilledOrders: null,
+      totalSales: null,
+      totalCost: null,
+      totalProfit: null,
+      profitPerOrder: null,
       currentDateTime: "",
       pollingInFlightOrders: null,
       pollingOrderMetrics: null,
-      totalOrders: null,
-      currentOrders: 0,
-      InFlightSales: 666.1, // Dynamic values to be updated
-      DailySales: 3500.07,
-      AverageMakeTime: 30.6,
-      MonthlySales: 80873.09,
     };
   },
   computed: {
@@ -159,26 +158,35 @@ export default {
       var current = new Date();
       this.currentDateTime = current.toLocaleString();
     },
-    getAccountingOrderMetrics(){
-      
+    getAccountingOrderMetrics() {
       this.pollingOrderMetrics = setInterval(() => {
         fetch("/orders/metrics")
-        .then((response) => response.json())
-        .then((data) => {
-          // zero out the metrics
-          this.fulfilledOrders = 0;
-          this.avgFulfillmentSec = 0;
-          this.totalFulfillmentTime = 0;
-          data.forEach((ord, index)=>{
-            this.fulfilledOrders = this.fulfilledOrders + ord.orderCount
-            this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec)
-            if (index===data.length-1){
-              this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders)
-              this.avgFulfillmentSec = this.avgFulfillmentSec.toFixed(0);
-              console.log(this.avgFulfillmentSec)
-            }
-          })
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            // zero out the metrics
+            this.fulfilledOrders = 0;
+            this.avgFulfillmentSec = 0;
+            this.totalFulfillmentTime = 0;
+            this.totalSales = 0;
+            this.totalCost = 0;
+            this.totalProfit = 0;
+            this.profitPerOrder = 0;
+
+            data.forEach((ord, index) => {
+              this.fulfilledOrders = this.fulfilledOrders + ord.orderCount;
+              this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec);
+              this.totalSales = this.totalSales + ord.totalPrice;
+              this.totalCost = this.totalCost + ord.totalCost;
+
+              if (index === data.length - 1) {
+                this.totalProfit = (this.totalSales - this.totalCost).toFixed(0) /// TOTAL PROFIT
+                this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDERS
+                this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0);
+                this.totalSales = this.totalSales.toFixed(0);
+                
+              }
+            });
+          });
       }, 5000);
     },
     getInFlightOrderMetrics() {
@@ -189,18 +197,15 @@ export default {
             this.unfulfilledOrders = data.length;
             this.getCurrentDateTime();
           });
-      }, 5000);
+      }, 2000);
     },
   },
   mounted() {
-    
-
     this.i18n = this.$i18n;
     if (this.enableRTL) {
       this.i18n.locale = "ar";
       this.$rtl.enableRTL();
     }
-
   },
   beforeDestroy() {
     clearInterval(this.pollingInFlightOrders);
