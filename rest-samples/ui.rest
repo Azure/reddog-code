@@ -1,0 +1,27 @@
+@ui-dapr = 127.0.0.1:5980
+@store-id = Redmond
+@order-service-name = order-service
+
+POST http://{{ui-dapr}}/v1.0/invoke/{{order-service-name}}/method/order
+Content-Type: application/json
+ 
+{
+    "storeId": "{{store-id}}",
+    "firstName": "John 'Hannibal'",
+    "lastName": "Smith",
+    "loyaltyId": "42",
+    "orderItems": [
+        {
+            "productId": 1,
+            "quantity": 1
+        },
+        {
+            "productId": 2,
+            "quantity": 1
+        },
+        {
+            "productId": 3,
+            "quantity": 3
+        }
+    ]
+}

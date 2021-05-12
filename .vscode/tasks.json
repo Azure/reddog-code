@@ -264,6 +264,22 @@
             "problemMatcher": []
         },
         {
+            "label": "Dapr UI",
+            "command": "dapr",
+            "args": [
+                "run",
+                "--app-id",
+                "reddog-ui",
+                "--components-path",
+                "${workspaceFolder}/components/local",
+                "--dapr-grpc-port",
+                "5901",
+                "--dapr-http-port",
+                "5980"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "Dapr Bootstrapper",
             "command": "dapr",
             "args": [
@@ -288,7 +304,8 @@
                 "Dapr ReceiptGenerationService",
                 "Dapr AccountingService",
                 "Dapr VirtualWorker",
-                "Dapr VirtualCustomers"
+                "Dapr VirtualCustomers",
+                "Dapr UI"
             ],
             "problemMatcher": []
         },
