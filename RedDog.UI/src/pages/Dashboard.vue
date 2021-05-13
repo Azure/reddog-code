@@ -173,6 +173,7 @@ export default {
             this.profitPerOrder = 0;
 
             data.forEach((ord, index) => {
+              console.log(ord);
               this.fulfilledOrders = this.fulfilledOrders + ord.orderCount;
               this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec);
               this.totalSales = this.totalSales + ord.totalPrice;
