@@ -73,7 +73,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Pushes branch manifests to the target repo
+    - name: Push branch manifests
       uses: dmnemec/copy_file_to_another_repo_action@main
       env:
         API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
@@ -84,15 +84,8 @@ jobs:
         destination_folder: 'app/manifests'
         user_email: 'noreply-cloudnativegbb@microsoft.com'
         user_name: 'cloudnativegbb'
-#         commit_message: 'A custom message for the commit'
 
-  copy-corporate-manifests:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Pushes corporate manifests to the target repo
+    - name: Push corporate manifests
       uses: dmnemec/copy_file_to_another_repo_action@main
       env:
         API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
@@ -103,4 +96,3 @@ jobs:
         destination_folder: 'app/manifests'
         user_email: 'noreply-cloudnativegbb@microsoft.com'
         user_name: 'cloudnativegbb'
-#         commit_message: 'A custom message for the commit'
