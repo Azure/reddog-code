@@ -15,7 +15,7 @@ RedDog.CorporateTransferService/local.settings.json
 brian-notes.md
 
 # Joey
-components/
+components/local/
 
 # User-specific files
 *.suo

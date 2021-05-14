@@ -1,0 +1,14 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: reddog.pubsub
+  namespace: reddog-corp
+spec:
+  type: pubsub.azure.servicebus
+  metadata:
+    - name: connectionString
+      secretKeyRef:
+        name: sb-root-connectionstring
+        key: sb-root-connectionstring
+auth:
+  secretStore: reddog.secretstore
