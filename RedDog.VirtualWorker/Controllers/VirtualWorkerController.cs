@@ -16,8 +16,8 @@ namespace RedDog.VirtualWorker.Controllers
     {
         private const string MakeLineServiceAppId = "make-line-service";
         public static readonly string StoreId = Environment.GetEnvironmentVariable("STORE_ID") ?? "Redmond";
-        public static readonly int MinSecondsToCompleteItem = int.Parse(Environment.GetEnvironmentVariable("MIN_SECONDS_TO_COMPLETE_ITEM") ?? "3");
-        public static readonly int MaxSecondsToCompleteItem = int.Parse(Environment.GetEnvironmentVariable("MAX_SECONDS_TO_COMPLETE_ITEM") ?? "10");
+        public static readonly int MinSecondsToCompleteItem = int.Parse(Environment.GetEnvironmentVariable("MIN_SECONDS_TO_COMPLETE_ITEM") ?? "2");
+        public static readonly int MaxSecondsToCompleteItem = int.Parse(Environment.GetEnvironmentVariable("MAX_SECONDS_TO_COMPLETE_ITEM") ?? "9");
         private static readonly object ItemLock = new object();
         private static bool IsMakingItems = false;
         private readonly ILogger<VirtualWorkerController> _logger;

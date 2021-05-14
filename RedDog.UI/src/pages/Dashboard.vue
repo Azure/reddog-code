@@ -173,7 +173,7 @@ export default {
             this.profitPerOrder = 0;
 
             data.forEach((ord, index) => {
-              console.log(ord);
+              // console.log(ord);
               this.fulfilledOrders = this.fulfilledOrders + ord.orderCount;
               this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec);
               this.totalSales = this.totalSales + ord.totalPrice;
@@ -195,6 +195,7 @@ export default {
         fetch("/orders/inflight")
           .then((response) => response.json())
           .then((data) => {
+            // console.log(data);
             this.unfulfilledOrders = data.length;
             this.getCurrentDateTime();
           });

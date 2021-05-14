@@ -24,6 +24,25 @@
     color: $nav-link-disabled-color;
   }
 }
+.nav-link-white {
+  // display: block;
+
+  padding-left:20px ;
+  padding-right:20px ;
+  color:#fff;
+  text-transform: uppercase;;
+  @include hover-focus {
+    text-decoration: none;
+  }
+
+  // Disabled state lightens text
+  &.disabled {
+    color: $nav-link-disabled-color;
+  }
+}
+.footer-nav{
+  padding-right: 240px;
+}
 
 //
 // Tabs
@@ -51,7 +70,7 @@
     }
   }
 
-  .nav-link.active,
+  .nav-link.active,.nav-link-white.active
   .nav-item.show .nav-link {
     color: $nav-tabs-link-active-color;
     background-color: $nav-tabs-link-active-bg;

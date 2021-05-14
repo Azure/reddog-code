@@ -14,9 +14,7 @@
           </button>
         </div>
         <div class="logo">
-        <a class="simple-text logo-normal">
-          RED DOG
-        </a>
+          <img src="img/reddog-logo-text.png" width="184px"/>
       </div>
       </div>
       <button class="navbar-toggler" type="button"

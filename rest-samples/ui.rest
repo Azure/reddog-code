@@ -30,3 +30,28 @@ Content-Type: application/json
 ###
 GET http://{{ui-dapr}}/v1.0/invoke/accounting-service/method/OrderMetrics
 Content-Type: application/json
+
+###
+
+GET http://0.0.0.0:5980/v1.0/invoke/make-line-service/method/orders/Redmond
+Content-Type: application/json
+
+
+
+###
+
+GET http://localhost:5680/v1.0/healthz
+Content-Type: application/json
+
+###
+# order-service
+GET http://localhost:5180/v1.0/healthz
+
+###
+# makeline-service
+GET http://0.0.0.0:5280/v1.0/healthz
+
+###
+# receipt-gen-service
+GET http://0.0.0.0:5380/v1.0/healthz
+
