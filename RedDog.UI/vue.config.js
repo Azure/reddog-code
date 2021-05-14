@@ -3,8 +3,8 @@ const fetch = require("node-fetch");
 // const axios = require('axios').default;
 
 
-let MAKELINE_SERVICE = "http://0.0.0.0:5980/v1.0/invoke/make-line-service/method/orders/Redmond"
-let ACCOUNTING_SERVICE = "http://0.0.0.0:5980/v1.0/invoke/accounting-service/method/OrderMetrics"
+let MAKELINE_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/make-line-service/method/orders/Redmond"
+let ACCOUNTING_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/accounting-service/method/OrderMetrics"
 
 if (process.env.NODE_ENV === 'production'){
   console.log('setting prod environment variables')
@@ -43,8 +43,8 @@ module.exports = {
         "X-Requested-With, content-type, Authorization"
     },
     disableHostCheck: true,
-    host: "0.0.0.0",
-    public: "0.0.0.0:8080",
+    host: "127.0.0.1",
+    public: "127.0.0.1:8080",
     port: 8080,
 
     before: (app)=> {

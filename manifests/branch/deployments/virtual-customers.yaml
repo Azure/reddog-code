@@ -17,7 +17,7 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "virtual-customers"
-        dapr.io/config: "tracing"
+        dapr.io/config: "reddog.config"
     spec:
       containers:
         - name: virtual-customers

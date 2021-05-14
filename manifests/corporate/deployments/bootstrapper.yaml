@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bootstrapper
+  namespace: reddog
+  labels:
+    app: bootstrapper
+spec:
+  template:
+    metadata:
+      name: bootstrapper
+      labels:
+        app: bootstrapper
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "bootstrapper"
+        dapr.io/config: "reddog.config"
+    spec:
+      containers:
+      - name: bootstrapper
+        image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-bootstrapper:latest"
