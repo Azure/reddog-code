@@ -67,21 +67,40 @@ jobs:
 #             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
 #             org.opencontainers.image.revision=${{ github.sha }}
             
-  copy-manifests:
+  copy-branch-manifests:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Pushes manifests to the target repo
+    - name: Pushes branch manifests to the target repo
       uses: dmnemec/copy_file_to_another_repo_action@main
       env:
         API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
       with:
-        source_file: 'components/'
+        source_file: 'manifests/branch'
         destination_repo: 'cloudnativegbb/paas-vnext'
         destination_branch: 'ghactions-manifests'
-#         destination_folder: 'test-dir'
+        destination_folder: 'app/manifests'
+        user_email: 'noreply-cloudnativegbb@microsoft.com'
+        user_name: 'cloudnativegbb'
+#         commit_message: 'A custom message for the commit'
+
+  copy-corporate-manifests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Pushes corporate manifests to the target repo
+      uses: dmnemec/copy_file_to_another_repo_action@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
+      with:
+        source_file: 'manifests/corporate'
+        destination_repo: 'cloudnativegbb/paas-vnext'
+        destination_branch: 'ghactions-manifests'
+        destination_folder: 'app/manifests'
         user_email: 'noreply-cloudnativegbb@microsoft.com'
         user_name: 'cloudnativegbb'
 #         commit_message: 'A custom message for the commit'

@@ -129,7 +129,7 @@
                 "--app-id",
                 "order-service",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--app-port",
                 "5100",
                 "--dapr-grpc-port",
@@ -147,7 +147,7 @@
                 "--app-id",
                 "make-line-service",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--app-port",
                 "5200",
                 "--dapr-grpc-port",
@@ -165,7 +165,7 @@
                 "--app-id",
                 "receipt-generation-service",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--app-port",
                 "5300",
                 "--dapr-grpc-port",
@@ -183,7 +183,7 @@
                 "--app-id",
                 "loyalty-service",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--app-port",
                 "5400",
                 "--dapr-grpc-port",
@@ -201,7 +201,7 @@
                 "--app-id",
                 "accounting-service",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--app-port",
                 "5700",
                 "--dapr-grpc-port",
@@ -219,7 +219,7 @@
                 "--app-id",
                 "accounting-service-corp",
                 "--components-path",
-                "${workspaceFolder}/components/corporate",
+                "${workspaceFolder}/manifests/local/corporate",
                 "--app-port",
                 "6700",
                 "--dapr-grpc-port",
@@ -237,7 +237,7 @@
                 "--app-id",
                 "virtual-worker",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--app-port",
                 "5500",
                 "--dapr-grpc-port",
@@ -255,7 +255,7 @@
                 "--app-id",
                 "virtual-customers",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--dapr-grpc-port",
                 "5601",
                 "--dapr-http-port",
@@ -271,7 +271,7 @@
                 "--app-id",
                 "reddog-ui",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--dapr-grpc-port",
                 "5901",
                 "--dapr-http-port",
@@ -287,7 +287,7 @@
                 "--app-id",
                 "bootstrapper",
                 "--components-path",
-                "${workspaceFolder}/components/local",
+                "${workspaceFolder}/manifests/local/branch",
                 "--dapr-grpc-port",
                 "5801",
                 "--dapr-http-port",
@@ -308,99 +308,6 @@
                 "Dapr UI"
             ],
             "problemMatcher": []
-        },
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/RedDog.MakeLineService/RedDog.MakeLineService.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/RedDog.MakeLineService/RedDog.MakeLineService.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "${workspaceFolder}/RedDog.MakeLineService/RedDog.MakeLineService.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "type": "docker-build",
-            "label": "docker-build: debug",
-            "dependsOn": [
-                "build"
-            ],
-            "dockerBuild": {
-                "tag": "reddog:dev",
-                "target": "base",
-                "dockerfile": "${workspaceFolder}/RedDog.Bootstrapper/Dockerfile",
-                "context": "${workspaceFolder}",
-                "pull": true
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/RedDog.Bootstrapper/RedDog.Bootstrapper.csproj"
-            }
-        },
-        {
-            "type": "docker-build",
-            "label": "docker-build: release",
-            "dependsOn": [
-                "build"
-            ],
-            "dockerBuild": {
-                "tag": "reddog:latest",
-                "dockerfile": "${workspaceFolder}/RedDog.Bootstrapper/Dockerfile",
-                "context": "${workspaceFolder}",
-                "pull": true
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/RedDog.Bootstrapper/RedDog.Bootstrapper.csproj"
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "docker-run: debug",
-            "dependsOn": [
-                "docker-build: debug"
-            ],
-            "dockerRun": {},
-            "netCore": {
-                "appProject": "${workspaceFolder}/RedDog.Bootstrapper/RedDog.Bootstrapper.csproj",
-                "enableDebugging": true
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "docker-run: release",
-            "dependsOn": [
-                "docker-build: release"
-            ],
-            "dockerRun": {},
-            "netCore": {
-                "appProject": "${workspaceFolder}/RedDog.Bootstrapper/RedDog.Bootstrapper.csproj"
-            }
         }
     ]
 }
