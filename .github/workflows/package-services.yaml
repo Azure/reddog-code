@@ -67,7 +67,7 @@ jobs:
 #             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
 #             org.opencontainers.image.revision=${{ github.sha }}
             
-  copy-branch-manifests:
+  copy-manifests:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
