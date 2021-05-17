@@ -175,7 +175,7 @@
                 "Debug AccountingService",
                 "Debug VirtualWorker",
                 "Debug VirtualCustomers",
-                "Debug UI"
+                // "Debug UI"
             ]
         },
     ]

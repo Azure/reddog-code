@@ -1,7 +1,9 @@
 .wrapper{
-    position: relative;
-    top: 0;
-    height: 100vh;
+  position: relative;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+  width: 100%;
 
     &.wrapper-full-page{
         min-height: 100vh;
@@ -19,8 +21,8 @@
 .sidebar,
 .off-canvas-sidebar{
     @include linear-gradient($primary-states, $primary);
-    height: calc(100vh - 110px);
-    width: 230px;
+    height: calc(90vh - 110px);
+    width: 200px;
     position: fixed;
     top: 0;
     left: 0;
@@ -29,9 +31,9 @@
     background-position: center center;
     display: block;
     box-shadow: none;
-    margin-top: 80px;
+    margin-top: 64px;
     margin-left: 20px;
-    border-radius: 5px;
+    border-radius: 8px;
 
     .sidebar-wrapper{
         width: $full-width;
@@ -133,7 +135,7 @@
     }
 
     .nav{
-        margin-top: 20px;
+        margin-top: 8px;
         display: block;
 
         .caret{
@@ -371,11 +373,11 @@
     }
 
     &[data="vue"] {
-
+      background:  #0c0e19;
       // #21182a, #000
-      @include linear-gradient(
-        #18151a,
-       #070207b1);
+      // @include linear-gradient(
+      //   #18151a,
+      //  #070207b1);
       //  ackground: linear-gradient(
       //   0deg
       //   , #18151a 0%, #070207b1 100%);
@@ -472,13 +474,18 @@
     position: relative;
     float: right;
     width: $full-width;
-    min-height: 100vh;
+    min-height: 90vh;
+    max-height: 90vh;
 
+  
 
     
-    border-top: 2px solid #d56464;
+    border-top: 3px solid #d14c4c;
     // background: linear-gradient(rgba(21, 15, 15, 0.962), rgb(11, 8, 8));
-    background: linear-gradient(rgba(69, 65, 66, 0.96), #121826);
+    // background: linear-gradient(rgba(69, 65, 66, 0.96), #121826);
+    // background: linear-gradient(#585858, #333030);
+    background: #161d2d;
+
     
     @include transitions (0.50s, cubic-bezier(0.685, 0.0473, 0.346, 1));
 
@@ -499,11 +506,11 @@
     }
 
     > .content {
-      padding: 78px 26px 12px 258px;
+      padding: 61px 6px 12px 232px;
       min-height: calc(90vh);
-      max-width: calc(92vw);
-      width: (90vw);
-      height: (88vw);
+      max-width: calc(100vw);
+      width: 100vw;
+      height: 90vw;
     }
 
     > .navbar {
@@ -521,7 +528,7 @@
   .sidebar,
   .main-panel{
       height: 100%;
-      max-height: 100%;
+      max-height: 95vh;
   }
 }
 

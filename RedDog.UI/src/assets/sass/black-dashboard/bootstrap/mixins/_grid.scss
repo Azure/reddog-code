@@ -13,7 +13,7 @@
     padding-right: 15px;
     padding-left: 15px;
     /* margin-right: auto; */
-    margin-left: 24px;
+    margin-left: 0px;
 
 }
 
@@ -22,8 +22,8 @@
 @mixin make-container-max-widths($max-widths: $container-max-widths, $breakpoints: $grid-breakpoints) {
   @each $breakpoint, $container-max-width in $max-widths {
     @include media-breakpoint-up($breakpoint, $breakpoints) {
-      max-width: 84vw;
-      min-width: 76vw;
+      max-width: 98%;
+      min-width: 90%;
     }
   }
 }

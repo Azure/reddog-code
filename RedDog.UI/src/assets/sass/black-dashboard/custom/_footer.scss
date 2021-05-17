@@ -1,5 +1,13 @@
 .footer{
-    padding: 12px 0 12px 250px;
+  width: 100vw;
+  height: 48px;
+  position: fixed;
+  padding: 10px 0px 11px 0px;
+  bottom: 0;
+  border-top-color: #d14c4c97;
+  border-top-style: solid;
+  border-top-width: 1px;
+  background: #0c0e1a69;
 
     [class*="container-"] {
       padding: 0;
@@ -7,7 +15,7 @@
 
     .nav{
         display: inline-block;
-        float: left;
+        // float: left;
         margin-bottom: 0;
         padding-left: 30px;
         list-style: none;

@@ -232,13 +232,8 @@
 
 
 .card-trans-base {
-  // min-width: 256px !important;
   border-radius: 8px;
-    border: .25px solid #121111aa;
-    -webkit-box-shadow: -1px -1px 10px #121111aa;
-    box-shadow: -1px -1px 6px #121111aa;
-    background: -webkit-gradient(linear, left bottom, left top, color-stop(15%, #2f2f2f), color-stop(40%, #070204a0));
-    background: linear-gradient(0, #232227 15%, #130f16 40%);
+  background: #0c0e19;
 }
 
 .card-big-category {

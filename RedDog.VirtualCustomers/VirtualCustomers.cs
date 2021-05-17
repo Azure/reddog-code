@@ -14,11 +14,11 @@ namespace RedDog.VirtualCustomers
     {
         private const string OrderServiceDaprId = "order-service";
         private const string StoreId = "Redmond";
-        public static readonly int maxItemQuantity = int.Parse(Environment.GetEnvironmentVariable("MAX_ITEM_QUANTITY") ?? "5");
-        public static readonly int minSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_TO_PLACE_ORDER") ?? "5");
-        public static readonly int maxSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MAX_SEC_TO_PLACE_ORDER") ?? "10");
-        public static readonly int minSecondsBetweenOrders = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_BETWEEN_ORDERS") ?? "3");
-        public static readonly int maxSecondsBetweenOrders = int.Parse(Environment.GetEnvironmentVariable("MAX_SEC_BETWEEN_ORDERS") ?? "6");
+        public static readonly int maxItemQuantity = int.Parse(Environment.GetEnvironmentVariable("MAX_ITEM_QUANTITY") ?? "8");
+        public static readonly int minSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_TO_PLACE_ORDER") ?? "2");
+        public static readonly int maxSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MAX_SEC_TO_PLACE_ORDER") ?? "8");
+        public static readonly int minSecondsBetweenOrders = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_BETWEEN_ORDERS") ?? "2");
+        public static readonly int maxSecondsBetweenOrders = int.Parse(Environment.GetEnvironmentVariable("MAX_SEC_BETWEEN_ORDERS") ?? "8");
         public static readonly int numOrders = int.Parse(Environment.GetEnvironmentVariable("NUM_ORDERS") ?? "-1");
 
         private readonly ILogger<VirtualCustomers> _logger;
