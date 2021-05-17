@@ -1,5 +1,13 @@
 .footer{
-  padding: 0px 0px 0px 256px;
+  width: 100vw;
+  height: 48px;
+  position: fixed;
+  padding: 10px 0px 11px 0px;
+  bottom: 0;
+  border-top-color: #d14c4c97;
+  border-top-style: solid;
+  border-top-width: 1px;
+  background: #0c0e1a69;
 
     [class*="container-"] {
       padding: 0;

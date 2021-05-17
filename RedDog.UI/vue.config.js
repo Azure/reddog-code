@@ -22,7 +22,7 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        "chart.js": "chart.js/dist/chart.js"
+        // "chart.js": "chart.js/dist/chart.js"
       }
     },
     plugins: [

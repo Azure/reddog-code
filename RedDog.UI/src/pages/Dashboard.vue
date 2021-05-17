@@ -116,21 +116,47 @@
         </div>
       </div>
     </div>
+    <div class="row justify-content-lg-left">
+      <div class="col-lg-4">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card card-trans-base">
+              <div class="card-header-title">
+                <i class="tim-icons icon-cart text-warning"></i>ORDERS IN-FLIGHT
+              </div>
+              <div class="card-body">
+                <StreamChart :chartdata="chartData" :options="chartOptions"/>
+                <div class="card-footer-title text-right">
+                  <!-- Footer stuff here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import chart from "chart.js";
+import moment from 'moment'
 
-// import fakeOrders from "../models/fakeOrderTotals.json";
-chart.defaults.font.family = "'Exo', sans-serif";
-chart.defaults.font.size = 12;
-chart.defaults.font.weight = 700;
-chart.defaults.plugins.legend.display = false;
+// // import fakeOrders from "../models/fakeOrderTotals.json";
+// chart.defaults.font.family = "'Exo', sans-serif";
+// chart.defaults.font.size = 12;
+// chart.defaults.font.weight = 700;
+// chart.defaults.plugins.legend.display = false;
+
+import StreamChart from '../components/RedDog/StreamChart.vue'
 
 export default {
-  components: {},
+  components: {
+    StreamChart
+  },
   data() {
     return {
+      inflightOrderArray:[],
+      chartData:null,
+      chartOptions: null,
       ctx: null,
       unfulfilledOrders: 0,
       avgFulfillmentSec: null,
@@ -154,6 +180,7 @@ export default {
     },
   },
   methods: {
+
     getCurrentDateTime() {
       var current = new Date();
       this.currentDateTime = current.toLocaleString();
@@ -195,12 +222,66 @@ export default {
         fetch("/orders/inflight")
           .then((response) => response.json())
           .then((data) => {
-            // console.log(data);
+            this.fillLineChart(data);
             this.unfulfilledOrders = data.length;
             this.getCurrentDateTime();
           });
       }, 2000);
     },
+    fillLineChart(orderData){
+      // orderData.forEach((ord,ordIndex) => {
+      //   let currentMinute = moment(ord.orderDate).format('MMM-Do h:mmA');
+      //   console.log(currentMinute)
+      // })
+      let minuteLabels = [];
+      for(var i=10; i>0; i--){
+        var dt = moment().subtract(i, 'minutes');
+        minuteLabels.push(dt.format('h:mmA'));
+      }
+      
+
+
+
+
+      this.chartData= {
+        labels:minuteLabels,
+        datasets: [
+          {
+            label: 'Orders',
+            borderColor:'rgb(132, 232, 137)',
+            backgroundColor: 'transparent',
+            data: [2,7,9,7,5]
+          }
+        ]
+      }
+      
+      this.chartOptions = {
+        legend: {
+            display: false
+         },
+         scales: {
+           yAxes: [{
+            ticks: {
+               min: 0,
+               max: 10,
+               stepSize: 2,
+               reverse: false,
+               beginAtZero: true
+            }
+          }],
+           xAxes: [{
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 90,
+                    minRotation: 90
+                }
+            }]
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    }
+
   },
   mounted() {
     this.i18n = this.$i18n;
@@ -221,6 +302,7 @@ export default {
   created() {
     this.getInFlightOrderMetrics();
     this.getAccountingOrderMetrics();
+    this.fillLineChart(null);
   },
 };
 </script>
