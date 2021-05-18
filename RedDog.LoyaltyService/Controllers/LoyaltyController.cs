@@ -51,7 +51,7 @@ namespace RedDog.LoyaltyService.Controllers
             }
             catch(Exception e)
             {
-                _logger.LogError("Error saving loyalty summary: {@LoyaltySummary}, Message: {Message}", stateEntry.Value, e.Message);
+                _logger.LogError("Error saving loyalty summary: {@LoyaltySummary}, Message: {Message}", stateEntry.Value, e.InnerException?.Message ?? e.Message);
             }
 
             return Ok(stateEntry.Value);
