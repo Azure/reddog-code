@@ -71,7 +71,7 @@
                 SALES
               </div>
               <div class="card-body">
-                <div class="card-big-detail text-center">${{ totalSales }}</div>
+                <div class="card-big-detail text-center">{{ totalSalesFormatted }}</div>
                 <div class="card-footer-title text-right">
                   <!-- Footer stuff here -->
                 </div>
@@ -89,7 +89,7 @@
                 PROFIT
               </div>
               <div class="card-body">
-                <div class="card-big-detail text-center">${{ totalProfit }}</div>
+                <div class="card-big-detail text-center">{{ totalProfitFormatted }}</div>
                 <div class="card-footer-title text-right">
                   <!-- Footer stuff here -->
                 </div>
@@ -106,7 +106,7 @@
                 <i class="tim-icons icon-money-coins text-success"></i>PROFIT PER ORDER
               </div>
               <div class="card-body">
-                <div class="card-big-detail text-center">${{ profitPerOrder }}</div>
+                <div class="card-big-detail text-center">{{ profitPerOrderFormatted }}</div>
                 <div class="card-footer-title text-right">
                   <!-- Footer stuff here -->
                 </div>
@@ -139,14 +139,21 @@
 </template>
 <script>
 import moment from 'moment'
+import currency from 'currency.js'
 
-// // import fakeOrders from "../models/fakeOrderTotals.json";
-// chart.defaults.font.family = "'Exo', sans-serif";
-// chart.defaults.font.size = 12;
-// chart.defaults.font.weight = 700;
-// chart.defaults.plugins.legend.display = false;
+import Chart from 'chart.js'
+
+Chart.defaults.global.defaultFontColor = '#FFF';
+Chart.defaults.global.defaultFontFamily = "'Exo', sans-serif";
+Chart.defaults.global.defaultFontSize = 12;
+Chart.defaults.global.defaultFontStyle = 300;
+// Chart.defaults.global.gridLines.display = false;
+
+// Chart.defaults.plugins.legend.display = false;
 
 import StreamChart from '../components/RedDog/StreamChart.vue'
+
+
 
 export default {
   components: {
@@ -163,9 +170,12 @@ export default {
       totalFulfillmentTime: null,
       fulfilledOrders: null,
       totalSales: null,
+      totalSalesFormatted: null,
       totalCost: null,
       totalProfit: null,
+      totalProfitFormatted: null,
       profitPerOrder: null,
+      profitPerOrderFormatted: null,
       currentDateTime: "",
       pollingInFlightOrders: null,
       pollingOrderMetrics: null,
@@ -207,11 +217,13 @@ export default {
               this.totalCost = this.totalCost + ord.totalCost;
 
               if (index === data.length - 1) {
-                this.totalProfit = (this.totalSales - this.totalCost).toFixed(0) /// TOTAL PROFIT
-                this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDERS
+                this.totalProfit = (this.totalSales - this.totalCost).toFixed(0); /// TOTAL PROFIT
+                this.totalProfitFormatted = currency(this.totalProfit, {precision:0}).format(); /// TOTAL PROFIT FORMATTEd
+                this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
+                this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
                 this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0);
-                this.totalSales = this.totalSales.toFixed(0);
-                
+                this.totalSales = this.totalSales.toFixed(0); /// TOTAL SALES
+                this.totalSalesFormatted = currency(this.totalSales, {precision:0}).format(); /// TOTAL SALES FORMATTED
               }
             });
           });
@@ -240,8 +252,8 @@ export default {
       }
       
 
-
-
+      // console.log(StreamChart);
+     
 
       this.chartData= {
         labels:minuteLabels,
@@ -260,22 +272,32 @@ export default {
             display: false
          },
          scales: {
-           yAxes: [{
+          yAxes: [{
             ticks: {
                min: 0,
                max: 10,
-               stepSize: 2,
-               reverse: false,
-               beginAtZero: true
-            }
+              //  stepSize: 2,
+              //  reverse: false,
+              //  beginAtZero: true,
+               padding: 40
+            },
+            gridLines: {
+              // display: false ,
+              color: "rgba(150,150,150, .125)"
+            },
           }],
-           xAxes: [{
-                ticks: {
-                    autoSkip: false,
-                    maxRotation: 90,
-                    minRotation: 90
-                }
-            }]
+          xAxes: [{
+            ticks: {
+              autoSkip: true,
+              // maxRotation: 270,
+              // minRotation: 270,
+              padding: 40
+            },
+            gridLines: {
+              display: false ,
+              // color: "rgba(150,150,150, .25)"
+            },
+          }]
         },
         responsive: true,
         maintainAspectRatio: false

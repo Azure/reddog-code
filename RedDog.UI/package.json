@@ -16,6 +16,7 @@
     "cache-loader": "^4.1.0",
     "chart.js": "2.8",
     "chartjs-plugin-streaming": "1.8",
+    "currency.js": "^2.0.3",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
     "node-sass": "4.14",

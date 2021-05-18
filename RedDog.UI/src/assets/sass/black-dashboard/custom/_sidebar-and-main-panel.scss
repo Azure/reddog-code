@@ -2,11 +2,7 @@
   position: relative;
   top: 0;
   height: 100vh;
-<<<<<<< HEAD
-  overflow: hidden;
-=======
   overflow: auto;
->>>>>>> 00a2abb3f6b70199d604678e38cf9e0e63f39cda
   width: 100%;
 
     &.wrapper-full-page{
@@ -510,11 +506,11 @@
     }
 
     > .content {
-      padding: 61px 6px 12px 232px;
-      min-height: calc(90vh);
+      padding: 61px 6px 80px 232px;
+      min-height: calc(98vh);
       max-width: calc(100vw);
       width: 100vw;
-      height: 90vw;
+      height: 98vw;
     }
 
     > .navbar {
