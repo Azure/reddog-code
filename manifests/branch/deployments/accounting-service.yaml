@@ -26,3 +26,11 @@ spec:
           ports:
             - containerPort: 80
           imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /probes/ready
+              port: 80
+            timeoutSeconds: 30
+            successThreshold: 1
+            failureThreshold: 12
+            periodSeconds: 10
