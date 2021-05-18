@@ -1,3 +1,7 @@
 @accounting-service = 127.0.0.1:5700
 
+### Order metrics
 GET http://{{accounting-service}}/OrderMetrics
+
+### Readiness probe
+GET http://{{accounting-service}}/Probes/ready
