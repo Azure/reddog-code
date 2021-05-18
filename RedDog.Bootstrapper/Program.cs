@@ -34,18 +34,20 @@ namespace RedDog.Bootstrapper
             {
                 try
                 {
+                    Console.WriteLine("Attempting to retrieve database connection string from Dapr...");
                     connectionString = daprClient.GetSecretAsync(SecretStoreName, "reddog-sql").GetAwaiter().GetResult();
-                    Console.WriteLine($"connectionString={connectionString}");
+                    Console.WriteLine("Successfully retrieved database connection string.");
                 }
                 catch(Exception e)
                 {
                     Console.WriteLine($"An exception occured while retrieving the secret from the Dapr sidecar. Retrying in 5 seconds...");
-                    Console.WriteLine($"connectionString={connectionString}");
                     Console.WriteLine(e.StackTrace);
                     Task.Delay(5000).Wait();
                 }
             } while(connectionString == null);
 
+
+            Console.WriteLine("Attempting to shutdown Dapr sidecar...");
             bool isDaprShutdownSuccessful = false;
             HttpClient httpClient = new HttpClient();
             do
@@ -57,10 +59,11 @@ namespace RedDog.Bootstrapper
                     if(response.IsSuccessStatusCode)
                     {
                         isDaprShutdownSuccessful = true;
+                        Console.WriteLine("Successfully shutdown Dapr sidecar.");
                     }
                     else
                     {
-                        Console.WriteLine($"Unable to shutdown Dapr sidecare. Retrying in 5 seconds...");
+                        Console.WriteLine($"Unable to shutdown Dapr sidecar. Retrying in 5 seconds...");
                         Console.WriteLine($"Dapr error message: {response.Content.ReadAsStringAsync().Result}");
                     }
                 }
