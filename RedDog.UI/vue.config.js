@@ -43,8 +43,8 @@ module.exports = {
         "X-Requested-With, content-type, Authorization"
     },
     disableHostCheck: true,
-    host: "127.0.0.1",
-    public: "127.0.0.1:8080",
+    host: "0.0.0.0",
+    public: "0.0.0.0:8080",
     port: 8080,
 
     before: (app)=> {

@@ -41,9 +41,7 @@
 .nav-link-white img{
   opacity: 25%;
 }
-.nav-link-white img:hover{
-  opacity: 100%;
-}
+
 .nav-pop-out{
   position: absolute;
   right: -20px;
@@ -68,6 +66,11 @@
   padding-right: 25px;
   padding-bottom: 25px;
 }
+
+.nav-pop-out:hover > a > img{
+  opacity: 100%;
+}
+
 
 .footer-nav{
   padding-right: 240px;
