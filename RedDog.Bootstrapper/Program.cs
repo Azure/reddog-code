@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Dapr.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -21,7 +23,21 @@ namespace RedDog.Bootstrapper
         public AccountingContext CreateDbContext(string[] args)
         {
             var daprClient = new DaprClientBuilder().Build();
-            var connectionString = daprClient.GetSecretAsync(SecretStoreName, "reddog-sql").GetAwaiter().GetResult();
+
+            Dictionary<string, string> connectionString = null;
+            do
+            {
+                try
+                {
+                    connectionString = daprClient.GetSecretAsync(SecretStoreName, "reddog-sql").GetAwaiter().GetResult();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine($"An exception occured while retrieving the secret from the Dapr sidecar. Retrying in 5 seconds...");
+                    Console.WriteLine(e.StackTrace);
+                    Task.Delay(5000).Wait();
+                }
+            } while(connectionString == null);
 
             DbContextOptionsBuilder<AccountingContext> optionsBuilder = new DbContextOptionsBuilder<AccountingContext>().UseSqlServer(connectionString["reddog-sql"], b => 
             {
