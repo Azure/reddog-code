@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: receipt-generation-service
-  namespace: reddog-branch
+  name: loyalty-service
+  namespace: reddog-corp
   labels:
-    app: receipt-generation-service
+    app: loyalty-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: receipt-generation-service
+      app: loyalty-service
   template:
     metadata:
       labels:
-        app: receipt-generation-service
+        app: loyalty-service
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "receipt-generation-service"
+        dapr.io/app-id: "loyalty-service"
         dapr.io/app-port: "80"
         dapr.io/config: "reddog.config"
     spec:
       containers:
-        - name: receipt-generation-service
-          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-receipt-generation-service:latest"
+        - name: loyalty-service
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-loyalty-service:latest"
           ports:
             - containerPort: 80
           imagePullPolicy: Always

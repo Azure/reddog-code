@@ -1,8 +1,8 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: reddog.state.makeline
-  namespace: reddog-branch
+  name: reddog.state.loyalty
+  namespace: reddog-corp
 spec:
   type: state.redis
   version: v1
@@ -14,6 +14,6 @@ spec:
         name: redis-password
         key: redis-password
 scopes:
-  - make-line-service
+  - loyalty-service
 auth:
-  secretStore: reddog.secretstore  
+  secretStore: reddog.secretstore

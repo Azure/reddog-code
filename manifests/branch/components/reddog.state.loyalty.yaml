@@ -4,18 +4,15 @@ metadata:
   name: reddog.state.loyalty
   namespace: reddog-branch
 spec:
-  type: state.azure.cosmosdb
+  type: state.redis
+  version: v1
   metadata:
-    - name: url
-      value: https://vigilantes.documents.azure.com:443/
-    - name: database
-      value: daprworkshop
-    - name: collection
-      value: loyalty
-    - name: masterKey
-      secretKeyRef:
-        name: cosmos-primary-rw-key
-        key: cosmos-primary-rw-key
+    - name: redisHost
+      value: redis-cache-master.redis:6379
+    - name: redisPassword
+      secretKeyRef:    
+        name: redis-password
+        key: redis-password
 scopes:
   - loyalty-service
 auth:

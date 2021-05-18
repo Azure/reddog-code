@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-customers
-  namespace: reddog
+  namespace: reddog-branch
   labels:
     app: virtual-customers
 spec:

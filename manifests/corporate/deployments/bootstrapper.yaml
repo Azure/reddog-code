@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: bootstrapper
-  namespace: reddog
+  namespace: reddog-corp
   labels:
     app: bootstrapper
 spec:
@@ -19,3 +19,5 @@ spec:
       containers:
       - name: bootstrapper
         image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-bootstrapper:latest"
+        imagePullPolicy: Always
+      restartPolicy: Never

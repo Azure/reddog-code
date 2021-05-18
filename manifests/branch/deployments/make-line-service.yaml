@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: make-line-service
-  namespace: reddog
+  namespace: reddog-branch
   labels:
     app: make-line-service
 spec:
