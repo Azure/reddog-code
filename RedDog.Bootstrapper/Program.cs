@@ -30,10 +30,12 @@ namespace RedDog.Bootstrapper
                 try
                 {
                     connectionString = daprClient.GetSecretAsync(SecretStoreName, "reddog-sql").GetAwaiter().GetResult();
+                    Console.WriteLine($"connectionString={connectionString}");
                 }
                 catch(Exception e)
                 {
                     Console.WriteLine($"An exception occured while retrieving the secret from the Dapr sidecar. Retrying in 5 seconds...");
+                    Console.WriteLine($"connectionString={connectionString}");
                     Console.WriteLine(e.StackTrace);
                     Task.Delay(5000).Wait();
                 }
