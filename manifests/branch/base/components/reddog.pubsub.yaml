@@ -1,0 +1,27 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: reddog.pubsub
+  namespace: reddog-branch
+spec:
+  type: pubsub.rabbitmq
+  version: v1
+  metadata: 
+    - name: host
+      secretKeyRef:
+        name: rabbitmq-connectionstring
+        key: rabbitmq-connectionstring
+    - name: durable
+      value: true
+    - name: deleteWhenUnused
+      value: false      
+    - name: deliveryMode
+      value: 2
+scopes:
+  - order-service
+  - make-line-service
+  - loyalty-service
+  - receipt-generation-service
+  - accounting-service   
+auth:
+  secretStore: reddog.secretstore

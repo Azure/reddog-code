@@ -5,10 +5,14 @@ metadata:
   namespace: reddog-corp
 spec:
   type: pubsub.azure.servicebus
+  version: v1  
   metadata:
     - name: connectionString
       secretKeyRef:
         name: sb-root-connectionstring
         key: sb-root-connectionstring
+scopes:
+  - loyalty-service
+  - accounting-service 
 auth:
   secretStore: reddog.secretstore

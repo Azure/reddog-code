@@ -1,0 +1,19 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: reddog.state.loyalty
+  namespace: reddog-corp
+spec:
+  type: state.redis
+  version: v1
+  metadata:
+    - name: redisHost
+      value: redis-cache-master.redis:6379
+    - name: redisPassword
+      secretKeyRef:    
+        name: redis-password
+        key: redis-password
+scopes:
+  - loyalty-service
+auth:
+  secretStore: reddog.secretstore

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ui
-  namespace: reddog
+  namespace: reddog-branch
   labels:
     app: ui
 spec:
@@ -23,5 +23,21 @@ spec:
         - name: ui
           image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-ui:latest"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reddog-branch-ui
+  namespace: reddog-branch  
+  labels:
+    name: reddog-branch-ui
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: ui          

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: receipt-generation-service
-  namespace: reddog
+  namespace: reddog-branch
   labels:
     app: receipt-generation-service
 spec:

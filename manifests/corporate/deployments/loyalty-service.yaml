@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: make-line-service
-  namespace: reddog
+  name: loyalty-service
+  namespace: reddog-corp
   labels:
-    app: make-line-service
+    app: loyalty-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: make-line-service
+      app: loyalty-service
   template:
     metadata:
       labels:
-        app: make-line-service
+        app: loyalty-service
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "make-line-service"
+        dapr.io/app-id: "loyalty-service"
         dapr.io/app-port: "80"
         dapr.io/config: "reddog.config"
     spec:
       containers:
-        - name: make-line-service
-          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-make-line-service:latest"
+        - name: loyalty-service
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-loyalty-service:latest"
           ports:
             - containerPort: 80
           imagePullPolicy: Always

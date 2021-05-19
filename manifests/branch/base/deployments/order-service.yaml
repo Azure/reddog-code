@@ -1,26 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: virtual-worker
-  namespace: reddog
+  name: order-service
+  namespace: reddog-branch
   labels:
-    app: virtual-worker
+    app: order-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: virtual-worker
+      app: order-service
   template:
     metadata:
       labels:
-        app: virtual-worker
+        app: order-service
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "virtual-worker"
+        dapr.io/app-id: "order-service"
         dapr.io/app-port: "80"
         dapr.io/config: "reddog.config"
     spec:
       containers:
-        - name: virtual-worker
-          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-virtual-worker:latest"
+        - name: order-service
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-order-service:latest"
+          ports:
+            - containerPort: 80
           imagePullPolicy: Always

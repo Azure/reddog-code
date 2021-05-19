@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-worker
+  namespace: reddog-branch
+spec:
+  template:
+    spec:
+      containers:
+      - name: virtual-worker
+        env:
+        - name: STORE_ID
+          value: Redmond
