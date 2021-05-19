@@ -39,28 +39,28 @@
   }
 }
 .nav-link-white img{
-  opacity: 25%;
+  opacity: .25;
 }
 
 .nav-pop-out{
   position: absolute;
   right: -20px;
   bottom: 20px;
-  padding-left: 8px;
-  padding-top: 18px;
+  padding-left: 6px;
+  padding-top: 12px;
   padding-right: 16px;
-  padding-bottom: 18px;
-  border-top:1px solid rgba(255, 255, 255, 0.25);
-  border-bottom:1px solid rgba(255, 255, 255, 0.25);
-  border-left:1px solid rgba(255, 255, 255, 0.25);
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+  padding-bottom: 12px;
+  // border-top:1px solid rgba(255, 255, 255, 0.25);
+  // border-bottom:1px solid rgba(255, 255, 255, 0.25);
+  // border-left:1px solid rgba(255, 255, 255, 0.25);
+  // border-top-left-radius: 18px;
+  // border-bottom-left-radius: 18px;
 }
 
 .nav-pop-out:hover{
-  border-top:1px solid rgba(255, 255, 255, 0.75);
-  border-bottom:1px solid rgba(255, 255, 255, 0.75);
-  border-left:1px solid rgba(255, 255, 255, 0.75);
+  // border-top:1px solid rgba(255, 255, 255, 0.75);
+  // border-bottom:1px solid rgba(255, 255, 255, 0.75);
+  // border-left:1px solid rgba(255, 255, 255, 0.75);
   padding-left: 20px;
   padding-top: 25px;
   padding-right: 25px;
@@ -68,7 +68,7 @@
 }
 
 .nav-pop-out:hover > a > img{
-  opacity: 100%;
+  opacity: 1;
 }
 
 

@@ -1,29 +1,16 @@
 <script>
-import { Line } from "vue-chartjs";
+import { Line, mixins } from 'vue-chartjs'
 
 export default {
+  name: 'sales-chart',
   extends: Line,
-  props: {
-    chartdata: {
-      type: Object,
-      default: null
-    },
-    options: {
-      type: Object,
-      default: null
-    }
-  },
+  mixins: [mixins.reactiveProp],
+  props: ['options', 'chart-id', 'width', 'height'],
   mounted () {
-      this.renderChart(this.chartdata, this.options)
-      console.log(this.$data._chart)
-      // this.$data._chart.defaults.font.family = "'Exo', sans-serif";
+    this.renderChart(this.chartData, this.options)
+  },
+  created() {
+
   }
 }
-
-
-// // import fakeOrders from "../models/fakeOrderTotals.json";
-// chart.defaults.font.family = "'Exo', sans-serif";
-// chart.defaults.font.size = 12;
-// chart.defaults.font.weight = 700;
-// chart.defaults.plugins.legend.display = false;
 </script>

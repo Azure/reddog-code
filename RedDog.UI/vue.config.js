@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const fetch = require("node-fetch");
+const moment = require("moment");
 // const axios = require('axios').default;
 
 
@@ -7,11 +8,11 @@ let MAKELINE_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/make-line-service/meth
 let ACCOUNTING_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/accounting-service/method/OrderMetrics"
 
 if (process.env.NODE_ENV === 'production'){
-  console.log('setting prod environment variables')
+  console.log('setting PROD environment variables')
   MAKELINE_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/make-line-service/method/orders/Redmond"
   ACCOUNTING_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/accounting-service/method/OrderMetrics"
 }else{
-  console.log('setting dev environment variables')
+  console.log('setting DEV environment variables')
   console.log(MAKELINE_SERVICE)
   console.log(ACCOUNTING_SERVICE)
 }
@@ -46,15 +47,38 @@ module.exports = {
     host: "0.0.0.0",
     public: "0.0.0.0:8080",
     port: 8080,
-
     before: (app)=> {
 
       app.get('/orders/inflight', (req, res)=>{
 
+        let outData=[];
+        let orderMinutes={};
         fetch(MAKELINE_SERVICE)
         .then(response => response.json())
         .then(data => {
-          res.json(data).status(200)
+          data.forEach((o,i)=>{
+            var propName = `${moment(o.orderDate).format("YYYYMMDDHHmm")}`.toString();
+            if (orderMinutes.hasOwnProperty(propName)){
+              orderMinutes[propName].total = (orderMinutes[propName].total + 1);
+            }else{
+              orderMinutes[propName] = { total: 1, prettyPrintTime: moment(o.orderDate).format('h:mma') }
+            }
+
+            
+            if (i === data.length -1){
+              let orderKeys = Object.keys(orderMinutes);
+              for(var k=0; k<orderKeys.length; k++){
+                outData.push(orderMinutes[orderKeys[k]])
+                if (k === orderKeys.length -1 ){
+                  res.json({e: 0, payload:{ orderCount: data.length, orderByMinute: outData}}).status(200)
+                }
+              }
+            }
+          })
+          
+        })
+        .catch(error=>{
+          res.json({e: -1, payload: { orderCount:100, orderByMinute: []}})
         })
 
       })
@@ -64,7 +88,11 @@ module.exports = {
         fetch(ACCOUNTING_SERVICE)
         .then(response => response.json())
         .then(data => {
-          res.json(data).status(200)
+          console.log(data)
+          res.json({e: 0, payload:data}).status(200)
+        })
+        .catch(error=>{
+          res.json({e: -1, payload: {}})
         })
 
       })

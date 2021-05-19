@@ -122,13 +122,19 @@
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                <i class="tim-icons icon-cart text-warning"></i>ORDERS IN-FLIGHT
+                <i class="tim-icons icon-cart text-warning"></i> IN-FLIGHT
               </div>
-              <div class="card-body">
-                <StreamChart :chartdata="chartData" :options="chartOptions"/>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
+              <div class="card-body chart-body" v-if="inflightChart">
+                <StreamChart v-if="loaded" :chartData="chartData" :options="chartOptions"/>
+              </div>
+              <div class="card-body" v-else>
+                <div class="card-big-detail text-center">
+                  {{ unfulfilledOrders }}
                 </div>
+              </div>
+              <div class="card-footer-title text-right">
+                <!-- Footer stuff here -->
+              </div>
               </div>
             </div>
           </div>
@@ -145,7 +151,7 @@ import Chart from 'chart.js'
 
 Chart.defaults.global.defaultFontColor = '#FFF';
 Chart.defaults.global.defaultFontFamily = "'Exo', sans-serif";
-Chart.defaults.global.defaultFontSize = 12;
+Chart.defaults.global.defaultFontSize = 10;
 Chart.defaults.global.defaultFontStyle = 300;
 // Chart.defaults.global.gridLines.display = false;
 
@@ -161,6 +167,8 @@ export default {
   },
   data() {
     return {
+      inflightChart: true,
+      loaded:false,
       inflightOrderArray:[],
       chartData:null,
       chartOptions: null,
@@ -200,33 +208,39 @@ export default {
         fetch("/orders/metrics")
           .then((response) => response.json())
           .then((data) => {
-            // zero out the metrics
-            this.fulfilledOrders = 0;
-            this.avgFulfillmentSec = 0;
-            this.totalFulfillmentTime = 0;
-            this.totalSales = 0;
-            this.totalCost = 0;
-            this.totalProfit = 0;
-            this.profitPerOrder = 0;
+            console.log(data)
+              if(data.e === 0){
+              // zero out the metrics
+              this.fulfilledOrders = 0;
+              this.avgFulfillmentSec = 0;
+              this.totalFulfillmentTime = 0;
+              this.totalSales = 0;
+              this.totalCost = 0;
+              this.totalProfit = 0;
+              this.profitPerOrder = 0;
 
-            data.forEach((ord, index) => {
-              // console.log(ord);
-              this.fulfilledOrders = this.fulfilledOrders + ord.orderCount;
-              this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec);
-              this.totalSales = this.totalSales + ord.totalPrice;
-              this.totalCost = this.totalCost + ord.totalCost;
+              data.payload.forEach((ord, index) => {
+                // console.log(ord);
+                this.fulfilledOrders = this.fulfilledOrders + ord.orderCount;
+                this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec);
+                this.totalSales = this.totalSales + ord.totalPrice;
+                this.totalCost = this.totalCost + ord.totalCost;
 
-              if (index === data.length - 1) {
-                this.totalProfit = (this.totalSales - this.totalCost).toFixed(0); /// TOTAL PROFIT
-                this.totalProfitFormatted = currency(this.totalProfit, {precision:0}).format(); /// TOTAL PROFIT FORMATTEd
-                this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
-                this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
-                this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0);
-                this.totalSales = this.totalSales.toFixed(0); /// TOTAL SALES
-                this.totalSalesFormatted = currency(this.totalSales, {precision:0}).format(); /// TOTAL SALES FORMATTED
-              }
-            });
-          });
+                if (index === data.payload.length - 1) {
+                  this.totalProfit = (this.totalSales - this.totalCost).toFixed(0); /// TOTAL PROFIT
+                  this.totalProfitFormatted = currency(this.totalProfit, {precision:0}).format(); /// TOTAL PROFIT FORMATTEd
+                  this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
+                  this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
+                  this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0);
+                  this.totalSales = this.totalSales.toFixed(0); /// TOTAL SALES
+                  this.totalSalesFormatted = currency(this.totalSales, {precision:0}).format(); /// TOTAL SALES FORMATTED
+                }
+              });
+            }else{
+              console.log('some kind of connection issue - you might want to get that looked at')
+            }
+          }
+          );
       }, 5000);
     },
     getInFlightOrderMetrics() {
@@ -234,39 +248,29 @@ export default {
         fetch("/orders/inflight")
           .then((response) => response.json())
           .then((data) => {
-            this.fillLineChart(data);
-            this.unfulfilledOrders = data.length;
-            this.getCurrentDateTime();
+            if (data.e === 0 ) {
+              this.fillLineChart(data.payload.orderByMinute);
+              this.unfulfilledOrders = data.payload.orderCount;
+              this.getCurrentDateTime();
+            }else{
+              console.log('some kind of connection issue - you might want to get that looked at')
+            }
           });
       }, 2000);
     },
-    fillLineChart(orderData){
-      // orderData.forEach((ord,ordIndex) => {
-      //   let currentMinute = moment(ord.orderDate).format('MMM-Do h:mmA');
-      //   console.log(currentMinute)
-      // })
-      let minuteLabels = [];
-      for(var i=10; i>0; i--){
-        var dt = moment().subtract(i, 'minutes');
-        minuteLabels.push(dt.format('h:mmA'));
-      }
-      
-
-      // console.log(StreamChart);
-     
-
+    createOrderLineChart(minuteLabels, minuteTotals){
       this.chartData= {
         labels:minuteLabels,
         datasets: [
           {
             label: 'Orders',
-            borderColor:'rgb(132, 232, 137)',
-            backgroundColor: 'transparent',
-            data: [2,7,9,7,5]
+            borderColor:'rgb(0, 255, 132)',
+            backgroundColor: 'rgba(0, 255, 132, .05)',
+            data: minuteTotals
           }
         ]
-      }
-      
+      };
+
       this.chartOptions = {
         legend: {
             display: false
@@ -274,34 +278,58 @@ export default {
          scales: {
           yAxes: [{
             ticks: {
-               min: 0,
-               max: 10,
-              //  stepSize: 2,
-              //  reverse: false,
-              //  beginAtZero: true,
-               padding: 40
+              stepSize: 2,
+              min:0,
+              autoSkip: true,
+              //reverse: false,
+              //beginAtZero: true,
+              padding: 14
             },
             gridLines: {
-              // display: false ,
-              color: "rgba(150,150,150, .125)"
+              display: true,
+              color: "rgba(150,150,150, .05)"
             },
           }],
           xAxes: [{
             ticks: {
               autoSkip: true,
-              // maxRotation: 270,
-              // minRotation: 270,
-              padding: 40
+              maxRotation: 90,
+              minRotation: 90,
+              padding: 14
             },
             gridLines: {
-              display: false ,
-              // color: "rgba(150,150,150, .25)"
+              display: true ,
+              color: "rgba(150,150,150, .05)"
             },
           }]
         },
         responsive: true,
-        maintainAspectRatio: false
-      }
+        // maintainAspectRatio: false
+      };
+      this.loaded = true;
+
+
+    },
+    fillLineChart(orderData){
+
+      let minuteLabels = [];
+      let dataValues = [];
+
+      orderData.forEach((o,i)=>{
+        minuteLabels.push(o.prettyPrintTime)
+        dataValues.push(o.total)
+        var _ml, _dv
+        if (i === orderData.length -1){
+          if (minuteLabels.length >=10){
+            _ml = minuteLabels.slice(minuteLabels.length -10, minuteLabels.length)
+            _dv = dataValues.slice(minuteLabels.length -10, minuteLabels.length)
+            this.createOrderLineChart(_ml, _dv)
+          }else{
+            this.createOrderLineChart(minuteLabels, dataValues)
+          }
+        }
+      })
+      
     }
 
   },
@@ -324,7 +352,7 @@ export default {
   created() {
     this.getInFlightOrderMetrics();
     this.getAccountingOrderMetrics();
-    this.fillLineChart(null);
+    // this.fillLineChart(null);
   },
 };
 </script>

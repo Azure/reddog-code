@@ -11,7 +11,7 @@
         <div class="col-lg-3 text-right"> -->
           <div class="nav-pop-out">
             <a class="nav-link-white" href="https://github.com/orgs/CloudNativeGBB/people" target="_blank">
-              <img src="img/cngbb-wide.png" height="24" />
+              <img src="img/msft-50mm.png" height="36" />
             </a>
           </div>
         <!-- </div>
