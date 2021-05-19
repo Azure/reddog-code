@@ -13,7 +13,7 @@ namespace RedDog.VirtualCustomers
     public class VirtualCustomers : BackgroundService
     {
         private const string OrderServiceDaprId = "order-service";
-        private const string StoreId = "Redmond";
+        private static readonly string storeId = Environment.GetEnvironmentVariable("STORE_ID") ?? "Redmond";
         public static readonly int maxItemQuantity = int.Parse(Environment.GetEnvironmentVariable("MAX_ITEM_QUANTITY") ?? "8");
         public static readonly int minSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_TO_PLACE_ORDER") ?? "2");
         public static readonly int maxSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MAX_SEC_TO_PLACE_ORDER") ?? "8");
@@ -98,7 +98,7 @@ namespace RedDog.VirtualCustomers
             CustomerOrder order = new CustomerOrder();
             int custNum = _random.Next(0, customers.Length);
             _logger.LogInformation("Customer {0} {1} with loyalty id {2} is placing an order.", customers[custNum].Item2, customers[custNum].Item3, customers[custNum].Item1);
-            order.StoreId = StoreId;
+            order.StoreId = storeId;
             order.FirstName = customers[custNum].Item2;
             order.LastName = customers[custNum].Item3;
             order.LoyaltyId = customers[custNum].Item1.ToString();
