@@ -4,15 +4,19 @@ metadata:
   name: reddog.state.loyalty
   namespace: reddog-corp
 spec:
-  type: state.redis
+  type: state.azure.cosmosdb
   version: v1
   metadata:
-    - name: redisHost
-      value: redis-cache-master.redis:6379
-    - name: redisPassword
-      secretKeyRef:    
-        name: redis-password
-        key: redis-password
+    - name: url
+      value: https://reddogdemocorp.documents.azure.com:443/
+    - name: database
+      value: reddog
+    - name: collection
+      value: loyalty
+    - name: masterKey
+      secretKeyRef:
+        name: cosmos-primary-rw-key
+        key: cosmos-primary-rw-key
 scopes:
   - loyalty-service
 auth:

@@ -25,6 +25,11 @@ spec:
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
+          env:
+          - name: IS_CORP
+            value: false          
+          - name: STORE_ID
+            value: Denver
 ---
 apiVersion: v1
 kind: Service
