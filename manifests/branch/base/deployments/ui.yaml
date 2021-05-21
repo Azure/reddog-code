@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: Always
           env:
           - name: IS_CORP
-            value: false          
+            value: "false"          
           - name: STORE_ID
             value: Denver
 ---
