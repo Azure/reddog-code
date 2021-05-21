@@ -28,6 +28,6 @@ spec:
           - name: STORE_ID
             value: Denver
           - name: MIN_SECONDS_TO_COMPLETE_ITEM
-            value: 2
+            value: "2"
           - name: MAX_SECONDS_TO_COMPLETE_ITEM
-            value: 12
+            value: "12"
