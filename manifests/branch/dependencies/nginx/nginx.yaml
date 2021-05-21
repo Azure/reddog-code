@@ -1,0 +1,18 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: nginx-ingress
+  namespace: nginx-ingress
+spec:
+  releaseName: nginx-ingress
+  chart:
+    repository: https://kubernetes.github.io/ingress-nginx
+    name: ingress-nginx
+    version: 3.29.0
+  values:
+    controller:
+      service:
+        type: LoadBalancer
+        annotations: 
+          service.beta.kubernetes.io/azure-dns-label-name: "paas-vnext-workshop"
+      replicaCount: 2
