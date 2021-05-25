@@ -56,13 +56,13 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
   margin: 0; // 1
-  font-family: $font-family-base;
+  font-family: "Quicksand", sans-serif;
   font-size: $font-size-base;
   font-weight: $font-weight-base;
   line-height: $line-height-base;
-  color: $body-color;
+  color: #DAE2DF; // GAINSBORO
   text-align: left; 
-  background-color: #161d2d;
+  background-color: #161D2D; // RAISIN BLACK
 }
 
 // Suppress the focus outline on elements that cannot be accessed via keyboard.

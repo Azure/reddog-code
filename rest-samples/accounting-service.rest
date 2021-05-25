@@ -3,5 +3,32 @@
 ### Order metrics
 GET http://{{accounting-service}}/OrderMetrics
 
+
+### Orders by Minute
+http://{{accounting-service}}/Orders/Minute?StoreId=Redmond
+
+
+### Order Counts over the last 30 minutes
+http://{{accounting-service}}/Orders/Minute/PT60M?StoreId=Redmond
+
+
+### Orders over the last 24 hours
+http://{{accounting-service}}/Orders/Hour/P2D?StoreId=Redmond
+
+
+
+
+### Orders by Hour
+http://{{accounting-service}}/Orders/Hour?StoreId=Redmond
+
+### Orders by Day
+http://{{accounting-service}}/Orders/Day?StoreId=Redmond
+
+### Orders by Week
+http://{{accounting-service}}/Orders/Week?StoreId=Redmond
+
+
+
+
 ### Readiness probe
 GET http://{{accounting-service}}/Probes/ready

@@ -55,3 +55,7 @@ GET http://0.0.0.0:5280/v1.0/healthz
 # receipt-gen-service
 GET http://0.0.0.0:5380/v1.0/healthz
 
+
+###
+# fake users
+GET https://randomuser.me/api/?inc=name&nat=au,ca,us,de,nz,gb&results=5

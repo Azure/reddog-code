@@ -3,9 +3,9 @@ const fetch = require("node-fetch");
 const moment = require("moment");
 // const axios = require('axios').default;
 
-
+// http://{{accounting-service}}/Orders/Minute?StoreId=Redmond
 let MAKELINE_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/make-line-service/method/orders/Redmond"
-let ACCOUNTING_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/accounting-service/method/OrderMetrics"
+let ACCOUNTING_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/accounting-service/method/"
 
 if (process.env.NODE_ENV === 'production'){
   console.log('setting PROD environment variables')
@@ -85,13 +85,57 @@ module.exports = {
 
       app.get('/orders/metrics', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE)
+        fetch(ACCOUNTING_SERVICE + 'OrderMetrics')
         .then(response => response.json())
         .then(data => {
           console.log(data)
           res.json({e: 0, payload:data}).status(200)
         })
         .catch(error=>{
+          console.log('error', error)
+          res.json({e: -1, payload: {}})
+        })
+
+      })
+
+      app.get('/orders/count/minute', (req, res)=>{
+        
+        fetch(ACCOUNTING_SERVICE + 'Orders/Minute/P30M?StoreId=Redmond')
+        .then(response => response.json())
+        .then(data => {
+          res.json({e: 0, payload:data}).status(200)
+        })
+        .catch(error=>{
+          console.log('error', error)
+          res.json({e: -1, payload: {}})
+        })
+
+      })
+
+
+      app.get('/orders/count/hour', (req, res)=>{
+        
+        fetch(ACCOUNTING_SERVICE + 'Orders/Hour/P1D?StoreId=Redmond')
+        .then(response => response.json())
+        .then(data => {
+          res.json({e: 0, payload:data}).status(200)
+        })
+        .catch(error=>{
+          console.log('error', error)
+          res.json({e: -1, payload: {}})
+        })
+
+      })
+
+      app.get('/orders/count/day', (req, res)=>{
+        
+        fetch(ACCOUNTING_SERVICE + 'Orders/Day/P2D?StoreId=Redmond')
+        .then(response => response.json())
+        .then(data => {
+          res.json({e: 0, payload:data}).status(200)
+        })
+        .catch(error=>{
+          console.log('error', error)
           res.json({e: -1, payload: {}})
         })
 

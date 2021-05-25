@@ -1,32 +1,37 @@
 <template>
   <div class="container">
     <div class="row justify-content-lg-left">
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="row">
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                <i class="tim-icons icon-cart text-warning"></i>ORDERS IN-FLIGHT
+                ORDERS OVER TIME
               </div>
-              <div class="card-body">
-                <div class="card-big-detail text-center">
-                  {{ unfulfilledOrders }}
-                </div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
+              <div class="card-body chart-body">
+                <StreamChart v-if="loaded" :chartData="chartData" :options="chartOptions"/>
+              </div>
+              <div class="card-footer-title chart-options text-right">
+                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'MINUTE' }" v-on:click="orderChartUpdate('MINUTE')">
+                  MINUTES
+                </a>
+                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'HOUR' }" v-on:click="orderChartUpdate('HOUR')">
+                  HOURS
+                </a>
+                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'DAY' }" v-on:click="orderChartUpdate('DAY')">
+                  DAYS
+                </a>
+              </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="row">
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                <i class="tim-icons icon-check-2 text-success"></i>FULFILLED
-                ORDERS
+                FULFILLED ORDERS
               </div>
               <div class="card-body">
                 <div class="card-big-detail text-center">
@@ -40,13 +45,65 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+    </div>
+    <div class="row justify-content-lg-left">
+      <div class="col-lg-3">
         <div class="row">
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                <i class="tim-icons icon-watch-time text-secondary"></i>AVG
-                ORDER TIME
+                TOTAL SALES
+              </div>
+              <div class="card-body">
+                <div class="card-big-detail text-center">{{ totalSalesFormatted }}</div>
+                <div class="card-footer-title text-right">
+                  <!-- Footer stuff here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="col-lg-3">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card card-trans-base">
+              <div class="card-header-title">
+                TOTAL PROFIT
+              </div>
+              <div class="card-body">
+                <div class="card-big-detail text-center">{{ totalProfitFormatted }}</div>
+                <div class="card-footer-title text-right">
+                  <!-- Footer stuff here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card card-trans-base">
+              <div class="card-header-title">
+                PROFIT PER ORDER
+              </div>
+              <div class="card-body">
+                <div class="card-big-detail text-center">{{ profitPerOrderFormatted }}</div>
+                <div class="card-footer-title text-right">
+                  <!-- Footer stuff here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card card-trans-base">
+              <div class="card-header-title">
+                AVG ORDER FILL TIME
               </div>
               <div class="card-body">
                 <div class="card-big-detail text-center">
@@ -62,62 +119,7 @@
       </div>
     </div>
     <div class="row justify-content-lg-left">
-      <div class="col-lg-4">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card card-trans-base">
-              <div class="card-header-title">
-                <i class="tim-icons icon-money-coins text-success"></i>TOTAL
-                SALES
-              </div>
-              <div class="card-body">
-                <div class="card-big-detail text-center">{{ totalSalesFormatted }}</div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <div class="col-lg-4">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card card-trans-base">
-              <div class="card-header-title">
-                <i class="tim-icons icon-money-coins text-success"></i>TOTAL
-                PROFIT
-              </div>
-              <div class="card-body">
-                <div class="card-big-detail text-center">{{ totalProfitFormatted }}</div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card card-trans-base">
-              <div class="card-header-title">
-                <i class="tim-icons icon-money-coins text-success"></i>PROFIT PER ORDER
-              </div>
-              <div class="card-body">
-                <div class="card-big-detail text-center">{{ profitPerOrderFormatted }}</div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-lg-left">
-      <div class="col-lg-4">
+      <!-- <div class="col-lg-4">
         <div class="row">
           <div class="col-lg-12">
             <div class="card card-trans-base">
@@ -132,13 +134,16 @@
                   {{ unfulfilledOrders }}
                 </div>
               </div>
-              <div class="card-footer-title text-right">
-                <!-- Footer stuff here -->
+              <div class="card-footer-title text-right" v-on:click="switchInflight" v-if="inflightChart">
+                <i class="tim-icons icon-sound-wave"></i>
+              </div>
+              <div class="card-footer-title text-right" v-on:click="switchInflight" v-else>
+                <i class="tim-icons icon-sound-wave active"></i>
               </div>
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -146,13 +151,12 @@
 <script>
 import moment from 'moment'
 import currency from 'currency.js'
-
 import Chart from 'chart.js'
 
-Chart.defaults.global.defaultFontColor = '#FFF';
+Chart.defaults.global.defaultFontColor = '#e6fff9';
 Chart.defaults.global.defaultFontFamily = "'Exo', sans-serif";
-Chart.defaults.global.defaultFontSize = 10;
-Chart.defaults.global.defaultFontStyle = 300;
+Chart.defaults.global.defaultFontSize = 14;
+Chart.defaults.global.defaultFontStyle = 500;
 // Chart.defaults.global.gridLines.display = false;
 
 // Chart.defaults.plugins.legend.display = false;
@@ -167,7 +171,9 @@ export default {
   },
   data() {
     return {
-      inflightChart: true,
+      orderChartSegment: 1,
+      orderChartSegmentName: 'MINUTES',
+      orderChartInterval: null,
       loaded:false,
       inflightOrderArray:[],
       chartData:null,
@@ -198,7 +204,22 @@ export default {
     },
   },
   methods: {
+    fillOrderChart(data){
+      let minuteLabels = [], dataValues = [], dataValuesPrev = []
 
+      let previousTen = data.values.slice(data.values.length-20, data.values.length-10) 
+      let lastTen = data.values.slice(data.values.length-10, data.values.length)
+
+      lastTen.forEach((lt,li) => {
+        minuteLabels.push(moment(lt.pointInTime).add(-4, 'hours').format("h:mmA"))
+        dataValues.push(lt.value)
+        dataValuesPrev.push(previousTen[li].value)
+
+        if(li=== lastTen.length-1){
+          this.createOrderLineChart(minuteLabels, dataValues, dataValuesPrev)
+        }
+      });
+    },
     getCurrentDateTime() {
       var current = new Date();
       this.currentDateTime = current.toLocaleString();
@@ -208,7 +229,7 @@ export default {
         fetch("/orders/metrics")
           .then((response) => response.json())
           .then((data) => {
-            console.log(data)
+            //console.log(data)
               if(data.e === 0){
               // zero out the metrics
               this.fulfilledOrders = 0;
@@ -241,39 +262,81 @@ export default {
             }
           }
           );
-      }, 5000);
+      }, 10000);
     },
-    getInFlightOrderMetrics() {
-      this.pollingInFlightOrders = setInterval(() => {
-        fetch("/orders/inflight")
+    getOrderChart(segment){
+      let orderChartUrl = '/orders/count/minute'
+      clearInterval(this.orderChartInterval)
+
+      switch (segment) {
+        case 1:
+          orderChartUrl = '/orders/count/minute';
+          this.orderChartSegmentName = 'MINUTE';
+          break;
+        case 2:
+          orderChartUrl = '/orders/count/hour';
+          this.orderChartSegmentName = 'HOUR';
+          break;
+        case 3:
+          orderChartUrl = '/orders/count/day';
+          this.orderChartSegmentName = 'DAY';
+          break;
+        default:
+          orderChartUrl = '/orders/count/minute';
+          this.orderChartSegmentName = 'MINUTE';
+          break;
+      }
+      this.orderChartInterval = setInterval(() => {
+        fetch(orderChartUrl)
           .then((response) => response.json())
           .then((data) => {
             if (data.e === 0 ) {
-              this.fillLineChart(data.payload.orderByMinute);
-              this.unfulfilledOrders = data.payload.orderCount;
-              this.getCurrentDateTime();
+              this.fillOrderChart(data.payload);
             }else{
               console.log('some kind of connection issue - you might want to get that looked at')
             }
           });
-      }, 2000);
+      }, 5000);
     },
-    createOrderLineChart(minuteLabels, minuteTotals){
+    // getInFlightOrderMetrics() {
+
+    //   this.pollingInFlightOrders = setInterval(() => {
+    //     fetch("/orders/byminute")
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         if (data.e === 0 ) {
+    //           this.fillLineChart(data.payload);
+    //           // this.unfulfilledOrders = data.payload.orderCount;
+    //           this.getCurrentDateTime();
+    //         }else{
+    //           console.log('some kind of connection issue - you might want to get that looked at')
+    //         }
+    //       });
+    //   }, 10000);
+    // },
+    createOrderLineChart(labels, totals, prevTotals){
       this.chartData= {
-        labels:minuteLabels,
+        labels:labels,
         datasets: [
           {
-            label: 'Orders',
-            borderColor:'rgb(0, 255, 132)',
-            backgroundColor: 'rgba(0, 255, 132, .05)',
-            data: minuteTotals
+            label: 'CURRENT',
+            borderColor:'rgb(0, 227, 53)',
+            backgroundColor: 'rgba(0, 227, 53, .05)',
+            data: totals
+          },
+          {
+            label: `PREVIOUS 10 ${this.orderChartSegmentName}`,
+            borderColor:'rgb(227, 121, 0)',
+            backgroundColor: 'rgba(227, 121, 0, .05)',
+            data: prevTotals
           }
         ]
       };
 
       this.chartOptions = {
         legend: {
-            display: false
+            display: true,
+            position: 'bottom'
          },
          scales: {
           yAxes: [{
@@ -307,29 +370,17 @@ export default {
         // maintainAspectRatio: false
       };
       this.loaded = true;
-
+    },
+    orderChartUpdate(segment){
+      // 1=MIN, 2=HOUR, 3=WEEK
+      if(this.orderChartSegment != segment){
+        this.orderChartSegment = segment;
+        this.getOrderChart(this.orderChartSegment)
+      }
 
     },
-    fillLineChart(orderData){
-
-      let minuteLabels = [];
-      let dataValues = [];
-
-      orderData.forEach((o,i)=>{
-        minuteLabels.push(o.prettyPrintTime)
-        dataValues.push(o.total)
-        var _ml, _dv
-        if (i === orderData.length -1){
-          if (minuteLabels.length >=10){
-            _ml = minuteLabels.slice(minuteLabels.length -10, minuteLabels.length)
-            _dv = dataValues.slice(minuteLabels.length -10, minuteLabels.length)
-            this.createOrderLineChart(_ml, _dv)
-          }else{
-            this.createOrderLineChart(minuteLabels, dataValues)
-          }
-        }
-      })
-      
+    switchInflight(){
+      this.inflightChart = this.inflightChart ? false : true;
     }
 
   },
@@ -350,9 +401,7 @@ export default {
     }
   },
   created() {
-    this.getInFlightOrderMetrics();
-    this.getAccountingOrderMetrics();
-    // this.fillLineChart(null);
+    this.getOrderChart(this.orderChartSegment);
   },
 };
 </script>

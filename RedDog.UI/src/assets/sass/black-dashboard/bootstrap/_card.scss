@@ -32,10 +32,32 @@
 }
 .chart-body{
   position: relative;
-  padding-top: 30px !important;
-  padding-bottom: 14px !important;
-  padding-left: 14px !important;
+  width: 94%;
+  padding-top: 40px !important;
+  padding-bottom: 8px !important;
+  padding-left: 20px !important;
   padding-right: 14px !important;
+}
+a.chart-segment.activeSegment{
+  color:#00e335 !important;
+}
+a.chart-segment.activeSegment:hover{
+  color:#00e335 !important;
+}
+a.chart-options:last-child{
+  padding-right: 40px;
+}
+a.chart-segment{
+  font-size: 12px;
+  font-weight: 500;
+  padding-right: 10px;
+  color: #FFF !important;
+}
+a.chart-segment:hover{
+  cursor:pointer;
+  font-size: 16px;
+  padding-right: 12px;
+  color: #FFF !important;
 }
 
 
