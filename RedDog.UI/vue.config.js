@@ -10,7 +10,7 @@ let ACCOUNTING_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/accounting-service/m
 if (process.env.NODE_ENV === 'production'){
   console.log('setting PROD environment variables')
   MAKELINE_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/make-line-service/method/orders/Redmond"
-  ACCOUNTING_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/accounting-service/method/OrderMetrics"
+  ACCOUNTING_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/accounting-service/method/"
 }else{
   console.log('setting DEV environment variables')
   console.log(MAKELINE_SERVICE)
