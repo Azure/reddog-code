@@ -2,14 +2,14 @@ const webpack = require("webpack");
 const fetch = require("node-fetch");
 const moment = require("moment");
 // const axios = require('axios').default;
-
+const STORE_ID = process.env.STORE_ID || "Denver";
 // http://{{accounting-service}}/Orders/Minute?StoreId=Redmond
 let MAKELINE_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/make-line-service/method/orders/Redmond"
 let ACCOUNTING_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/accounting-service/method/"
 
 if (process.env.NODE_ENV === 'production'){
   console.log('setting PROD environment variables')
-  MAKELINE_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/make-line-service/method/orders/Redmond"
+  MAKELINE_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/make-line-service/method/orders/" + STORE_ID
   ACCOUNTING_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/accounting-service/method/OrderMetrics"
 }else{
   console.log('setting DEV environment variables')
@@ -100,7 +100,7 @@ module.exports = {
 
       app.get('/orders/count/minute', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Minute/P30M?StoreId=Redmond')
+        fetch(ACCOUNTING_SERVICE + 'Orders/Minute/P30M?StoreId=' + STORE_ID)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -115,7 +115,7 @@ module.exports = {
 
       app.get('/orders/count/hour', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Hour/P1D?StoreId=Redmond')
+        fetch(ACCOUNTING_SERVICE + 'Orders/Hour/P1D?StoreId=' + STORE_ID)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -129,7 +129,7 @@ module.exports = {
 
       app.get('/orders/count/day', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Day/P2D?StoreId=Redmond')
+        fetch(ACCOUNTING_SERVICE + 'Orders/Day/P2D?StoreId=' + STORE_ID)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
