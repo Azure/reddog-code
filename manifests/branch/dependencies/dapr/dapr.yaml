@@ -1,0 +1,11 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: dapr
+  namespace: dapr-system
+spec:
+  releaseName: dapr
+  chart:
+    repository: https://dapr.github.io/helm-charts/
+    name: dapr
+    version: 1.0.0

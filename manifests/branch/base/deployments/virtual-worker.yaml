@@ -24,3 +24,10 @@ spec:
         - name: virtual-worker
           image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-virtual-worker:latest"
           imagePullPolicy: Always
+          env:
+          - name: STORE_ID
+            value: Denver
+          - name: MIN_SECONDS_TO_COMPLETE_ITEM
+            value: "2"
+          - name: MAX_SECONDS_TO_COMPLETE_ITEM
+            value: "12"

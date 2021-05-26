@@ -1,0 +1,13 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: rabbitmq
+  namespace: rabbitmq
+spec:
+  releaseName: rabbitmq
+  chart:
+    repository: https://charts.bitnami.com/bitnami
+    name: rabbitmq
+    version: 8.9.2
+  values:
+    replicaCount: 3

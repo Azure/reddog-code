@@ -1,0 +1,29 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: dapr-system
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: rabbitmq
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: redis
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: nginx-ingress
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: cert-manager
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: keda

@@ -1,0 +1,11 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: redis
+  namespace: redis
+spec:
+  releaseName: redis
+  chart:
+    repository: https://charts.bitnami.com/bitnami
+    name: redis
+    version: 12.7.4
