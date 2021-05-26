@@ -100,7 +100,7 @@ module.exports = {
 
       app.get('/orders/count/minute', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Minute/P30M?StoreId=Redmond')
+        fetch(ACCOUNTING_SERVICE + 'Orders/Minute/PT3H?StoreId=Redmond')
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -115,7 +115,7 @@ module.exports = {
 
       app.get('/orders/count/hour', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Hour/P1D?StoreId=Redmond')
+        fetch(ACCOUNTING_SERVICE + 'Orders/Hour/PT72H?StoreId=Redmond')
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -129,7 +129,7 @@ module.exports = {
 
       app.get('/orders/count/day', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Day/P2D?StoreId=Redmond')
+        fetch(ACCOUNTING_SERVICE + 'Orders/Day/P14D?StoreId=Redmond')
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)

@@ -31,16 +31,22 @@
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                FULFILLED ORDERS
+                SALES OVER TIME
               </div>
-              <div class="card-body">
-                <div class="card-big-detail text-center">
-                  {{ fulfilledOrders }}
-                </div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
+              <div class="card-body chart-body">
+                <StreamChart v-if="salesChartLoaded" :chartData="salesChartData" :options="salesChartOptions"/>
               </div>
+              <!-- <div class="card-footer-title chart-options text-right">
+                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'MINUTE' }" v-on:click="orderChartUpdate('MINUTE')">
+                  MINUTES
+                </a>
+                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'HOUR' }" v-on:click="orderChartUpdate('HOUR')">
+                  HOURS
+                </a>
+                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'DAY' }" v-on:click="orderChartUpdate('DAY')">
+                  DAYS
+                </a>
+              </div> -->
             </div>
           </div>
         </div>
@@ -52,7 +58,7 @@
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                TOTAL SALES
+                TOTAL SALES <span class="card-header-subtitle">LAST 30 DAYS</span>
               </div>
               <div class="card-body">
                 <div class="card-big-detail text-center">{{ totalSalesFormatted }}</div>
@@ -193,6 +199,9 @@ export default {
       currentDateTime: "",
       pollingInFlightOrders: null,
       pollingOrderMetrics: null,
+      salesChartData: null,
+      salesChartOptions: null,
+      salesChartLoaded: false
     };
   },
   computed: {
@@ -204,21 +213,48 @@ export default {
     },
   },
   methods: {
-    fillOrderChart(data){
-      let minuteLabels = [], dataValues = [], dataValuesPrev = []
+    fillOrderChart(data, segment){
+      let minuteLabels = [], dataValues = [], dataValuesPrev = [], previousArr = [], lastArr = []
 
-      let previousTen = data.values.slice(data.values.length-20, data.values.length-10) 
-      let lastTen = data.values.slice(data.values.length-10, data.values.length)
+      switch (segment) {
+        case 'MINUTE':
+          previousArr = data.values.slice(data.values.length-20, data.values.length-10)
+          lastArr = data.values.slice(data.values.length-10, data.values.length) 
+          break
+        case 'HOUR':
+          previousArr = data.values.slice(data.values.length-14, data.values.length-7)
+          lastArr = data.values.slice(data.values.length-7, data.values.length)
+          break
+        case 'DAY':
+          previousArr = data.values.slice(data.values.length-14, data.values.length-7)
+          lastArr = data.values.slice(data.values.length-7, data.values.length)
+          break
+        default:
+          previousArr = data.values.slice(data.values.length-20, data.values.length-10)
+          lastArr = data.values.slice(data.values.length-10, data.values.length) 
+          break
+      }
 
-      lastTen.forEach((lt,li) => {
+      lastArr.forEach((lt,li) => {
         minuteLabels.push(moment(lt.pointInTime).add(-4, 'hours').format("h:mmA"))
         dataValues.push(lt.value)
-        dataValuesPrev.push(previousTen[li].value)
+        dataValuesPrev.push(previousArr[li].value)
 
-        if(li=== lastTen.length-1){
+        if(li=== lastArr.length-1){
           this.createOrderLineChart(minuteLabels, dataValues, dataValuesPrev)
         }
       });
+    },
+    fillSalesChart(labels, values){
+      let outLabels = [], outValues = []
+      if(labels.length> 10){
+        outLabels = labels.slice(labels.length-10, labels.length)
+        outValues = values.slice(labels.length-10, labels.length)
+      }else{
+        outLabels = labels
+        outValues = values
+      }
+      this.createSalesLineChart(outLabels, outValues)
     },
     getCurrentDateTime() {
       var current = new Date();
@@ -226,12 +262,11 @@ export default {
     },
     getAccountingOrderMetrics() {
       this.pollingOrderMetrics = setInterval(() => {
+        let salesLabels = [], salesValues = []
         fetch("/orders/metrics")
           .then((response) => response.json())
           .then((data) => {
-            //console.log(data)
               if(data.e === 0){
-              // zero out the metrics
               this.fulfilledOrders = 0;
               this.avgFulfillmentSec = 0;
               this.totalFulfillmentTime = 0;
@@ -241,13 +276,15 @@ export default {
               this.profitPerOrder = 0;
 
               data.payload.forEach((ord, index) => {
-                // console.log(ord);
+                salesLabels.push(moment(ord.orderDate).add(ord.orderHour, 'hours').format('M/D hA'))
+                salesValues.push(ord.totalPrice)
                 this.fulfilledOrders = this.fulfilledOrders + ord.orderCount;
                 this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec);
                 this.totalSales = this.totalSales + ord.totalPrice;
                 this.totalCost = this.totalCost + ord.totalCost;
 
                 if (index === data.payload.length - 1) {
+                  this.fillSalesChart(salesLabels, salesValues);
                   this.totalProfit = (this.totalSales - this.totalCost).toFixed(0); /// TOTAL PROFIT
                   this.totalProfitFormatted = currency(this.totalProfit, {precision:0}).format(); /// TOTAL PROFIT FORMATTEd
                   this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
@@ -269,15 +306,15 @@ export default {
       clearInterval(this.orderChartInterval)
 
       switch (segment) {
-        case 1:
+        case 'MINUTE':
           orderChartUrl = '/orders/count/minute';
           this.orderChartSegmentName = 'MINUTE';
           break;
-        case 2:
+        case 'HOUR':
           orderChartUrl = '/orders/count/hour';
           this.orderChartSegmentName = 'HOUR';
           break;
-        case 3:
+        case 'DAY':
           orderChartUrl = '/orders/count/day';
           this.orderChartSegmentName = 'DAY';
           break;
@@ -291,12 +328,12 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             if (data.e === 0 ) {
-              this.fillOrderChart(data.payload);
+              this.fillOrderChart(data.payload, this.orderChartSegmentName);
             }else{
               console.log('some kind of connection issue - you might want to get that looked at')
             }
           });
-      }, 5000);
+      }, 10000);
     },
     // getInFlightOrderMetrics() {
 
@@ -314,14 +351,14 @@ export default {
     //       });
     //   }, 10000);
     // },
-    createOrderLineChart(labels, totals, prevTotals){
+    createOrderLineChart(labels, totals, prevTotals, segment){
       this.chartData= {
         labels:labels,
         datasets: [
           {
             label: 'CURRENT',
-            borderColor:'rgb(0, 227, 53)',
-            backgroundColor: 'rgba(0, 227, 53, .05)',
+            borderColor:'rgb(112, 162, 255)',
+            backgroundColor: 'rgba(112, 162, 255, .05)',
             data: totals
           },
           {
@@ -341,8 +378,61 @@ export default {
          scales: {
           yAxes: [{
             ticks: {
-              stepSize: 2,
-              min:0,
+              // stepSize: 2,
+              // min:0,
+              autoSkip: true,
+              //reverse: false,
+              beginAtZero: false,
+              padding: 14
+            },
+            gridLines: {
+              display: true,
+              color: "rgba(150,150,150, .05)"
+            },
+          }],
+          xAxes: [{
+            ticks: {
+              autoSkip: true,
+              maxRotation: 90,
+              minRotation: 90,
+              padding: 14
+            },
+            gridLines: {
+              display: true ,
+              color: "rgba(150,150,150, .05)"
+            },
+          }]
+        },
+        responsive: true,
+        // maintainAspectRatio: false
+      };
+      this.loaded = true;
+    },
+
+
+    createSalesLineChart(labels, values){
+      this.salesChartData= {
+        labels:labels,
+        datasets: [
+          {
+            label: 'US DOLLARS',
+            borderColor:'rgb(0, 227, 53)',
+            backgroundColor: 'rgba(0, 227, 53, .05)',
+            data: values
+          },
+        ]
+      };
+
+      this.salesChartOptions = {
+        legend: {
+            display: true,
+            position: 'bottom'
+         },
+         scales: {
+          yAxes: [{
+            ticks: {
+              // stepSize: 2,
+              // min:0,
               autoSkip: true,
               //reverse: false,
               //beginAtZero: true,
@@ -369,18 +459,17 @@ export default {
         responsive: true,
         // maintainAspectRatio: false
       };
-      this.loaded = true;
+      this.salesChartLoaded = true;
+
     },
     orderChartUpdate(segment){
-      // 1=MIN, 2=HOUR, 3=WEEK
+
+      console.log('updating chart to ', segment )
       if(this.orderChartSegment != segment){
         this.orderChartSegment = segment;
         this.getOrderChart(this.orderChartSegment)
       }
 
-    },
-    switchInflight(){
-      this.inflightChart = this.inflightChart ? false : true;
     }
 
   },
@@ -402,6 +491,7 @@ export default {
   },
   created() {
     this.getOrderChart(this.orderChartSegment);
+    this.getAccountingOrderMetrics();
   },
 };
 </script>
