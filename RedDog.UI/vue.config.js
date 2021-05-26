@@ -88,7 +88,6 @@ module.exports = {
         fetch(ACCOUNTING_SERVICE + 'OrderMetrics')
         .then(response => response.json())
         .then(data => {
-          console.log(data)
           res.json({e: 0, payload:data}).status(200)
         })
         .catch(error=>{
