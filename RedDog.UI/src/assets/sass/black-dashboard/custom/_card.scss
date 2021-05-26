@@ -250,9 +250,9 @@
   z-index: 4;
   margin-top: -4px;
   margin-bottom: -16px;
-  font-size: clamp(24px, 5vw, 108px);
-  color: white;
-  font-weight: 500;
+  font-size: clamp(36px, 64px, 108px);
+  color: #DAE2DF; // GAINSBORO
+  font-weight: 300;
   font-family: "Exo", sans-serif;
   padding-bottom: 2vh;
   padding-top: 1.5vh;
@@ -315,23 +315,23 @@
   text-align: center;
   font-size: 128px;
   font-weight: 500;
-  color: #fff;
+  color: #DAE2DF; // GAINSBORO
 }
 .card-header-title{
-  margin-left: 12px;
-  margin-top: 8px;
+  margin-left: 8px;
+  margin-top: 12px;
   padding-left: 10px;
   padding-top: 4px;
-  color: #939393;
-  font-size: clamp(14px, 1vw, 24px);
-  margin-bottom: -14px;
-  font-weight: 500;
-  font-family: "Exo", sans-serif;
+  color: #a08f80; //GRULIO
+  font-size: clamp(16px, 20px, 28px);
+  margin-bottom: 4px;
+  font-weight: 300;
+  font-family: "Quicksand", sans-serif;
 }
 .card-header-title i{
-  font-size: clamp(14px, 1.25vw, 24px);
+  font-size: clamp(10px, 16px, 20px);
   padding-bottom: 6px;
-  padding-right: 10px !important;
+  padding-right: 6px !important;
 }
 .card-header-subtitle{
   font-size: 11px;
@@ -339,7 +339,7 @@
   font-family: "Quicksand", sans-serif;
   font-weight: 500;
   // letter-spacing: 1px;
-  color:#fff;
+  color:rgb(223, 87, 194);
 
 }
 
@@ -390,9 +390,9 @@
 
 .card-footer-title {
   position: relative;
-  padding-right: 0px;
+  padding-right: 6px;
   padding-left: 22px;
-  padding-bottom: 2px;
+  padding-bottom: 12px;
   font-size: 10px;
   font-weight: 700;
   color: rgba(255, 115, 220, 0.578);
@@ -402,60 +402,28 @@
 
 .card-footer-title i {
   padding-left: 4px;
-  font-size: 10px;
+  padding-right: 4px;
+  font-size: 14px;
   font-weight: 700;
-  color: #ccc;
+  color: rgb(108, 108, 108);
 }
+.card-footer-title i.active {
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(108, 242, 119);
+}
+
 .chart-doughnut-canvas {
   position: relative;
   margin: auto;
 }
+
 .chart-doughnut-canvas canvas{
   height:clamp(128px, 6.83vw, 190px);
   width: 9vw;
-  // height: 20vh !important;
-  // padding-top: 24px !important;
-  // padding-bottom: 24px !important;
 }
-
-// .grid-container {
-//   height: calc(88vh - 20px);
-//   min-height: 88%;
-//   max-height: 88%;
-//   padding: 10px;
-//   background-color: rgba(5, 2, 6, 0.65);
-//   border-radius: 4px;
-//   width: 100%;
-//   position: relative;
-//   overflow: hidden;
-// }
-
-// .grid-container:after {
-//   height: calc(88vh - 20px);
-//   top: calc(2vh);
-//   width: 100%;
-//   -webkit-transform: perspective(68vh) rotateX(44deg) scale(16, 24)
-//     translateZ(0);
-//   transform: perspective(88vh) rotateX(44deg) scale(16, 24) translateZ(0);
-//   content: "";
-//   display: block;
-//   position: relative;
-//   padding: 10px;
-//   background-position: center bottom;
-//   background-size: 32px 28px;
-//   // 11f7ff2b
-//   //f668ff14
-//   background-image: linear-gradient(
-//       to left,
-//       rgba(1, 255, 247, 0.425) 0.025rem,
-//       rgba(0, 0, 0, 0.125) 0rem
-//     ),
-//     linear-gradient(
-//       to top,
-//       rgba(255, 9, 243, 0.425) 0.025rem,
-//       rgba(0, 0, 0, 0.125) 0rem
-//     );
-// }
 
 .card-body {
   padding: $card-spacer-y;

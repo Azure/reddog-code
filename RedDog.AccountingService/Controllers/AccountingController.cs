@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
@@ -87,6 +88,45 @@ namespace RedDog.AccountingService.Controllers
 
             return Ok();
         }
+        [HttpGet("/Orders/{period}/{timeSpan}")]
+        public async Task<OrdersTimeSeries> GetOrderCountOverTime(string storeId, string period, string timeSpan, [FromServices] AccountingContext dbContext)
+        {
+
+            TimeSpan spanLength = XmlConvert.ToTimeSpan(timeSpan);
+            var fromDate = DateTime.UtcNow.Subtract(spanLength);
+
+            IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> totalOrders;
+
+            switch(period){
+                case "Minute":
+                    totalOrders = GetOrdersByMinute(dbContext,storeId,fromDate);
+                    break;
+                case "Hour":
+                    totalOrders = GetOrdersByHour(dbContext,storeId,fromDate);
+                    break;
+                case "Day":
+                    totalOrders = GetOrdersByDay(dbContext,storeId,fromDate);
+                    break;
+                default:
+                    totalOrders = GetOrdersByMinute(dbContext,storeId,fromDate);
+                    break;
+            };
+
+
+            var orderData =         from oi in totalOrders
+                                    select new TimeSeries<int>
+                                     {
+                                        PointInTime = new DateTime(oi.Key.Year,oi.Key.Month, oi.Key.Day, oi.Key.Hour, oi.Key.Minute, 0),
+                                        Value = oi.Count()
+                                    };
+            var totalOrdersByMinute =  new OrdersTimeSeries{
+                StoreId = storeId,
+                Values =   await orderData.ToListAsync()
+            };
+
+            return totalOrdersByMinute;
+
+        }
 
         [HttpGet("/OrderMetrics")]
         public async Task<List<OrderMetric>> GetOrderMetricsAsync(string storeId, [FromServices] AccountingContext dbContext)
@@ -160,5 +200,50 @@ namespace RedDog.AccountingService.Controllers
             
             return await metrics.ToListAsync();
         }
+
+
+        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByMinute(AccountingContext dbContext, string storeId, DateTime fromDate) {
+            var totalOrders =       from o in dbContext.Orders
+                                    where o.StoreId == storeId && o.PlacedDate > fromDate
+                                    orderby o.PlacedDate descending
+                                    group o by new StoreTimeSegmentMinute{
+                                        StoreId = storeId,
+                                        Year = o.PlacedDate.Year,
+                                        Month = o.PlacedDate.Month,
+                                        Day = o.PlacedDate.Day,
+                                        Hour = o.PlacedDate.Hour,
+                                        Minute = o.PlacedDate.Minute
+                                    };
+            return totalOrders;
+        }
+
+        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByHour(AccountingContext dbContext, string storeId, DateTime fromDate) {
+            var totalOrders =       from o in dbContext.Orders
+                                    where o.StoreId == storeId && o.PlacedDate > fromDate
+                                    orderby o.PlacedDate descending
+                                    group o by new StoreTimeSegmentMinute{
+                                        StoreId = storeId,
+                                        Year = o.PlacedDate.Year,
+                                        Month = o.PlacedDate.Month,
+                                        Day = o.PlacedDate.Day,
+                                        Hour = o.PlacedDate.Hour
+                                    };
+            return totalOrders;
+        }
+
+        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByDay(AccountingContext dbContext, string storeId, DateTime fromDate) {
+            var totalOrders =       from o in dbContext.Orders
+                                    where o.StoreId == storeId && o.PlacedDate > fromDate
+                                    orderby o.PlacedDate descending
+                                    group o by new StoreTimeSegmentMinute{
+                                        StoreId = storeId,
+                                        Year = o.PlacedDate.Year,
+                                        Month = o.PlacedDate.Month,
+                                        Day = o.PlacedDate.Day
+                                    };
+            return totalOrders;
+        }
+
+        
     }
 }

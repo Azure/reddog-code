@@ -188,7 +188,7 @@
                 background: transparent;
 
                 i,p{
-                  color: #FFF;
+                  color: #DAE2DF; //GAINSBORO
                   font-weight: 700;
                 }
 
@@ -476,15 +476,8 @@
     width: $full-width;
     min-height: 90vh;
     max-height: 90vh;
-
-  
-
-    
-    border-top: 3px solid #d14c4c;
-    // background: linear-gradient(rgba(21, 15, 15, 0.962), rgb(11, 8, 8));
-    // background: linear-gradient(rgba(69, 65, 66, 0.96), #121826);
-    // background: linear-gradient(#585858, #333030);
-    background: #161d2d;
+    border-top: 3px solid #D14C4C; //ENGLISH VERMILLION
+    background: #161D2D; // RAISIN BLACK
 
     
     @include transitions (0.50s, cubic-bezier(0.685, 0.0473, 0.346, 1));
