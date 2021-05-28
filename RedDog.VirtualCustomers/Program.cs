@@ -25,7 +25,7 @@ namespace RedDog.VirtualCustomers
 
             try
             {
-                using (IHost host = new HostBuilder()
+                using IHost host = new HostBuilder()
                     .ConfigureHostConfiguration(configHost =>
                     {
                         configHost.SetBasePath(Directory.GetCurrentDirectory());
@@ -42,14 +42,14 @@ namespace RedDog.VirtualCustomers
                     })
                     .ConfigureServices((hostContext, services) =>
                     {
+                        services.AddHttpClient();
                         services.AddDaprClient();
                         services.AddHostedService<VirtualCustomers>();
                     })
                     .UseSerilog()
-                    .Build())
-                {
-                    await host.RunAsync();
-                }
+                    .Build();
+                
+                await host.RunAsync();
             }
             catch (Exception e)
             {

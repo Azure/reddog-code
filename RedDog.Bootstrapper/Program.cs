@@ -13,6 +13,7 @@ namespace RedDog.Bootstrapper
     {
         private const string SecretStoreName = "reddog.secretstore";
         private string DaprHttpPort = Environment.GetEnvironmentVariable("DAPR_HTTP_PORT") ?? "3500";
+        private HttpClient _httpClient = new HttpClient();
 
         static async Task Main(string[] args)
         {
@@ -27,26 +28,35 @@ namespace RedDog.Bootstrapper
 
         public AccountingContext CreateDbContext(string[] args)
         {
-            var daprClient = new DaprClientBuilder().Build();
+            EnsureDaprOrTerminate().Wait();
+            string connectionString = GetDbConnectionString().Result;
+            ShutdownDapr();
 
-            Dictionary<string, string> connectionString = null;
-            do
+            DbContextOptionsBuilder<AccountingContext> optionsBuilder = new DbContextOptionsBuilder<AccountingContext>().UseSqlServer(connectionString, b =>
             {
-                try
-                {
-                    Console.WriteLine("Attempting to retrieve database connection string from Dapr...");
-                    connectionString = daprClient.GetSecretAsync(SecretStoreName, "reddog-sql").GetAwaiter().GetResult();
-                    Console.WriteLine("Successfully retrieved database connection string.");
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine($"An exception occured while retrieving the secret from the Dapr sidecar. Retrying in 5 seconds...");
-                    Console.WriteLine(e.StackTrace);
-                    Task.Delay(5000).Wait();
-                }
-            } while(connectionString == null);
+                b.MigrationsAssembly("RedDog.Bootstrapper");
+                b.EnableRetryOnFailure();
+            });
 
+            return new AccountingContext(optionsBuilder.Options);
+        }
 
+        private async Task EnsureDaprOrTerminate()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"http://localhost:{DaprHttpPort}/v1.0/healthz");
+                response.EnsureSuccessStatusCode();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Error communicating with Dapr sidecar. Exiting...", e.InnerException?.Message ?? e.Message);
+                Environment.Exit(1);
+            }
+        }
+
+        private void ShutdownDapr()
+        {
             Console.WriteLine("Attempting to shutdown Dapr sidecar...");
             bool isDaprShutdownSuccessful = false;
             HttpClient httpClient = new HttpClient();
@@ -56,7 +66,7 @@ namespace RedDog.Bootstrapper
                 {
                     var response = httpClient.PostAsync($"http://localhost:{DaprHttpPort}/v1.0/shutdown", null).Result;
 
-                    if(response.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode)
                     {
                         isDaprShutdownSuccessful = true;
                         Console.WriteLine("Successfully shutdown Dapr sidecar.");
@@ -67,7 +77,7 @@ namespace RedDog.Bootstrapper
                         Console.WriteLine($"Dapr error message: {response.Content.ReadAsStringAsync().Result}");
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine($"An exception occured while attempting to shutdown the Dapr sidecar.");
                     Console.WriteLine(e.StackTrace);
@@ -76,15 +86,30 @@ namespace RedDog.Bootstrapper
                 {
                     Task.Delay(5000).Wait();
                 }
-            } while(!isDaprShutdownSuccessful);
+            } while (!isDaprShutdownSuccessful);
+        }
 
-            DbContextOptionsBuilder<AccountingContext> optionsBuilder = new DbContextOptionsBuilder<AccountingContext>().UseSqlServer(connectionString["reddog-sql"], b => 
+        private async Task<string> GetDbConnectionString()
+        {
+            var daprClient = new DaprClientBuilder().Build();
+
+            Dictionary<string, string> connectionString = null;
+            do
             {
-                b.MigrationsAssembly("RedDog.Bootstrapper");
-                b.EnableRetryOnFailure();
-            });
-
-            return new AccountingContext(optionsBuilder.Options);
+                try
+                {
+                    Console.WriteLine("Attempting to retrieve database connection string from Dapr...");
+                    connectionString = await daprClient.GetSecretAsync(SecretStoreName, "reddog-sql");
+                    Console.WriteLine("Successfully retrieved database connection string.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"An exception occured while retrieving the secret from the Dapr sidecar. Retrying in 5 seconds...");
+                    Console.WriteLine(e.StackTrace);
+                    Task.Delay(5000).Wait();
+                }
+            } while (connectionString == null);
+            return connectionString["reddog-sql"];
         }
     }
 }
