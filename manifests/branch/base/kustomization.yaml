@@ -8,6 +8,7 @@ resources:
 - ./components/reddog.secretstore.yaml
 - ./components/reddog.state.loyalty.yaml
 - ./components/reddog.state.makeline.yaml
+- ./deployments/rbac.yaml
 - ./deployments/accounting-service.yaml
 - ./deployments/bootstrapper.yaml
 - ./deployments/loyalty-service.yaml
