@@ -2,7 +2,7 @@
 @storeId = Redmond
 
 ### Get all orders waiting to be made via makeline-service
-//GET http://{{makeline-service}}/orders/{{storeId}}
+GET http://{{makeline-service}}/orders/{{storeId}}
 
 //GET http://127.0.0.1:5580/v1.0/invoke/make-line-service/method/orders/{{storeId}}
 

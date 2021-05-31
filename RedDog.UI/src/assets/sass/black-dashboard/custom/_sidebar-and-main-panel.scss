@@ -4,11 +4,29 @@
   height: 100vh;
   overflow: auto;
   width: 100%;
+  // color:rgb(27, 51, 82);
+  background: url("/img/hex-back-pat.png");
+  background-repeat: no-repeat;
+  background-size:cover;
+  // background: no-repeat left/200% url('/img/hex-back-pat.png');
 
     &.wrapper-full-page{
         min-height: 100vh;
         height: auto;
     }
+}
+.card-table-par{
+  height: 480px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.card-table{
+  position: relative;
+  max-height: 80% !important;
+  overflow: scroll;
+}
+.inflight-items{
+  text-align: right;
 }
 
 .sidebar-wrapper ul li div.collapse ul li div.collapse ul li a,
@@ -16,6 +34,33 @@
 .sidebar-wrapper ul li div.collapsing ul li div.collapse ul li a{
 
   margin-left: 25px;
+}
+
+.logo-simple-text{
+  color: #ffffff;
+  font-size: 14px;
+  font-family: good-times, sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.logo-content {
+  width: 400px;
+  padding-left: 0px;
+  padding-right: 2px;
+  float:left;
+}
+
+
+.left-logo{
+  float: left;
+  width: 200px;
+}
+.right-logo{
+  padding-top: 7px;
+  padding-left: 20px;
+  width: 120px;
+  float: left;
 }
 
 .sidebar,
@@ -346,6 +391,7 @@
         }
     }
 
+
     .logo-tim{
         border-radius: 50%;
         border: 1px solid #333;
@@ -373,7 +419,7 @@
     }
 
     &[data="vue"] {
-      background:  #0c0e19;
+      background:  #101b34;
       // #21182a, #000
       // @include linear-gradient(
       //   #18151a,
@@ -476,8 +522,7 @@
     width: $full-width;
     min-height: 90vh;
     max-height: 90vh;
-    border-top: 3px solid #D14C4C; //ENGLISH VERMILLION
-    background: #161D2D; // RAISIN BLACK
+    border-top: 3px solid #de2020; 
 
     
     @include transitions (0.50s, cubic-bezier(0.685, 0.0473, 0.346, 1));
