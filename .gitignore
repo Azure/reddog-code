@@ -644,3 +644,14 @@ manifests/local/corporate/**
 !manifests/local/corporate/.keep
 
 **/*.pfx
+
+# KEDA deployment yml with secrets
+RedDog.CorporateTransferService/func-deployment.yaml
+RedDog.CorporateTransferService/local.settings.json
+
+# Brian
+brian-notes.md
+contoso-health-notes.md
+
+# Joey
+components/local/
