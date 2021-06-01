@@ -12,6 +12,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/cli-plugin-babel": "^4.4.6",
+    "@vue/cli-plugin-eslint": "^4.4.6",
+    "@vue/cli-plugin-pwa": "^4.4.6",
     "@vue/cli-service": "^4.5.12",
     "async": "^2.6.3",
     "cache-loader": "^4.1.0",
@@ -27,7 +30,8 @@
     "vue-i18n": "^8.18.2",
     "vue-router": "^3.3.4",
     "vue-router-prefetch": "^1.6.0",
-    "vue2-transitions": "^0.3.0"
+    "vue2-transitions": "^0.3.0",
+    "vue-template-compiler": "^2.6.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.6",
