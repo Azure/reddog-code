@@ -1,12 +1,12 @@
 @accounting-service = 127.0.0.1:5700
 
 ### Order metrics
-GET http://{{accounting-service}}/OrderMetrics
+GET http://{{accounting-service}}/OrderMetrics?StoreId=Redmond
 
 
 
-### Order Counts over the last 30 minutes
-http://{{accounting-service}}/Orders/Minute/PT3H?StoreId=Redmond
+### Order Counts over the last 20 minutes
+http://{{accounting-service}}/Orders/Minute/PT20M?StoreId=Redmond
 
 
 ### Orders over the last 24 hours

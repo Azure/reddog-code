@@ -116,6 +116,14 @@
 
 }
 
+.site-name{
+  padding-right:8px;
+  color: #DAE2DF; // GAINSBORO
+  font-weight: 400;
+  font-size: 14px;
+  font-family: good-times, sans-serif;
+}
+
 .navbar-minimize-fixed {
 	position: fixed;
   margin-left: 40px;
@@ -393,6 +401,7 @@
 
   .navbar {
     .caret {
+      // display: none;
       position: absolute;
       left: 80%;
       top: 55%;

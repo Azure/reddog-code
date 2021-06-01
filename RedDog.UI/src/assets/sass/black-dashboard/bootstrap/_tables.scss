@@ -76,7 +76,7 @@
 
 .table-striped {
   tbody tr:nth-of-type(#{$table-striped-order}) {
-    background-color: $table-accent-bg;
+    background-color: #FFF;
   }
 }
 
@@ -130,8 +130,9 @@
 }
 
 .table-dark {
-  color: $table-dark-color;
-  background-color: $table-dark-bg;
+  color: #20bf5d;
+  font-size: 20px;
+  background-color:transparent;
 
   th,
   td,
@@ -145,7 +146,7 @@
 
   &.table-striped {
     tbody tr:nth-of-type(odd) {
-      background-color: $table-dark-accent-bg;
+      background-color: #e1e8ffe5;
     }
   }
 
@@ -157,7 +158,32 @@
     }
   }
 }
+.table-fixed tbody {
+  height: 240px;
+  overflow-y: auto;
+  width: 100%;
+}
 
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+  display: block;
+}
+
+.table-fixed tbody td,
+.table-fixed tbody th,
+.table-fixed thead > tr > th {
+  float: left;
+  position: relative;
+
+  &::after {
+      content: '';
+      clear: both;
+      display: block;
+  }
+}
 
 // Responsive tables
 //

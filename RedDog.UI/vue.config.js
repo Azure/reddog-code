@@ -1,10 +1,16 @@
 const webpack = require("webpack");
 const fetch = require("node-fetch");
-const moment = require("moment");
-// const axios = require('axios').default;
-const STORE_ID = process.env.STORE_ID || "Denver";
-// http://{{accounting-service}}/Orders/Minute?StoreId=Redmond
-let MAKELINE_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/make-line-service/method/orders/Redmond"
+
+const STORE_ID = process.env.STORE_ID || "Redmond";
+const SITE_TYPE = process.env.SITE_TYPE || 'Pharmacy';
+const SITE_TITLE = process.env.SITE_TITLE || 'Contoso :: Pharmacy & Convenience Store';
+let variables = {
+  STORE_ID: STORE_ID,
+  SITE_TYPE: SITE_TYPE,
+  SITE_TITLE: SITE_TITLE
+ }
+
+let MAKELINE_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/make-line-service/method/orders/" + STORE_ID
 let ACCOUNTING_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/accounting-service/method/"
 
 if (process.env.NODE_ENV === 'production'){
@@ -49,43 +55,29 @@ module.exports = {
     port: 8080,
     before: (app)=> {
 
+      app.get('/variables', (req, res)=>{
+
+        res.json({e: -1, payload:variables}).status(200)
+
+      })
+
       app.get('/orders/inflight', (req, res)=>{
 
-        let outData=[];
-        let orderMinutes={};
         fetch(MAKELINE_SERVICE)
         .then(response => response.json())
         .then(data => {
-          data.forEach((o,i)=>{
-            var propName = `${moment(o.orderDate).format("YYYYMMDDHHmm")}`.toString();
-            if (orderMinutes.hasOwnProperty(propName)){
-              orderMinutes[propName].total = (orderMinutes[propName].total + 1);
-            }else{
-              orderMinutes[propName] = { total: 1, prettyPrintTime: moment(o.orderDate).format('h:mma') }
-            }
-
-            
-            if (i === data.length -1){
-              let orderKeys = Object.keys(orderMinutes);
-              for(var k=0; k<orderKeys.length; k++){
-                outData.push(orderMinutes[orderKeys[k]])
-                if (k === orderKeys.length -1 ){
-                  res.json({e: 0, payload:{ orderCount: data.length, orderByMinute: outData}}).status(200)
-                }
-              }
-            }
-          })
-          
+          res.json({e: 0, payload:data}).status(200)
         })
         .catch(error=>{
-          res.json({e: -1, payload: { orderCount:100, orderByMinute: []}})
+          console.log('error', error)
+          res.json({e: -1, payload: {}})
         })
 
       })
 
       app.get('/orders/metrics', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'OrderMetrics')
+        fetch(ACCOUNTING_SERVICE + 'OrderMetrics?StoreId=' + STORE_ID)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -99,7 +91,7 @@ module.exports = {
 
       app.get('/orders/count/minute', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Minute/P30M?StoreId=' + STORE_ID)
+        fetch(ACCOUNTING_SERVICE + 'Orders/Minute/PT20M?StoreId=' + STORE_ID)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
