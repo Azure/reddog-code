@@ -21,8 +21,11 @@ namespace RedDog.VirtualCustomers
         public static readonly int maxSecondsBetweenOrders = int.Parse(Environment.GetEnvironmentVariable("MAX_SEC_BETWEEN_ORDERS") ?? "5");
         public static readonly int numOrders = int.Parse(Environment.GetEnvironmentVariable("NUM_ORDERS") ?? "-1");
 
+        private string DaprHttpPort = Environment.GetEnvironmentVariable("DAPR_HTTP_PORT") ?? "3500";
+        private IHostApplicationLifetime _lifetime;
         private readonly ILogger<VirtualCustomers> _logger;
         private readonly DaprClient _daprClient;
+        private readonly HttpClient _httpClient;
         private Task _ordersTask = Task.CompletedTask;
         private List<Product> _products;
         private Random _random;
@@ -230,22 +233,35 @@ namespace RedDog.VirtualCustomers
             (200,"Rachel","Alvarez")
         };
 
-        public VirtualCustomers(ILogger<VirtualCustomers> logger, DaprClient daprClient)
+        public VirtualCustomers(IHostApplicationLifetime lifetime, ILogger<VirtualCustomers> logger, DaprClient daprClient, IHttpClientFactory httpClientFactory)
         {
+            _lifetime = lifetime;
             _logger = logger;
             _daprClient = daprClient;
+            _httpClient = httpClientFactory.CreateClient();
             _random = new Random();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            try
+            {
+                var response = await _httpClient.GetAsync($"http://localhost:{DaprHttpPort}/v1.0/healthz", stoppingToken);
+                response.EnsureSuccessStatusCode();
+            }
+            catch(Exception e)
+            {
+                _logger.LogError("Error communicating with Dapr sidecar. Exiting...", e.InnerException?.Message ?? e.Message);
+                _lifetime.StopApplication();
+            }
+
             _logger.LogInformation($"The customers are ready to place their orders!");
 
             stoppingToken.Register(() =>
             {
                 _ordersTask.Wait();
                 _logger.LogInformation($"The remaining customers have cancelled their orders and are leaving the store.");
-                Environment.Exit(1);
+                _lifetime.StopApplication();
             });
 
             int ordersCreated = 0;
@@ -253,18 +269,18 @@ namespace RedDog.VirtualCustomers
             {
                 try
                 {
-                    _products = await _daprClient.InvokeMethodAsync<List<Product>>(HttpMethod.Get, OrderServiceDaprId, "product");
+                    _products = await _daprClient.InvokeMethodAsync<List<Product>>(HttpMethod.Get, OrderServiceDaprId, "product", stoppingToken);
                 }
                 catch(Exception e)
                 {
                     _logger.LogError("Error retrieving products. Retrying in 5 seconds. Message: {Message}", e.InnerException?.Message ?? e.Message);
-                    await Task.Delay(5000);
+                    await Task.Delay(5000, stoppingToken);
                 }
             } while (!stoppingToken.IsCancellationRequested && _products == null);
 
             do
             {
-                await Task.Delay(_random.Next(minSecondsBetweenOrders, maxSecondsBetweenOrders + 1) * 1000);
+                await Task.Delay(_random.Next(minSecondsBetweenOrders, maxSecondsBetweenOrders + 1) * 1000, stoppingToken);
                 await CreateOrder(stoppingToken);
                 ordersCreated += 1;
 

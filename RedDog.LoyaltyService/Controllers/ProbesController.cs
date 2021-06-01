@@ -2,17 +2,14 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RedDog.AccountingModel;
 
-namespace RedDog.AccountingService.Controllers
+namespace RedDog.LoyaltyService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class ProbesController : ControllerBase
     {
-        private static bool isReady;
         private string DaprHttpPort = Environment.GetEnvironmentVariable("DAPR_HTTP_PORT") ?? "3500";
         private ILogger<ProbesController> _logger;
         private HttpClient _httpClient;
@@ -24,28 +21,9 @@ namespace RedDog.AccountingService.Controllers
         }
 
         [HttpGet("ready")]
-        public async Task<IActionResult> IsReady([FromServices] AccountingContext dbContext)
+        public async Task<IActionResult> IsReady()
         {
-            if(!isReady)
-            {
-                try
-                {
-                    if(await dbContext.Orders.CountAsync() >= 0 && 
-                       await dbContext.OrderItems.CountAsync() >= 0 &&
-                       await dbContext.Customers.CountAsync() >= 0)
-                    {
-                        isReady = true;
-                    }
-                }
-                catch(Exception e)
-                {
-                    _logger.LogWarning(e, "Readiness probe failure.");
-                }
-
-                return new StatusCodeResult(503);
-            }
-
-            return Ok();
+            return await Task.FromResult(Ok());
         }
 
         [HttpGet("healthz")]
