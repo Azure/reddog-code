@@ -9,6 +9,10 @@ GET http://{{accounting-service}}/OrderMetrics?StoreId=Redmond
 http://{{accounting-service}}/Orders/Minute/PT20M?StoreId=Redmond
 
 
+### Remote Order Counts
+http://austin.accounting.brianredmond.io/Orders/Minute/PT20M?StoreId=Austin
+
+
 ### Orders over the last 24 hours
 http://{{accounting-service}}/Orders/Hour/PT72H?StoreId=Redmond
 

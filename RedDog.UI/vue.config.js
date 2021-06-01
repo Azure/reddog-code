@@ -1,17 +1,22 @@
 const webpack = require("webpack");
 const fetch = require("node-fetch");
 
-const STORE_ID = process.env.STORE_ID || "Redmond";
+const STORE_ID = process.env.STORE_ID || "Austin";
 const SITE_TYPE = process.env.SITE_TYPE || 'Pharmacy';
 const SITE_TITLE = process.env.SITE_TITLE || 'Contoso :: Pharmacy & Convenience Store';
+const MAKELINE_BASE_URL = process.env.MAKELINE_BASE_URL || 'http://austin.makeline.brianredmond.io';
+const ACCOUNTING_BASE_URL = process.env.MAKELINE_BASE_URL || 'http://austin.accounting.brianredmond.io';
+
 let variables = {
   STORE_ID: STORE_ID,
   SITE_TYPE: SITE_TYPE,
-  SITE_TITLE: SITE_TITLE
- }
+  SITE_TITLE: SITE_TITLE,
+  ACCOUNTING_BASE_URL: ACCOUNTING_BASE_URL,
+  MAKELINE_BASE_URL: MAKELINE_BASE_URL
+}
 
-let MAKELINE_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/make-line-service/method/orders/" + STORE_ID
-let ACCOUNTING_SERVICE = "http://127.0.0.1:5980/v1.0/invoke/accounting-service/method/"
+let MAKELINE_SERVICE = MAKELINE_BASE_URL + "/orders/" + STORE_ID
+let ACCOUNTING_SERVICE = ACCOUNTING_BASE_URL
 
 if (process.env.NODE_ENV === 'production'){
   console.log('setting PROD environment variables')
@@ -37,8 +42,7 @@ module.exports = {
         maxChunks: 6
       }),
       new webpack.DefinePlugin({
-        "process.env": {
-        }
+        "process.env": variables
       })
     ]
   },
@@ -77,7 +81,7 @@ module.exports = {
 
       app.get('/orders/metrics', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'OrderMetrics?StoreId=' + STORE_ID)
+        fetch(ACCOUNTING_SERVICE + '/OrderMetrics?StoreId=' + STORE_ID)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -91,7 +95,7 @@ module.exports = {
 
       app.get('/orders/count/minute', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Minute/PT20M?StoreId=' + STORE_ID)
+        fetch(ACCOUNTING_SERVICE + '/Orders/Minute/PT20M?StoreId=' + STORE_ID)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -104,33 +108,33 @@ module.exports = {
       })
 
 
-      app.get('/orders/count/hour', (req, res)=>{
+      // app.get('/orders/count/hour', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Hour/P1D?StoreId=' + STORE_ID)
-        .then(response => response.json())
-        .then(data => {
-          res.json({e: 0, payload:data}).status(200)
-        })
-        .catch(error=>{
-          console.log('error', error)
-          res.json({e: -1, payload: {}})
-        })
+      //   fetch(ACCOUNTING_SERVICE + 'Orders/Hour/P1D?StoreId=' + STORE_ID)
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     res.json({e: 0, payload:data}).status(200)
+      //   })
+      //   .catch(error=>{
+      //     console.log('error', error)
+      //     res.json({e: -1, payload: {}})
+      //   })
 
-      })
+      // })
 
-      app.get('/orders/count/day', (req, res)=>{
+      // app.get('/orders/count/day', (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + 'Orders/Day/P2D?StoreId=' + STORE_ID)
-        .then(response => response.json())
-        .then(data => {
-          res.json({e: 0, payload:data}).status(200)
-        })
-        .catch(error=>{
-          console.log('error', error)
-          res.json({e: -1, payload: {}})
-        })
+      //   fetch(ACCOUNTING_SERVICE + 'Orders/Day/P2D?StoreId=' + STORE_ID)
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     res.json({e: 0, payload:data}).status(200)
+      //   })
+      //   .catch(error=>{
+      //     console.log('error', error)
+      //     res.json({e: -1, payload: {}})
+      //   })
 
-      })
+      // })
      
     }
     // proxy: devUrls,

@@ -49,17 +49,6 @@
                   </table>
                 </div>
               </div>
-              <!-- <div class="card-footer-title chart-options text-right">
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'MINUTE' }" v-on:click="orderChartUpdate('MINUTE')">
-                  MINUTES
-                </a>
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'HOUR' }" v-on:click="orderChartUpdate('HOUR')">
-                  HOURS
-                </a>
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'DAY' }" v-on:click="orderChartUpdate('DAY')">
-                  DAYS
-                </a>
-              </div> -->
             </div>
           </div>
         </div>
