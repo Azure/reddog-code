@@ -13,9 +13,10 @@
             <span class="navbar-toggler-bar bar3"></span>
           </button>
         </div>
-        <div class="logo">
-          <img src="img/reddog-logo-text.png" width="184px"/>
-      </div>
+        <div class="logo-content">
+          <div class="left-logo"><img src="img/contoso-pharmacy-tl-logo.png" width="184px"/></div>
+          <div class="right-logo logo-simple-text">{{ siteName }}</div>
+        </div>
       </div>
       <button class="navbar-toggler" type="button"
               @click="toggleMenu"
@@ -37,10 +38,11 @@
                            class="nav-item"
                            menu-classes="dropdown-navbar">
               <a slot="title" href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="true">
+                <span class="site-name">{{ siteType }}</span>
                 <div class="photo">
                   <img src="img/max-lord.png">
                 </div>
-                <b class="caret d-none d-lg-block d-xl-block"></b>
+                <!-- <b class="caret d-none d-lg-block d-xl-block"></b> -->
                 <p class="d-lg-none">
                   Log out
                 </p>
@@ -87,8 +89,8 @@
       return {
         activeNotifications: false,
         showMenu: false,
-        // searchModalVisible: false,
-        // searchQuery: ''
+        siteType: (process.env.SITE_TYPE || 'PHARMACY'),
+        siteName: (process.env.SITE_ID || 'Redmond'),
       };
     },
     methods: {
