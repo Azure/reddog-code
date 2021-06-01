@@ -71,99 +71,24 @@
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                SALES OVER TIME
+                P & L OVER TIME
               </div>
               <div class="card-body chart-body">
                 <StreamChart v-if="salesChartLoaded" :chartData="salesChartData" :options="salesChartOptions"/>
               </div>
-              <!-- <div class="card-footer-title chart-options text-right">
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'MINUTE' }" v-on:click="orderChartUpdate('MINUTE')">
-                  MINUTES
-                </a>
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'HOUR' }" v-on:click="orderChartUpdate('HOUR')">
-                  HOURS
-                </a>
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'DAY' }" v-on:click="orderChartUpdate('DAY')">
-                  DAYS
-                </a>
-              </div> -->
               </div>
             </div>
           </div>
         </div>
-      <div class="col-lg-6">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card card-trans-base">
-              <div class="card-header-title">
-                PROFIT OVER TIME
-              </div>
-              <div class="card-body chart-body">
-                <!-- <StreamChart v-if="salesChartLoaded" :chartData="salesChartData" :options="salesChartOptions"/> -->
-              </div>
-              <!-- <div class="card-footer-title chart-options text-right">
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'MINUTE' }" v-on:click="orderChartUpdate('MINUTE')">
-                  MINUTES
-                </a>
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'HOUR' }" v-on:click="orderChartUpdate('HOUR')">
-                  HOURS
-                </a>
-                <a class="chart-segment" :class="{ activeSegment : orderChartSegment === 'DAY' }" v-on:click="orderChartUpdate('DAY')">
-                  DAYS
-                </a>
-              </div> -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-lg-left">
       <div class="col-lg-3">
         <div class="row">
           <div class="col-lg-12">
             <div class="card card-trans-base">
               <div class="card-header-title">
-                TOTAL SALES <span class="card-header-subtitle">LAST 30 DAYS</span>
-              </div>
-              <div class="card-body">
-                <div class="card-big-detail text-center">{{ totalSalesFormatted }}</div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <div class="col-lg-3">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card card-trans-base">
-              <div class="card-header-title">
-                TOTAL PROFIT
-              </div>
-              <div class="card-body">
-                <div class="card-big-detail text-center">{{ totalProfitFormatted }}</div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card card-trans-base">
-              <div class="card-header-title">
-                PROFIT PER ORDER
+                AVG PROFIT
               </div>
               <div class="card-body">
                 <div class="card-big-detail text-center">{{ profitPerOrderFormatted }}</div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
               </div>
             </div>
           </div>
@@ -177,12 +102,7 @@
                 AVG ORDER FILL TIME
               </div>
               <div class="card-body">
-                <div class="card-big-detail text-center">
-                  {{ avgFulfillmentSec }}s
-                </div>
-                <div class="card-footer-title text-right">
-                  <!-- Footer stuff here -->
-                </div>
+                <div class="card-big-detail text-center">{{ avgFulfillmentSec }} min</div>
               </div>
             </div>
           </div>
@@ -247,28 +167,11 @@ export default {
     },
   },
   methods: {
-    // fillOrderChart(data, segment){
     fillOrderChart(data){
       let minuteLabels = [], dataValues = [], dataValuesPrev = [], previousArr = [], lastArr = []
-
-      // switch (segment) {
-      //   case 'MINUTE':
-          previousArr = data.values.slice(data.values.length-20, data.values.length-10)
-          lastArr = data.values.slice(data.values.length-10, data.values.length) 
-      //     break
-      //   case 'HOUR':
-      //     previousArr = data.values.slice(data.values.length-14, data.values.length-7)
-      //     lastArr = data.values.slice(data.values.length-7, data.values.length)
-      //     break
-      //   case 'DAY':
-      //     previousArr = data.values.slice(data.values.length-14, data.values.length-7)
-      //     lastArr = data.values.slice(data.values.length-7, data.values.length)
-      //     break
-      //   default:
-      //     previousArr = data.values.slice(data.values.length-20, data.values.length-10)
-      //     lastArr = data.values.slice(data.values.length-10, data.values.length) 
-      //     break
-      // }
+      
+      previousArr = data.values.slice(data.values.length-20, data.values.length-10)
+      lastArr = data.values.slice(data.values.length-10, data.values.length) 
 
       lastArr.forEach((lt,li) => {
         minuteLabels.push(moment(lt.pointInTime).add(-4, 'hours').format("h:mmA"))
@@ -283,17 +186,6 @@ export default {
         }
       });
     },
-    fillSalesChart(labels, values){
-      let outLabels = [], outValues = []
-      if(labels.length> 10){
-        outLabels = labels.slice(labels.length-10, labels.length)
-        outValues = values.slice(labels.length-10, labels.length)
-      }else{
-        outLabels = labels
-        outValues = values
-      }
-      this.createSalesLineChart(outLabels, outValues)
-    },
     getCurrentDateTime() {
       var current = new Date();
       this.currentDateTime = current.toLocaleString();
@@ -301,7 +193,7 @@ export default {
     getAccountingOrderMetrics() {
       clearInterval(this.pollingOrderMetrics)
       this.pollingOrderMetrics = setInterval(() => {
-        let salesLabels = [], salesValues = []
+        let salesLabels = [], salesValues = [], profitLabels =[], profitValues=[]
         fetch("/orders/metrics")
           .then((response) => response.json())
           .then((data) => {
@@ -317,18 +209,21 @@ export default {
               data.payload.forEach((ord, index) => {
                 salesLabels.push(moment(ord.orderDate).add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
                 salesValues.push(ord.totalPrice)
+                profitLabels.push(moment(ord.orderDate).add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
+                profitValues.push(ord.totalPrice-ord.totalCost)
                 this.fulfilledOrders = this.fulfilledOrders + ord.orderCount;
                 this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec);
                 this.totalSales = this.totalSales + ord.totalPrice;
                 this.totalCost = this.totalCost + ord.totalCost;
 
                 if (index === data.payload.length - 1) {
-                  this.fillSalesChart(salesLabels, salesValues);
+                  this.createSalesProfitLineChart(salesLabels, salesValues, profitValues);
                   this.totalProfit = (this.totalSales - this.totalCost).toFixed(0); /// TOTAL PROFIT
                   this.totalProfitFormatted = currency(this.totalProfit, {precision:0}).format(); /// TOTAL PROFIT FORMATTEd
                   this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
                   this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
-                  this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0);
+                  // this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0); /// AVG FULFILLMENT TIME
+                  this.avgFulfillmentSec = moment.duration((this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0), "seconds").minutes();
                   this.totalSales = this.totalSales.toFixed(0); /// TOTAL SALES
                   this.totalSalesFormatted = currency(this.totalSales, {precision:0}).format(); /// TOTAL SALES FORMATTED
                 }
@@ -340,34 +235,16 @@ export default {
           );
       }, 5000);
     },
-    // getOrderChart(segment){
+
     getOrderChart(){
       clearInterval(this.orderChartInterval)
       let orderChartUrl = '/orders/count/minute'
-      // switch (segment) {
-      //   case 'MINUTE':
-      //     orderChartUrl = '/orders/count/minute';
-      //     this.orderChartSegmentName = 'MINUTE';
-      //     break;
-      //   case 'HOUR':
-      //     orderChartUrl = '/orders/count/hour';
-      //     this.orderChartSegmentName = 'HOUR';
-      //     break;
-      //   case 'DAY':
-      //     orderChartUrl = '/orders/count/day';
-      //     this.orderChartSegmentName = 'DAY';
-      //     break;
-      //   default:
-      //     orderChartUrl = '/orders/count/minute';
-      //     this.orderChartSegmentName = 'MINUTE';
-      //     break;
-      // }
       this.orderChartInterval = setInterval(() => {
         fetch(orderChartUrl)
           .then((response) => response.json())
           .then((data) => {
             if (data.e === 0 ) {
-              this.fillOrderChart(data.payload, this.orderChartSegmentName);
+              this.fillOrderChart(data.payload);
             }else{
               console.log('some kind of connection issue - you might want to get that looked at')
             }
@@ -381,9 +258,8 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.inflight = []
-          let tempInflight = []
           data.payload.forEach((ord, index) => {
-            tempInflight.push({
+            this.inflight.push({
               id: ord.orderId,
               timeIn: moment(ord.orderDate).format('h:mmA'),
               first: ord.firstName,
@@ -392,11 +268,11 @@ export default {
               itemDetails: ord.orderItems
             })
             if(index === data.payload.length -1){
-              this.inflight = tempInflight
+              console.log('loaded current orders')
             }
           })
         })
-      }, 3000);
+      }, 10000);
     },
     createOrderLineChart(labels, totals, prevTotals, segment){
       this.chartData= {
@@ -455,15 +331,21 @@ export default {
       };
       this.loaded = true;
     },
-    createSalesLineChart(labels, values){
+    createSalesProfitLineChart(labels, salesValues, profitValues){
       this.salesChartData= {
         labels:labels,
         datasets: [
           {
-            label: 'US DOLLARS',
+            label: 'SALES',
+            borderColor:'rgb(41, 219, 255)',
+            backgroundColor: 'rgba(0, 227, 53, .05)',
+            data: salesValues
+          },
+          {
+            label: 'PROFIT',
             borderColor:'rgb(0, 227, 53)',
             backgroundColor: 'rgba(0, 227, 53, .05)',
-            data: values
+            data: profitValues
           },
         ]
       };
