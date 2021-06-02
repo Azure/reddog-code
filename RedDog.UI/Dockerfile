@@ -10,6 +10,13 @@ RUN npm ci
 RUN npm run build
 
 ENV NODE_ENV "production"
+ENV VUE_APP_IS_CORP true
+ENV VUE_APP_STORE_ID "Austin"
+ENV VUE_APP_SITE_TYPE "Pharmacia"
+ENV VUE_APP_SITE_TITLE "Contoso :: Pharmacy & Bodega"
+ENV VUE_APP_MAKELINE_BASE_URL "http://austin.makeline.brianredmond.io"
+ENV VUE_APP_ACCOUNTING_BASE_URL "http://austin.accounting.brianredmond.io"
+
 EXPOSE 8080
 
 CMD [ "npm", "run", "container" ]

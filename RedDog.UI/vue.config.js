@@ -1,13 +1,15 @@
 const webpack = require("webpack");
 const fetch = require("node-fetch");
 
-const STORE_ID = process.env.STORE_ID || "Austin";
-const SITE_TYPE = process.env.SITE_TYPE || 'Pharmacy';
-const SITE_TITLE = process.env.SITE_TITLE || 'Contoso :: Pharmacy & Convenience Store';
-const MAKELINE_BASE_URL = process.env.MAKELINE_BASE_URL || 'http://austin.makeline.brianredmond.io';
-const ACCOUNTING_BASE_URL = process.env.MAKELINE_BASE_URL || 'http://austin.accounting.brianredmond.io';
+const IS_CORP = (process.env.VUE_APP_IS_CORP || false);
+const STORE_ID = (process.env.VUE_APP_STORE_ID || "Austin");
+const SITE_TYPE = (process.env.VUE_APP_SITE_TYPE || "Pharmacy");
+const SITE_TITLE = (process.env.VUE_APP_SITE_TITLE || "Contoso :: Pharmacy & Convenience Store");
+const MAKELINE_BASE_URL = (process.env.VUE_APP_MAKELINE_BASE_URL || "http://austin.makeline.brianredmond.io");
+const ACCOUNTING_BASE_URL = (process.env.VUE_APP_ACCOUNTING_BASE_URL || "http://austin.accounting.brianredmond.io");
 
 let variables = {
+  IS_CORP: IS_CORP,
   STORE_ID: STORE_ID,
   SITE_TYPE: SITE_TYPE,
   SITE_TITLE: SITE_TITLE,
@@ -20,12 +22,12 @@ let ACCOUNTING_SERVICE = ACCOUNTING_BASE_URL
 
 if (process.env.NODE_ENV === 'production'){
   console.log('setting PROD environment variables')
-  MAKELINE_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/make-line-service/method/orders/" + STORE_ID
-  ACCOUNTING_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/accounting-service/method/"
+  // MAKELINE_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/make-line-service/method/orders/" + STORE_ID
+  // ACCOUNTING_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/accounting-service/method/"
 }else{
   console.log('setting DEV environment variables')
-  console.log(MAKELINE_SERVICE)
-  console.log(ACCOUNTING_SERVICE)
+  // console.log(MAKELINE_SERVICE)
+  // console.log(ACCOUNTING_SERVICE)
 }
 
 
@@ -40,9 +42,6 @@ module.exports = {
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 6
-      }),
-      new webpack.DefinePlugin({
-        "process.env": variables
       })
     ]
   },
@@ -60,9 +59,7 @@ module.exports = {
     before: (app)=> {
 
       app.get('/variables', (req, res)=>{
-
         res.json({e: -1, payload:variables}).status(200)
-
       })
 
       app.get('/orders/inflight', (req, res)=>{
