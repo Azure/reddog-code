@@ -407,8 +407,7 @@ export default {
     }
   },
   created() {
-    document.title = (process.env.SITE_TITLE || 'Contoso :: Pharmacy & Convenience Store');
-    // this.getOrderChart(this.orderChartSegment);
+    document.title = process.env.VUE_APP_SITE_TITLE
     this.getOrderChart();
     this.getAccountingOrderMetrics();
     this.getCurrentOrders();
