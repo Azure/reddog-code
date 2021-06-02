@@ -222,7 +222,7 @@ export default {
             }
           }
           );
-      }, 5000);
+      }, 3000);
     },
 
     getOrderChart(){
@@ -238,7 +238,7 @@ export default {
               console.log('some kind of connection issue - you might want to get that looked at')
             }
           });
-      }, 1000);
+      }, 3000);
     },
     getCurrentOrders(){
       clearInterval(this.pollingInflight)
@@ -261,7 +261,7 @@ export default {
             }
           })
         })
-      }, 10000);
+      }, 3000);
     },
     createOrderLineChart(labels, totals, prevTotals, segment){
       this.chartData= {

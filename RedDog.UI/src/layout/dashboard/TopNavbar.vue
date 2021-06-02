@@ -15,7 +15,7 @@
         </div>
         <div class="logo-content">
           <div class="left-logo"><img src="img/contoso-pharmacy-tl-logo.png" width="184px"/></div>
-          <div class="right-logo logo-simple-text">{{ process.env.VUE_APP_STORE_ID }}</div>
+          <div class="right-logo logo-simple-text">{{ storeId }}</div>
         </div>
       </div>
       <button class="navbar-toggler" type="button"
@@ -90,7 +90,7 @@
         activeNotifications: false,
         showMenu: false,
         siteType: (process.env.VUE_APP_SITE_TYPE || 'PHARMACY-Local'),
-        siteName: (process.env.VUE_APP_STORE_ID || 'Redmond-Local'),
+        storeId: (process.env.VUE_APP_STORE_ID || 'Redmond-Local'),
       };
     },
     methods: {
@@ -112,6 +112,9 @@
       toggleMenu() {
         this.showMenu = !this.showMenu;
       }
+    },
+    created() {
+      // console.log(process.env.VUE_APP_STORE_ID)
     }
   };
 </script>

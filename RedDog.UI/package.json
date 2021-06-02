@@ -21,6 +21,7 @@
     "chart.js": "2.8",
     "chartjs-plugin-streaming": "1.8",
     "currency.js": "^2.0.3",
+    "dotenv-webpack": "^7.0.2",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
     "node-sass": "4.14",
@@ -30,8 +31,8 @@
     "vue-i18n": "^8.18.2",
     "vue-router": "^3.3.4",
     "vue-router-prefetch": "^1.6.0",
-    "vue2-transitions": "^0.3.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "vue2-transitions": "^0.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.6",
