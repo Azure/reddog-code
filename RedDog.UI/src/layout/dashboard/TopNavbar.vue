@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-absolute"
+  <nav class="navbar navbar-expand-lg navbar-absolute" 
        :class="{'bg-white': showMenu, 'navbar-transparent': !showMenu}">
     <div class="container-fluid">
       <div class="navbar-wrapper">
@@ -15,7 +15,7 @@
         </div>
         <div class="logo-content">
           <div class="left-logo"><img src="img/contoso-pharmacy-tl-logo.png" width="184px"/></div>
-          <div class="right-logo logo-simple-text">{{ siteName }}</div>
+          <div class="right-logo logo-simple-text">{{ storeId }}</div>
         </div>
       </div>
       <button class="navbar-toggler" type="button"
@@ -89,8 +89,8 @@
       return {
         activeNotifications: false,
         showMenu: false,
-        siteType: (process.env.SITE_TYPE || 'PHARMACY'),
-        siteName: (process.env.SITE_ID || 'Redmond'),
+        siteType: (process.env.VUE_APP_SITE_TYPE || 'PHARMACY-Local'),
+        storeId: (process.env.VUE_APP_STORE_ID || 'Redmond-Local'),
       };
     },
     methods: {
@@ -112,6 +112,9 @@
       toggleMenu() {
         this.showMenu = !this.showMenu;
       }
+    },
+    created() {
+      // console.log(process.env.VUE_APP_STORE_ID)
     }
   };
 </script>
