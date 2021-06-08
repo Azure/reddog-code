@@ -19,6 +19,7 @@ namespace RedDog.VirtualWorker
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddControllers().AddDapr();
         }
 

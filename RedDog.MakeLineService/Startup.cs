@@ -18,6 +18,7 @@ namespace RedDog.MakeLineService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddControllers().AddDapr();
         }
 

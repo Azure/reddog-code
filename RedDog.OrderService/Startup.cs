@@ -18,6 +18,7 @@ namespace RedDog.OrderService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddControllers().AddDapr();
             services.AddCors(options =>
             {
