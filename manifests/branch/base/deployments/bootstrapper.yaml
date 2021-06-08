@@ -20,4 +20,4 @@ spec:
       - name: bootstrapper
         image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-bootstrapper:latest"
         imagePullPolicy: Always
-      restartPolicy: Never
+      restartPolicy: OnFailure
