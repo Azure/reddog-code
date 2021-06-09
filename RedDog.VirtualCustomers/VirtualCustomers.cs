@@ -15,6 +15,7 @@ namespace RedDog.VirtualCustomers
         private const string OrderServiceDaprId = "order-service";
         private static readonly string storeId = Environment.GetEnvironmentVariable("STORE_ID") ?? "Redmond";
         public static readonly int maxItemQuantity = int.Parse(Environment.GetEnvironmentVariable("MAX_ITEM_QUANTITY") ?? "5");
+        public static readonly int maxUniqueItemsPerOrder = int.Parse(Environment.GetEnvironmentVariable("MAX_UNIQUE_ITEMS_PER_ORDER") ?? "20");
         public static readonly int minSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_TO_PLACE_ORDER") ?? "1");
         public static readonly int maxSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MAX_SEC_TO_PLACE_ORDER") ?? "3");
         public static readonly int minSecondsBetweenOrders = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_BETWEEN_ORDERS") ?? "1");
@@ -301,12 +302,12 @@ namespace RedDog.VirtualCustomers
 
             // Get total number of menu items (t) and ramdomly choose a number of them to order (n)
             int numProducts = _products.Count;
-            int productNum = _random.Next(1, numProducts + 1); // Never order 0 items
+            int numOrderItems = _random.Next(1, Math.Min(numProducts, maxUniqueItemsPerOrder)); // Never order 0 items
 
             // Randomly choose a number between (1-t), (n) times to get a random quantity of (n) items
             List<CustomerOrderItem> orderItems = new List<CustomerOrderItem>();
             List<int> productIndicies = new List<int>();
-            for (int i = 0; i < productNum; i++)
+            for (int i = 0; i < numOrderItems; i++)
             {
                 int productIndex = _random.Next(1, numProducts + 1);
                 while (productIndicies.Contains(productIndex)) // Ensure no duplicate menu items within order

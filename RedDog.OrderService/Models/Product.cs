@@ -9,7 +9,7 @@ namespace RedDog.OrderService.Models
 {
     public class Product
     {
-        private static string _productDefinitionFilename =  Environment.GetEnvironmentVariable("PRODUCT_DEFINITION_FILENAME") ?? "CoffeeShopProducts.json";
+        private static string _productDefinitionFilename =  Environment.GetEnvironmentVariable("PRODUCT_DEFINITION_FILENAME") ?? "DrugStoreProducts.json";
         private static List<Product> _products;
 
         [JsonPropertyName("productId")]
