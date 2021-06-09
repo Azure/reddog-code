@@ -95,69 +95,105 @@ namespace RedDog.AccountingService.Controllers
             TimeSpan spanLength = XmlConvert.ToTimeSpan(timeSpan);
             var fromDate = DateTime.UtcNow.Subtract(spanLength);
 
-            var totalOrders =       from o in dbContext.Orders
-                                    where o.StoreId == storeId && o.PlacedDate > fromDate
-                                    orderby o.PlacedDate descending
-                                    group o by new StoreTimeSegmentMinute{
-                                        StoreId = storeId,
-                                        Year = o.PlacedDate.Year,
-                                        Month = o.PlacedDate.Month,
-                                        Day = o.PlacedDate.Day,
-                                        Hour = o.PlacedDate.Hour,
-                                        Minute = o.PlacedDate.Minute
-                                    };
+            var totalOrders = from o in dbContext.Orders
+                              where o.StoreId == storeId && o.PlacedDate > fromDate
+                              orderby o.PlacedDate descending
+                              group o by new StoreTimeSegmentMinute
+                              {
+                                  StoreId = storeId,
+                                  Year = o.PlacedDate.Year,
+                                  Month = o.PlacedDate.Month,
+                                  Day = o.PlacedDate.Day,
+                                  Hour = o.PlacedDate.Hour,
+                                  Minute = o.PlacedDate.Minute
+                              };
 
-            var orderData =         from oi in totalOrders
-                                    select new TimeSeries<int>
-                                     {
-                                        PointInTime = new DateTime(oi.Key.Year,oi.Key.Month, oi.Key.Day, oi.Key.Hour, oi.Key.Minute,0),
-                                        Value = oi.Count()
-                                    };
+            var orderData = from oi in totalOrders
+                            select new TimeSeries<int>
+                            {
+                                PointInTime = new DateTime(oi.Key.Year, oi.Key.Month, oi.Key.Day, oi.Key.Hour, oi.Key.Minute, 0),
+                                Value = oi.Count()
+                            };
 
-            var totalOrdersByMinute =  new OrdersTimeSeries{
+            var totalOrdersByMinute = new OrdersTimeSeries
+            {
                 StoreId = storeId,
-                Values =  await orderData.ToListAsync()
+                Values = await orderData.ToListAsync()
             };
 
             return totalOrdersByMinute;
 
         }
 
-
-        [HttpGet("/Profit/{period}/{timeSpan}")]
-        public OrdersTimeSeries GetProfitOverTime(string storeId, string period, string timeSpan, [FromServices] AccountingContext dbContext)
+        [HttpGet("/Corp/SalesProfit/PerStore")]
+        public async Task<List<SalesProfitMetric>> GetCorpSalesAndProfitPerStore([FromServices] AccountingContext dbContext)
         {
+            var salesAndProfit = from oi in dbContext.OrderItems
+                                 group oi by new
+                                 {
+                                     StoreId = oi.Order.StoreId,
+                                     OrderYear = oi.Order.PlacedDate.Year,
+                                     OrderMonth = oi.Order.PlacedDate.Month,
+                                     OrderDay = oi.Order.PlacedDate.Day
+                                 }
+                                 into g
+                                 select new
+                                 {
+                                     StoreId = g.Key.StoreId,
+                                     OrderYear = g.Key.OrderYear,
+                                     OrderMonth = g.Key.OrderMonth,
+                                     OrderDay = g.Key.OrderDay,
+                                     TotalOrderItems = g.Count(),
+                                     TotalSales = g.Sum(i => i.UnitPrice * i.Quantity),
+                                     TotalProfit = g.Sum(i => (i.UnitPrice - i.UnitCost) * i.Quantity)
+                                 };
 
-            TimeSpan spanLength = XmlConvert.ToTimeSpan(timeSpan);
-            var fromDate = DateTime.UtcNow.Subtract(spanLength);
+            var orderCounts = from o in dbContext.Orders
+                              group o by new
+                              {
+                                  StoreId = o.StoreId,
+                                  OrderYear = o.PlacedDate.Year,
+                                  OrderMonth = o.PlacedDate.Month,
+                                  OrderDay = o.PlacedDate.Day
+                              }
+                              into g
+                              select new
+                              {
+                                  StoreId = g.Key.StoreId,
+                                  OrderYear = g.Key.OrderYear,
+                                  OrderMonth = g.Key.OrderMonth,
+                                  OrderDay = g.Key.OrderDay,
+                                  TotalOrders = g.Count()
+                              };
 
-            var totalOrders =       from o in dbContext.Orders
-                                    where o.StoreId == storeId && o.PlacedDate > fromDate
-                                    orderby o.PlacedDate descending
-                                    group o by new StoreTimeSegmentMinute{
-                                        StoreId = storeId,
-                                        Year = o.PlacedDate.Year,
-                                        Month = o.PlacedDate.Month,
-                                        Day = o.PlacedDate.Day,
-                                        Hour = o.PlacedDate.Hour,
-                                        Minute = o.PlacedDate.Minute
-                                    };
-
-            var orderData =         from oi in totalOrders
-                                    select new TimeSeries<int>
+            var salesProfitMetrics = from sap in salesAndProfit
+                                     join oc in orderCounts on new { StoreId = sap.StoreId, 
+                                                                     OrderYear = sap.OrderYear, 
+                                                                     OrderMonth = sap.OrderMonth, 
+                                                                     OrderDay = sap.OrderDay }
+                                     equals new { StoreId = oc.StoreId, 
+                                                  OrderYear = oc.OrderYear, 
+                                                  OrderMonth = oc.OrderMonth, 
+                                                  OrderDay = oc.OrderDay }
+                                     select new SalesProfitMetric
                                      {
-                                        PointInTime = new DateTime(oi.Key.Year,oi.Key.Month, oi.Key.Day, oi.Key.Hour, oi.Key.Minute,0),
-                                        Value = oi.Count()
-                                    };
+                                         StoreId = sap.StoreId,
+                                         OrderYear = sap.OrderYear,
+                                         OrderMonth = sap.OrderMonth,
+                                         OrderDay = sap.OrderDay,
+                                         TotalOrders = oc.TotalOrders,
+                                         TotalOrderItems = sap.TotalOrderItems,
+                                         TotalSales = sap.TotalSales,
+                                         TotalProfit = sap.TotalProfit
+                                     };
 
-            var totalOrdersByMinute =  new OrdersTimeSeries{
-                StoreId = storeId,
-                Values =  orderData.ToList()
-            };
-
-            return totalOrdersByMinute;
-
+            return await salesProfitMetrics.OrderBy(s => s.StoreId)
+                                           .ThenBy(s => s.OrderYear)
+                                           .ThenBy(s => s.OrderMonth)
+                                           .ThenBy(s => s.OrderDay)
+                                           .ToListAsync();
         }
+
 
         [HttpGet("/OrderMetrics")]
         public async Task<List<OrderMetric>> GetOrderMetricsAsync(string storeId, [FromServices] AccountingContext dbContext)
@@ -203,16 +239,16 @@ namespace RedDog.AccountingService.Controllers
                              };
 
             var calcOrdersByHour = from c in calcOrders
-                                    group c by new { c.StoreId, Date = EF.Functions.DateFromParts(c.PlacedDate.Year, c.PlacedDate.Month, c.PlacedDate.Day), OrderHour = c.PlacedDate.Hour }
+                                   group c by new { c.StoreId, Date = EF.Functions.DateFromParts(c.PlacedDate.Year, c.PlacedDate.Month, c.PlacedDate.Day), OrderHour = c.PlacedDate.Hour }
                                     into g
-                                    select new
-                                    {
-                                        StoreId = g.Key.StoreId,
-                                        OrderDate = g.Key.Date,
-                                        OrderHour = g.Key.OrderHour,
-                                        OrderCount = g.Count(),
-                                        AverageFulfillmentTime = g.Average(i => i.FulfillmentTime)
-                                    };
+                                   select new
+                                   {
+                                       StoreId = g.Key.StoreId,
+                                       OrderDate = g.Key.Date,
+                                       OrderHour = g.Key.OrderHour,
+                                       OrderCount = g.Count(),
+                                       AverageFulfillmentTime = g.Average(i => i.FulfillmentTime)
+                                   };
 
             var metrics = from o in calcOrdersByHour
                           join oi in calcOrderItemsByHour on new { o.StoreId, o.OrderHour } equals new { oi.StoreId, oi.OrderHour }
@@ -228,53 +264,63 @@ namespace RedDog.AccountingService.Controllers
                               TotalPrice = oi.TotalPrice
                           };
 
-            
-            return await metrics.ToListAsync();
+            if (!string.IsNullOrEmpty(storeId))
+            {
+                metrics = metrics.Where(m => m.StoreId == storeId);
+            }
+
+            return await metrics.OrderByDescending(m => m.OrderDate).ToListAsync();
         }
 
 
-        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByMinute(AccountingContext dbContext, string storeId, DateTime fromDate) {
-            var totalOrders =       from o in dbContext.Orders
-                                    where o.StoreId == storeId && o.PlacedDate > fromDate
-                                    orderby o.PlacedDate descending
-                                    group o by new StoreTimeSegmentMinute{
-                                        StoreId = storeId,
-                                        Year = o.PlacedDate.Year,
-                                        Month = o.PlacedDate.Month,
-                                        Day = o.PlacedDate.Day,
-                                        Hour = o.PlacedDate.Hour,
-                                        Minute = o.PlacedDate.Minute
-                                    };
+        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByMinute(AccountingContext dbContext, string storeId, DateTime fromDate)
+        {
+            var totalOrders = from o in dbContext.Orders
+                              where o.StoreId == storeId && o.PlacedDate > fromDate
+                              orderby o.PlacedDate descending
+                              group o by new StoreTimeSegmentMinute
+                              {
+                                  StoreId = storeId,
+                                  Year = o.PlacedDate.Year,
+                                  Month = o.PlacedDate.Month,
+                                  Day = o.PlacedDate.Day,
+                                  Hour = o.PlacedDate.Hour,
+                                  Minute = o.PlacedDate.Minute
+                              };
             return totalOrders;
         }
 
-        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByHour(AccountingContext dbContext, string storeId, DateTime fromDate) {
-            var totalOrders =       from o in dbContext.Orders
-                                    where o.StoreId == storeId && o.PlacedDate > fromDate
-                                    orderby o.PlacedDate descending
-                                    group o by new StoreTimeSegmentMinute{
-                                        StoreId = storeId,
-                                        Year = o.PlacedDate.Year,
-                                        Month = o.PlacedDate.Month,
-                                        Day = o.PlacedDate.Day,
-                                        Hour = o.PlacedDate.Hour
-                                    };
+        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByHour(AccountingContext dbContext, string storeId, DateTime fromDate)
+        {
+            var totalOrders = from o in dbContext.Orders
+                              where o.StoreId == storeId && o.PlacedDate > fromDate
+                              orderby o.PlacedDate descending
+                              group o by new StoreTimeSegmentMinute
+                              {
+                                  StoreId = storeId,
+                                  Year = o.PlacedDate.Year,
+                                  Month = o.PlacedDate.Month,
+                                  Day = o.PlacedDate.Day,
+                                  Hour = o.PlacedDate.Hour
+                              };
             return totalOrders;
         }
 
-        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByDay(AccountingContext dbContext, string storeId, DateTime fromDate) {
-            var totalOrders =       from o in dbContext.Orders
-                                    where o.StoreId == storeId && o.PlacedDate > fromDate
-                                    orderby o.PlacedDate descending
-                                    group o by new StoreTimeSegmentMinute{
-                                        StoreId = storeId,
-                                        Year = o.PlacedDate.Year,
-                                        Month = o.PlacedDate.Month,
-                                        Day = o.PlacedDate.Day
-                                    };
+        private IQueryable<IGrouping<StoreTimeSegmentMinute, Order>> GetOrdersByDay(AccountingContext dbContext, string storeId, DateTime fromDate)
+        {
+            var totalOrders = from o in dbContext.Orders
+                              where o.StoreId == storeId && o.PlacedDate > fromDate
+                              orderby o.PlacedDate descending
+                              group o by new StoreTimeSegmentMinute
+                              {
+                                  StoreId = storeId,
+                                  Year = o.PlacedDate.Year,
+                                  Month = o.PlacedDate.Month,
+                                  Day = o.PlacedDate.Day
+                              };
             return totalOrders;
         }
 
-        
+
     }
 }

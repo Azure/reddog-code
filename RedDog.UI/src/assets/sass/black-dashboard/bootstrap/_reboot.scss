@@ -45,25 +45,23 @@ html {
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
 }
-// stylelint-enable selector-list-comma-newline-after
-
-// Body
-//
-// 1. Remove the margin in all browsers.
-// 2. As a best practice, apply a default `background-color`.
-// 3. Set an explicit initial text-align value so that we can later use the
-//    the `inherit` value on things like `<th>` elements.
-
-body {
+body{
   margin: 0; // 1
   font-family: "Quicksand", sans-serif;
   font-size: $font-size-base;
   font-weight: $font-weight-base;
   line-height: $line-height-base;
-  color: #DAE2DF; // GAINSBORO
+  color: #DAE2DF;
   text-align: left; 
-  background-color: #0d152b; // RAISIN BLACK
-  // background: url('/img/hex-back-pat.png');
+}
+//branch look and feel
+body.branch {
+  background-color: #0d152b; 
+}
+
+//corp look and feel
+body.corp {
+  background-color: #25292c; 
 }
 
 // Suppress the focus outline on elements that cannot be accessed via keyboard.

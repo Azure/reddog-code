@@ -17,5 +17,6 @@ namespace RedDog.AccountingModel
         [Column(TypeName = "nvarchar(50)")]
         [Required]
         public string LastName { get; set; }
+
     }
 }

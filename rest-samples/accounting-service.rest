@@ -3,10 +3,20 @@
 ### Order metrics
 GET http://{{accounting-service}}/OrderMetrics?StoreId=Redmond
 
-
+http://20.81.98.23/v1.0/invoke/accounting-service/method/OrderMetrics?StoreId=NYC
 
 ### Order Counts over the last 20 minutes
 http://{{accounting-service}}/Orders/Minute/PT20M?StoreId=Redmond
+
+
+### NYC Brian
+http://20.81.98.23/OrderMetrics?StoreId=NYC
+# /20.81.98.23
+
+
+### Corp Brian
+http://20.81.98.23/OrderMetrics
+
 
 
 ### Remote Order Counts
@@ -21,9 +31,16 @@ http://{{accounting-service}}/Orders/Hour/PT72H?StoreId=Redmond
 http://{{accounting-service}}/Orders/Day/P14D?StoreId=Redmond
 
 
+### Brian's Austin 
+http://austin.accounting.brianredmond.io/OrderMetrics
 
 
 
 
 ### Readiness probe
 GET http://{{accounting-service}}/Probes/ready
+
+
+
+### New Metrics
+GET http://{{accounting-service}}/Corp/SalesProfit/PerStore
