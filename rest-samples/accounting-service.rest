@@ -44,3 +44,7 @@ GET http://{{accounting-service}}/Probes/ready
 
 ### New Metrics
 GET http://{{accounting-service}}/Corp/SalesProfit/PerStore
+
+
+### Walmart Products
+GET https://marketplace.walmartapis.com/v3/items/walmart/search?query=ipad
