@@ -420,13 +420,14 @@
 
     &[data="vue"] {
       background:  #101b34;
-      // #21182a, #000
-      // @include linear-gradient(
-      //   #18151a,
-      //  #070207b1);
-      //  ackground: linear-gradient(
-      //   0deg
-      //   , #18151a 0%, #070207b1 100%);
+    }
+
+    &[data="branch"] {
+      background:  #101b34;
+    }
+
+    &[data="corp"] {
+      background:  #222222;
     }
 
     .user{

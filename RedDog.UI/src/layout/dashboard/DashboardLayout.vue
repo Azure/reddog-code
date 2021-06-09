@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <side-bar>
+    <side-bar :backgroundColor="sideBarColor">
       <template slot="links">
         <sidebar-link to="/dashboard" :name="$t('sidebar.dashboard')" icon="tim-icons icon-chart-pie-36"/>
         <sidebar-link to="/maps" :name="$t('sidebar.maps')" icon="tim-icons icon-globe-2"/>
@@ -28,6 +28,8 @@ export default {
   },
   data() {
     return {
+      isCorp: (process.env.VUE_APP_IS_CORP || false),
+      sideBarColor: "branch"
     }
   },
   methods: {
@@ -40,6 +42,14 @@ export default {
   beforeDestroy() {
     },
   created() {
+    if(this.isCorp === true || this.isCorp === 'true'){
+      this.sideBarColor = "corp"
+    }
+    else{
+      this.sideBarColor = "branch"
+    }
   },
 };
 </script>
+<style>
+</style>

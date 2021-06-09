@@ -4,7 +4,7 @@
       <div class="col-lg-6">
         <div class="row">
           <div class="col-lg-12">
-            <div class="card card-trans-base">
+            <div class="card" :class="[cardClass]">
               <div class="card-header-title">
                 ORDERS OVER TIME
               </div>
@@ -16,16 +16,35 @@
           </div>
         </div>
       <div class="col-lg-6">
-        <div class="row">
+       <div class="row">
           <div class="col-lg-12">
-            <div class="card card-trans-base">
+            <div class="card" :class="[cardClass]">
+              <div class="card-header-title">
+                P & L OVER TIME
+              </div>
+              <div class="card-body chart-body">
+                <StreamChart v-if="salesChartLoaded" :chartData="salesChartData" :options="salesChartOptions"/>
+              </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="row justify-content-lg-left">
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="col-lg-12" v-if="isCorp === true || isCorp === 'true'">
+             Need to put something for corp here
+          </div>
+          <div class="col-lg-12" v-else>
+           <div class="card" :class="[cardClass]">
               <div class="card-header-title">
                 ORDER QUEUE
               </div>
               <div class="card-table-par">
                 <div class="table-responsive">
                   <table id="tblInflight" class="table table-striped table-dark table-fixed">
-                    <thead>
+                     <thead>
                       <tr>
                         <th scope="col" class="col-1 th-order">#</th>
                         <th scope="col" class="col-2 th-order">TIME</th>
@@ -34,7 +53,6 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <!-- {{ this.inflight.forEach((item, index)) }} -->
                       <tr v-for="(order, i) in inflight" class="tr-item-queue">
                         <td scope="row" class="col-1 td-queue-position">{{ i+1 }}</td>  
                         <td class="col-2 td-time">{{ order.timeIn }}</td>  
@@ -52,27 +70,11 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row justify-content-lg-left">
-      <div class="col-lg-6">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card card-trans-base">
-              <div class="card-header-title">
-                P & L OVER TIME
-              </div>
-              <div class="card-body chart-body">
-                <StreamChart v-if="salesChartLoaded" :chartData="salesChartData" :options="salesChartOptions"/>
-              </div>
-              </div>
-            </div>
-          </div>
         </div>
       <div class="col-lg-3">
         <div class="row">
           <div class="col-lg-12">
-            <div class="card card-trans-base">
+            <div class="card" :class="[cardClass]">
               <div class="card-header-title">
                 AVG PROFIT
               </div>
@@ -86,7 +88,7 @@
       <div class="col-lg-3">
         <div class="row">
           <div class="col-lg-12">
-            <div class="card card-trans-base">
+            <div class="card" :class="[cardClass]">
               <div class="card-header-title">
                 AVG ORDER FILL TIME
               </div>
@@ -120,6 +122,8 @@ export default {
   },
   data() {
     return {
+      isCorp: (process.env.VUE_APP_IS_CORP || false),
+      cardClass: "card-trans-branch",
       orderChartSegment: 1,
       orderChartSegmentName: 'MINUTES',
       orderChartInterval: null,
@@ -156,7 +160,7 @@ export default {
     },
   },
   methods: {
-    fillOrderChart(data){
+    fillBranchOrderChart(data){
       let minuteLabels = [], dataValues = [], dataValuesPrev = [], previousArr = [], lastArr = []
       
       previousArr = data.values.slice(data.values.length-20, data.values.length-10)
@@ -175,6 +179,7 @@ export default {
         }
       });
     },
+    fillCorpOrderChart(data){},
     getCurrentDateTime() {
       var current = new Date();
       this.currentDateTime = current.toLocaleString();
@@ -211,7 +216,6 @@ export default {
                   this.totalProfitFormatted = currency(this.totalProfit, {precision:0}).format(); /// TOTAL PROFIT FORMATTEd
                   this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
                   this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
-                  // this.avgFulfillmentSec = (this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0); /// AVG FULFILLMENT TIME
                   this.avgFulfillmentSec = moment.duration((this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0), "seconds").minutes();
                   this.totalSales = this.totalSales.toFixed(0); /// TOTAL SALES
                   this.totalSalesFormatted = currency(this.totalSales, {precision:0}).format(); /// TOTAL SALES FORMATTED
@@ -222,9 +226,8 @@ export default {
             }
           }
           );
-      }, 3000);
+      }, 10000);
     },
-
     getOrderChart(){
       clearInterval(this.orderChartInterval)
       let orderChartUrl = '/orders/count/minute'
@@ -233,12 +236,12 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             if (data.e === 0 ) {
-              this.fillOrderChart(data.payload);
+              this.fillBranchOrderChart(data.payload);
             }else{
               console.log('some kind of connection issue - you might want to get that looked at')
             }
           });
-      }, 3000);
+      }, 10000);
     },
     getCurrentOrders(){
       clearInterval(this.pollingInflight)
@@ -261,7 +264,7 @@ export default {
             }
           })
         })
-      }, 3000);
+      }, 10000);
     },
     createOrderLineChart(labels, totals, prevTotals, segment){
       this.chartData= {
@@ -377,15 +380,6 @@ export default {
       };
       this.salesChartLoaded = true;
 
-    },
-    orderChartUpdate(segment){
-
-      console.log('updating chart to ', segment )
-      if(this.orderChartSegment != segment){
-        this.orderChartSegment = segment;
-        this.getOrderChart(this.orderChartSegment)
-      }
-
     }
 
   },
@@ -397,9 +391,11 @@ export default {
     }
   },
   beforeDestroy() {
+    
     clearInterval(this.pollingOrderMetrics);
     clearInterval(this.pollingInflight);
     clearInterval(this.orderChartInterval);
+    
     
     if (this.$rtl.isRTL) {
       this.i18n.locale = "en";
@@ -407,10 +403,21 @@ export default {
     }
   },
   created() {
-    document.title = process.env.VUE_APP_SITE_TITLE
-    this.getOrderChart();
-    this.getAccountingOrderMetrics();
-    this.getCurrentOrders();
+    var corpVal = JSON.stringify(process.env.VUE_APP_IS_CORP)
+    console.log(`corp to string is ${corpVal}`)
+    console.log()
+    if (process.env.VUE_APP_IS_CORP === true || process.env.VUE_APP_IS_CORP === 'true'){
+      this.isCorp = true;
+      this.getAccountingOrderMetrics();
+      this.cardClass="card-trans-corp"
+    }
+    else{
+      this.isCorp = false;
+      this.getOrderChart();
+      this.getAccountingOrderMetrics();
+      this.getCurrentOrders();
+      this.cardClass="card-trans-branch"
+    }
   },
 };
 </script>

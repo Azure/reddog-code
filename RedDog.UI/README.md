@@ -1,4 +1,4 @@
-![Red Dog :: Bodega](./public/img/android-chrome-192x192.png)
+![Red Dog :: Contoso](./public/img/android-chrome-192x192.png)
 ## RedDog.UI :: RedDog single site location user interface
 
 > Prerequisites
@@ -7,11 +7,27 @@
 - [NPM](https://npm.org) 
 
 
-### Quickstart
 
-> To run locally :
+### QUI
+> To run locally with env vars
+
+- add a .env file to the root with the following in it, changing said variables as needed:
 ```shell
-npm install
+VUE_APP_IS_CORP=false
+NODE_ENV=development
+VUE_APP_STORE_ID="Austin"
+VUE_APP_SITE_TYPE="Pharmacy"
+VUE_APP_SITE_TITLE="Contoso :: BODEGA"
+VUE_APP_MAKELINE_BASE_URL="http://austin.makeline.brianredmond.io"
+VUE_APP_ACCOUNTING_BASE_URL="http://austin.accounting.brianredmond.io"
+```
+
+
+
+
+> Then run
+```shell
+npm ci ## this will overwrite any and all node_modules
 npm run serve
 ```
 

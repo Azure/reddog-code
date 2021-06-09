@@ -123,41 +123,26 @@ namespace RedDog.AccountingService.Controllers
 
         }
 
+        // [HttpGet("/Corp/SalesProfit/PerStore")]
+        // public async Task<List<SalesProfitMetric>> GetCorpSalesAndProfitPerStore([FromServices] AccountingContext dbContext){
 
-        [HttpGet("/Profit/{period}/{timeSpan}")]
-        public OrdersTimeSeries GetProfitOverTime(string storeId, string period, string timeSpan, [FromServices] AccountingContext dbContext)
-        {
 
-            TimeSpan spanLength = XmlConvert.ToTimeSpan(timeSpan);
-            var fromDate = DateTime.UtcNow.Subtract(spanLength);
+        //     var totalOrders =       from o in dbContext.Orders
+        //                             join oi in dbContext.OrderItems on o.OrderId equals oi.OrderId
+        //                             orderby o.PlacedDate descending
+        //                             group o by new SalesProfitMetric{
+        //                                 StoreId = o.StoreId,
+        //                                 OrderYear = o.PlacedDate.Year,
+        //                                 OrderMonth = o.PlacedDate.Month,
+        //                                 OrderDay = o.PlacedDate.Day,
+        //                                 TotalProfit = (oi.UnitPrice - oi.UnitCost) * oi.Quantity,
+        //                                 TotalSales = oi.UnitPrice * oi.Quantity
+        //                             };
 
-            var totalOrders =       from o in dbContext.Orders
-                                    where o.StoreId == storeId && o.PlacedDate > fromDate
-                                    orderby o.PlacedDate descending
-                                    group o by new StoreTimeSegmentMinute{
-                                        StoreId = storeId,
-                                        Year = o.PlacedDate.Year,
-                                        Month = o.PlacedDate.Month,
-                                        Day = o.PlacedDate.Day,
-                                        Hour = o.PlacedDate.Hour,
-                                        Minute = o.PlacedDate.Minute
-                                    };
 
-            var orderData =         from oi in totalOrders
-                                    select new TimeSeries<int>
-                                     {
-                                        PointInTime = new DateTime(oi.Key.Year,oi.Key.Month, oi.Key.Day, oi.Key.Hour, oi.Key.Minute,0),
-                                        Value = oi.Count()
-                                    };
+        //     return await totalOrders.ToListAsync();
+        // }
 
-            var totalOrdersByMinute =  new OrdersTimeSeries{
-                StoreId = storeId,
-                Values =  orderData.ToList()
-            };
-
-            return totalOrdersByMinute;
-
-        }
 
         [HttpGet("/OrderMetrics")]
         public async Task<List<OrderMetric>> GetOrderMetricsAsync(string storeId, [FromServices] AccountingContext dbContext)
@@ -228,8 +213,11 @@ namespace RedDog.AccountingService.Controllers
                               TotalPrice = oi.TotalPrice
                           };
 
-            
-            return await metrics.ToListAsync();
+            if(!string.IsNullOrEmpty(storeId)){
+                metrics = metrics.Where(m=>m.StoreId == storeId);
+            }
+
+            return await metrics.OrderByDescending(m=>m.OrderDate).ToListAsync();
         }
 
 
