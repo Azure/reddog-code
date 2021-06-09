@@ -115,7 +115,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "DAPR_HTTP_PORT": "5680",
                 "DAPR_GRPC_PORT": "5601",
-                "STORE_ID": "Norman"
+                "STORE_ID": "Redmond"
             }
         },
         {
