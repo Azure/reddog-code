@@ -123,25 +123,37 @@ namespace RedDog.AccountingService.Controllers
 
         }
 
-        // [HttpGet("/Corp/SalesProfit/PerStore")]
-        // public async Task<List<SalesProfitMetric>> GetCorpSalesAndProfitPerStore([FromServices] AccountingContext dbContext){
+        [HttpGet("/Corp/SalesProfit/PerStore")]
+        public async Task<List<SalesProfitMetric>> GetCorpSalesAndProfitPerStore([FromServices] AccountingContext dbContext){
 
 
-        //     var totalOrders =       from o in dbContext.Orders
-        //                             join oi in dbContext.OrderItems on o.OrderId equals oi.OrderId
-        //                             orderby o.PlacedDate descending
-        //                             group o by new SalesProfitMetric{
-        //                                 StoreId = o.StoreId,
-        //                                 OrderYear = o.PlacedDate.Year,
-        //                                 OrderMonth = o.PlacedDate.Month,
-        //                                 OrderDay = o.PlacedDate.Day,
-        //                                 TotalProfit = (oi.UnitPrice - oi.UnitCost) * oi.Quantity,
-        //                                 TotalSales = oi.UnitPrice * oi.Quantity
-        //                             };
+            var totalOrders =       from o in dbContext.Orders
+                                    join oi in dbContext.OrderItems on o.OrderId equals oi.OrderId
+                                    orderby o.PlacedDate descending
+                                    group o by new {
+                                        StoreId = o.StoreId,
+                                        OrderYear = o.PlacedDate.Year,
+                                        OrderMonth = o.PlacedDate.Month,
+                                        OrderDay = o.PlacedDate.Day
+                                        // TotalProfit = (oi.UnitPrice - oi.UnitCost) * oi.Quantity,
+                                        // TotalSales = oi.UnitPrice * oi.Quantity
+                                    }
+                                    into g
+                                    select new SalesProfitMetric
+                                    {
+                                        StoreId = g.Key.StoreId,
+                                        OrderYear = g.Key.OrderYear,
+                                        OrderMonth = g.Key.OrderMonth,
+                                        OrderDay = g.Key.OrderDay,
+                                        TotalOrders = g.Count()
+                                        // TotalProfit = g.Sum(i => i.OrderItems.Sum(j=>(j.UnitPrice - j.UnitCost) * j.Quantity)),
+                                        // TotalSales = g.Sum(i => i.OrderItems.Sum(j=>j.UnitPrice * j.Quantity))
+                                        // TotalSales = oi.UnitPrice * oi.Quantity 
+                                    };
 
 
-        //     return await totalOrders.ToListAsync();
-        // }
+            return await totalOrders.ToListAsync();
+        }
 
 
         [HttpGet("/OrderMetrics")]
