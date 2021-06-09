@@ -15,7 +15,8 @@
         </div>
         <div class="logo-content">
           <div class="left-logo"><img src="img/contoso-pharmacy-tl-logo.png" width="184px"/></div>
-          <div class="right-logo logo-simple-text">{{ storeId }}</div>
+          <div class="right-logo logo-simple-text" v-if="isCorp === true || isCorp === 'true'">CORP</div>
+          <div class="right-logo logo-simple-text" v-else>{{ storeId }}</div>
         </div>
       </div>
       <button class="navbar-toggler" type="button"
@@ -89,8 +90,9 @@
       return {
         activeNotifications: false,
         showMenu: false,
-        siteType: (process.env.VUE_APP_SITE_TYPE || 'PHARMACY-Local'),
-        storeId: (process.env.VUE_APP_STORE_ID || 'Redmond-Local'),
+        isCorp: (process.env.VUE_APP_IS_CORP || false),
+        siteType: (process.env.VUE_APP_SITE_TYPE || 'PHARMACY-NOENV'),
+        storeId: (process.env.VUE_APP_STORE_ID || 'REDMOND-NOENV'),
       };
     },
     methods: {
@@ -113,8 +115,18 @@
         this.showMenu = !this.showMenu;
       }
     },
+    mounted(){
+      // SET PAGE TITLE
+      document.title = process.env.VUE_APP_SITE_TITLE
+
+      // SET BODY STYLE
+      if (process.env.VUE_APP_IS_CORP === true || process.env.VUE_APP_IS_CORP === 'true'){
+        document.body.className = 'corp'
+      }else{
+        document.body.className = 'branch'
+      }
+    },
     created() {
-      // console.log(process.env.VUE_APP_STORE_ID)
     }
   };
 </script>

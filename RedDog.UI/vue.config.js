@@ -2,7 +2,9 @@ const webpack = require("webpack");
 const fetch = require("node-fetch");
 const Dotenv = require("dotenv-webpack");
 
-const IS_CORP = (process.env.VUE_APP_IS_CORP || false);
+const IS_CORP_TMP = (process.env.VUE_APP_IS_CORP || false);
+const IS_CORP = JSON.stringify(IS_CORP_TMP);
+
 const STORE_ID = (process.env.VUE_APP_STORE_ID || "Redmond");
 const SITE_TYPE = (process.env.VUE_APP_SITE_TYPE || "Pharmacy");
 const SITE_TITLE = (process.env.VUE_APP_SITE_TITLE || "Contoso :: Pharmacy & Convenience Store");
@@ -19,16 +21,12 @@ let variables = {
 }
 
 let MAKELINE_SERVICE = MAKELINE_BASE_URL + "/orders/" + STORE_ID
-let ACCOUNTING_SERVICE = ACCOUNTING_BASE_URL
+
 
 if (process.env.NODE_ENV === "production"){
   console.log("setting PROD environment variables")
-  // MAKELINE_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/make-line-service/method/orders/" + STORE_ID
-  // ACCOUNTING_SERVICE = "http://0.0.0.0:3500/v1.0/invoke/accounting-service/method/"
 }else{
   console.log("setting DEV environment variables")
-  // console.log(MAKELINE_SERVICE)
-  // console.log(ACCOUNTING_SERVICE)
 }
 
 
@@ -88,8 +86,12 @@ module.exports = {
       })
 
       app.get("/orders/metrics", (req, res)=>{
-        
-        fetch(ACCOUNTING_SERVICE + "/OrderMetrics?StoreId=" + STORE_ID)
+        var metricsUrl = ACCOUNTING_BASE_URL + "/OrderMetrics?StoreId=" + STORE_ID
+        if(IS_CORP === true || IS_CORP === "true"){
+          metricsUrl = ACCOUNTING_BASE_URL + "/OrderMetrics"
+        }
+
+        fetch(metricsUrl)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -103,7 +105,7 @@ module.exports = {
 
       app.get("/orders/count/minute", (req, res)=>{
         
-        fetch(ACCOUNTING_SERVICE + "/Orders/Minute/PT20M?StoreId=" + STORE_ID)
+        fetch(ACCOUNTING_BASE_URL + "/Orders/Minute/PT20M?StoreId=" + STORE_ID)
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)
@@ -114,35 +116,6 @@ module.exports = {
         })
 
       })
-
-
-      // app.get("/orders/count/hour", (req, res)=>{
-        
-      //   fetch(ACCOUNTING_SERVICE + "Orders/Hour/P1D?StoreId=" + STORE_ID)
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     res.json({e: 0, payload:data}).status(200)
-      //   })
-      //   .catch(error=>{
-      //     console.log("error", error)
-      //     res.json({e: -1, payload: {}})
-      //   })
-
-      // })
-
-      // app.get("/orders/count/day", (req, res)=>{
-        
-      //   fetch(ACCOUNTING_SERVICE + "Orders/Day/P2D?StoreId=" + STORE_ID)
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     res.json({e: 0, payload:data}).status(200)
-      //   })
-      //   .catch(error=>{
-      //     console.log("error", error)
-      //     res.json({e: -1, payload: {}})
-      //   })
-
-      // })
      
     }
     // proxy: devUrls,
