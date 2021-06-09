@@ -249,6 +249,7 @@ export default {
         fetch("/orders/inflight")
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           this.inflight = []
           data.payload.forEach((ord, index) => {
             this.inflight.push({

@@ -17,6 +17,12 @@ namespace RedDog.AccountingService.Models
         [JsonPropertyName("orderDay")]  
         public int OrderDay { get; set; }
 
+        [JsonPropertyName("totalOrders")]  
+        public int TotalOrders { get; set; }
+
+        [JsonPropertyName("totalOrderItems")]  
+        public int TotalOrderItems { get; set; }
+
         [JsonPropertyName("totalSales")]  
         public decimal TotalSales { get; set; }
 
