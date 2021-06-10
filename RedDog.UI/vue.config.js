@@ -117,9 +117,38 @@ module.exports = {
 
       })
 
-      app.get("/corp/salesprofit", (req, res)=>{
+      app.get("/corp/salesprofitbranch", (req, res)=>{
 
         fetch(ACCOUNTING_BASE_URL + "/Corp/SalesProfit/PerStore")
+        .then(response => response.json())
+        .then(data => {
+          res.json({e: 0, payload:data}).status(200)
+        })
+        .catch(error=>{
+          console.log("error", error)
+          res.json({e: -1, payload: {}})
+        })
+        
+      })
+
+      app.get("/corp/salesprofitcorp", (req, res)=>{
+
+        fetch(ACCOUNTING_BASE_URL + "/Corp/SalesProfit/Total")
+        .then(response => response.json())
+        .then(data => {
+          res.json({e: 0, payload:data}).status(200)
+        })
+        .catch(error=>{
+          console.log("error", error)
+          res.json({e: -1, payload: {}})
+        })
+        
+      })
+
+      
+      app.get("/corp/stores", (req, res)=>{
+
+        fetch(ACCOUNTING_BASE_URL + "/Corp/Stores")
         .then(response => response.json())
         .then(data => {
           res.json({e: 0, payload:data}).status(200)

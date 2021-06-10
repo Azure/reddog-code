@@ -5,9 +5,10 @@ namespace RedDog.AccountingService.Models
 {
     public class SalesProfitMetric
     {
+
         [JsonPropertyName("storeId")]  
         public string StoreId { get; set; }
-
+        
         [JsonPropertyName("orderYear")]  
         public int OrderYear { get; set; }
 
@@ -16,6 +17,9 @@ namespace RedDog.AccountingService.Models
 
         [JsonPropertyName("orderDay")]  
         public int OrderDay { get; set; }
+
+        [JsonPropertyName("orderHour")]  
+        public int OrderHour { get; set; }
 
         [JsonPropertyName("totalOrders")]  
         public int TotalOrders { get; set; }

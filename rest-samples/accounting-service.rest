@@ -1,50 +1,38 @@
 @accounting-service = 127.0.0.1:5700
 
-### Order metrics
+
+###### ORDER METRICS
+### Order metrics per store
 GET http://{{accounting-service}}/OrderMetrics?StoreId=Redmond
 
-http://20.81.98.23/v1.0/invoke/accounting-service/method/OrderMetrics?StoreId=NYC
-
-### Order Counts over the last 20 minutes
-http://{{accounting-service}}/Orders/Minute/PT20M?StoreId=Redmond
+### Order metrics total 
+GET http://{{accounting-service}}/OrderMetrics
 
 
-### NYC Brian
-http://20.81.98.23/OrderMetrics?StoreId=NYC
-# /20.81.98.23
+###### ORDERS OVER TIME
+### Order counts over the last 20 minutes
+GET http://{{accounting-service}}/Orders/Minute/PT20M?StoreId=Redmond
 
-
-### Corp Brian
-http://20.81.98.23/OrderMetrics
-
-
-
-### Remote Order Counts
-http://austin.accounting.brianredmond.io/Orders/Minute/PT20M?StoreId=Austin
-
-
-### Orders over the last 24 hours
-http://{{accounting-service}}/Orders/Hour/PT72H?StoreId=Redmond
-
+### Order counts over the last 24 hours, by hour
+GET http://{{accounting-service}}/Orders/Hour/PT24H?StoreId=Redmond
 
 ### Orders by Day
-http://{{accounting-service}}/Orders/Day/P14D?StoreId=Redmond
+GET http://{{accounting-service}}/Orders/Day/P14D?StoreId=Redmond
 
 
-### Brian's Austin 
-http://austin.accounting.brianredmond.io/OrderMetrics
+###### CORP STORE LISTING
+### Corporate Store List
+GET http://{{accounting-service}}/Corp/Stores
 
 
+###### CORP SALES PROFIT
+### Corp SalesProfit Per Store
+GET http://{{accounting-service}}/Corp/SalesProfit/PerStore
+
+### Corp SalesProfit All Stores
+GET http://{{accounting-service}}/Corp/SalesProfit/Total
 
 
 ### Readiness probe
 GET http://{{accounting-service}}/Probes/ready
 
-
-
-### New Metrics
-GET http://{{accounting-service}}/Corp/SalesProfit/PerStore
-
-
-### Walmart Products
-GET https://marketplace.walmartapis.com/v3/items/walmart/search?query=ipad
