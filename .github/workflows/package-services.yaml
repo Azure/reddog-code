@@ -3,9 +3,7 @@ name: package-services
 on:
   push:
     branches:
-      - 'releases/**'
-  release:
-    types: [published]
+      - 'master'
 
   workflow_dispatch:
 
@@ -21,11 +19,7 @@ jobs:
     steps:
       - id: main
         run: |
-          VERSION=edge
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/}
-          fi
-          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=version::$(echo ${GITHUB_SHA} | cut -c1-7)
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           echo ::set-output name=services::[\"AccountingService accounting-service\", \"LoyaltyService loyalty-service\", \"MakeLineService make-line-service\", \"OrderService order-service\", \"ReceiptGenerationService receipt-generation-service\", \"VirtualWorker virtual-worker\", \"VirtualCustomers virtual-customers\", \"Bootstrapper bootstrapper\", \"UI ui\"]
           echo ::set-output name=repositories::[\"ghcr.io/lynn-orrell/reddog\", \"ghcr.io/cloudnativegbb/paas-vnext\"]
