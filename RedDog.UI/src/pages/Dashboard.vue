@@ -3,7 +3,17 @@
     <div class="row justify-content-lg-left">
       <div class="col-lg-6">
         <div class="row">
-          <div class="col-lg-12">
+          <div class="col-lg-12" v-if="isCorp === true || isCorp === 'true'">
+            <div class="card" :class="[cardClass]">
+              <div class="card-header-title">
+                ORDERS / ITEMS OVER TIME
+              </div>
+              <div class="card-body chart-body">
+                <StreamChart v-if="corpLoaded" :chartData="corpChartData" :options="corpChartOptions"/>
+              </div>
+            </div>
+          </div>
+           <div class="col-lg-12" v-else>
             <div class="card" :class="[cardClass]">
               <div class="card-header-title">
                 ORDERS OVER TIME
@@ -11,8 +21,10 @@
               <div class="card-body chart-body">
                 <StreamChart v-if="loaded" :chartData="chartData" :options="chartOptions"/>
               </div>
-              </div>
             </div>
+          </div>
+
+
           </div>
         </div>
       <div class="col-lg-6">
@@ -20,7 +32,7 @@
           <div class="col-lg-12">
             <div class="card" :class="[cardClass]">
               <div class="card-header-title">
-                P & L OVER TIME
+                SALES AND PROFIT
               </div>
               <div class="card-body chart-body">
                 <StreamChart v-if="salesChartLoaded" :chartData="salesChartData" :options="salesChartOptions"/>
@@ -34,7 +46,14 @@
       <div class="col-lg-6">
         <div class="row">
           <div class="col-lg-12" v-if="isCorp === true || isCorp === 'true'">
-             Need to put something for corp here
+            <div class="card" :class="[cardClass]">
+             <div class="card-header-title">
+                TOP STORE SALES
+              </div>
+              <div class="card-body chart-body">
+                <StreamChart v-if="topStoreSalesLoaded" :chartData="topSalesChartData" :options="topSalesChartOptions"/>
+              </div>
+            </div>
           </div>
           <div class="col-lg-12" v-else>
            <div class="card" :class="[cardClass]">
@@ -76,7 +95,7 @@
           <div class="col-lg-12">
             <div class="card" :class="[cardClass]">
               <div class="card-header-title">
-                AVG PROFIT
+                PROFIT PER ORDER
               </div>
               <div class="card-body">
                 <div class="card-big-detail text-center">{{ profitPerOrderFormatted }}</div>
@@ -90,10 +109,10 @@
           <div class="col-lg-12">
             <div class="card" :class="[cardClass]">
               <div class="card-header-title">
-                AVG ORDER FILL TIME
+                AVG FULFILLMENT 
               </div>
               <div class="card-body">
-                <div class="card-big-detail text-center">{{ avgFulfillmentSec }} min</div>
+                <div class="card-big-detail text-center">{{ avgFulfillmentSec }}{{ fulfillmentTimeDesc }}</div>
               </div>
             </div>
           </div>
@@ -132,8 +151,12 @@ export default {
       pollingInflight:null,
       chartData:null,
       chartOptions: null,
+      corpLoaded:false,
+      corpChartData: null,
+      corpChartOptions: null,
       ctx: null,
       avgFulfillmentSec: null,
+      fulfillmentTimeDesc: ' sec',
       totalFulfillmentTime: null,
       fulfilledOrders: null,
       totalSales: null,
@@ -146,9 +169,17 @@ export default {
       currentDateTime: "",
       pollingInFlightOrders: null,
       pollingOrderMetrics: null,
+      pollingSalesProfit: null,
+      pollingSalesProfitCorp:null,
+      pollingTopStoresMetrics: null,
       salesChartData: null,
       salesChartOptions: null,
-      salesChartLoaded: false
+      salesChartLoaded: false,
+      storeId: "CORP",
+      topStoreSalesLoaded: false,
+      topSalesChartData: null,
+      topSalesChartOptions: null
+
     };
   },
   computed: {
@@ -179,7 +210,9 @@ export default {
         }
       });
     },
-    fillCorpOrderChart(data){},
+    fillCorpOrderChart(data){
+
+    },
     getCurrentDateTime() {
       var current = new Date();
       this.currentDateTime = current.toLocaleString();
@@ -201,22 +234,26 @@ export default {
               this.profitPerOrder = 0;
 
               data.payload.forEach((ord, index) => {
-                salesLabels.push(moment(ord.orderDate).add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
-                salesValues.push(ord.totalPrice)
-                profitLabels.push(moment(ord.orderDate).add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
-                profitValues.push(ord.totalPrice-ord.totalCost)
                 this.fulfilledOrders = this.fulfilledOrders + ord.orderCount;
                 this.totalFulfillmentTime = this.totalFulfillmentTime + (ord.orderCount * ord.avgFulfillmentSec);
                 this.totalSales = this.totalSales + ord.totalPrice;
                 this.totalCost = this.totalCost + ord.totalCost;
 
                 if (index === data.payload.length - 1) {
-                  this.createSalesProfitLineChart(salesLabels, salesValues, profitValues);
-                  this.totalProfit = (this.totalSales - this.totalCost).toFixed(0); /// TOTAL PROFIT
-                  this.totalProfitFormatted = currency(this.totalProfit, {precision:0}).format(); /// TOTAL PROFIT FORMATTEd
-                  this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
-                  this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
-                  this.avgFulfillmentSec = moment.duration((this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0), "seconds").minutes();
+                  // this.totalProfit = (this.totalSales - this.totalCost).toFixed(0); /// TOTAL PROFIT
+                  // this.totalProfitFormatted = currency(this.totalProfit, {precision:0}).format(); /// TOTAL PROFIT FORMATTEd
+                  // this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
+                  // this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
+                  
+
+                  // FOR DEMO ONLY
+                  // console.log(`Fulfillment Time: ${this.totalFulfillmentTime}`)
+                  // TODO: Fix to handle less than 1 minute completion time
+                  this.avgFulfillmentSec = moment.duration((this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0), "seconds").seconds();
+                  if(this.avgFulfillmentSec > 60){
+                    this.fulfillmentTimeDesc = ' min'
+                    this.avgFulfillmentSec = (this.avgFulfillmentSec / 60).toFixed(0)
+                  }
                   this.totalSales = this.totalSales.toFixed(0); /// TOTAL SALES
                   this.totalSalesFormatted = currency(this.totalSales, {precision:0}).format(); /// TOTAL SALES FORMATTED
                 }
@@ -228,7 +265,7 @@ export default {
           );
       }, 10000);
     },
-    getOrderChart(){
+    getOrderChartBranch(){
       clearInterval(this.orderChartInterval)
       let orderChartUrl = '/orders/count/minute'
       this.orderChartInterval = setInterval(() => {
@@ -249,7 +286,6 @@ export default {
         fetch("/orders/inflight")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           this.inflight = []
           data.payload.forEach((ord, index) => {
             this.inflight.push({
@@ -261,13 +297,142 @@ export default {
               itemDetails: ord.orderItems
             })
             if(index === data.payload.length -1){
-              console.log('loaded current orders')
+              // console.log('loaded current orders')
             }
           })
         })
       }, 10000);
     },
-    createOrderLineChart(labels, totals, prevTotals, segment){
+    getSalesProfitMetricsBranch(){
+      clearInterval(this.pollingSalesProfit)
+
+      this.pollingSalesProfit = setInterval(() => {
+        let salesLabels = [], salesValues = [], profitValues = [], modSaleslabels = [], modSalesValues = [], modProfitValues = []
+        
+        fetch("/corp/salesprofitbranch")
+        .then((response) => response.json())
+        .then((data) => {
+
+          if(data.e === 0){
+            
+              // "storeId": "Redmond",
+              // "orderYear": 2021,
+              // "orderMonth": 6,
+              // "orderDay": 9,
+              // "orderHour": 23,
+              // "totalOrders": 705,
+              // "totalOrderItems": 45131,
+              // "totalSales": 1396845.7600,
+              // "totalProfit": 489346.5500
+            
+            data.payload.forEach((ord, index) => {
+                if(ord.storeId === this.storeId){
+                  salesLabels.push(moment(`${ord.orderMonth}-${ord.orderDay}-${ord.orderYear}`, "MM-DD-YYYY").add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
+                  salesValues.push(ord.totalSales.toFixed(0))
+                  profitValues.push(ord.totalProfit.toFixed(0))
+                  this.profitPerOrderFormatted = currency((ord.totalProfit / ord.totalOrders), {precision:2}).format()
+                }
+                if (index === data.payload.length - 1) {
+                  
+                  modSaleslabels = salesLabels.slice(salesLabels.length-10, salesLabels.length)
+                  modSalesValues = salesValues.slice(salesValues.length-10, salesValues.length)
+                  modProfitValues = profitValues.slice(profitValues.length-10, profitValues.length)
+                  this.createSalesProfitLineChart(modSaleslabels, modSalesValues, modProfitValues);
+                }
+            })
+
+          }
+          else{
+            console.log('some kind of connection issue - you might want to get that looked at')
+          }
+
+
+        })
+
+      }, 10000);
+
+
+    },
+    getSalesProfitMetricsCorp(){
+      clearInterval(this.pollingSalesProfitCorp)
+
+      this.pollingSalesProfitCorp = setInterval(() => {
+        let salesLabels = [], salesValues = [], profitValues = [], modSaleslabels = [], modSalesValues = [], modProfitValues = []
+        let orderLabels = [], orderValues = [], itemValues = [], modOrderLabels = [], modOrderValues = [], modItemValues = []
+        
+        fetch("/corp/salesprofitcorp")
+        .then((response) => response.json())
+        .then((data) => {
+
+          if(data.e === 0){
+            data.payload.forEach((ord, index) => {
+                
+                salesLabels.push(moment(`${ord.orderMonth}-${ord.orderDay}-${ord.orderYear}`, "MM-DD-YYYY").add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
+                
+                salesValues.push(ord.totalSales.toFixed(0))
+                profitValues.push(ord.totalProfit.toFixed(0))
+
+                orderLabels.push(moment(`${ord.orderMonth}-${ord.orderDay}-${ord.orderYear}`, "MM-DD-YYYY").add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
+                orderValues.push(ord.totalOrders)
+                itemValues.push(ord.totalOrderItems)
+
+
+
+                if (index === data.payload.length - 1) {
+
+                  this.profitPerOrderFormatted = currency((ord.totalProfit / ord.totalOrders), {precision:2}).format()
+
+
+
+                  modSaleslabels = salesLabels.slice(salesLabels.length-10, salesLabels.length)
+                  modSalesValues = salesValues.slice(salesValues.length-10, salesValues.length)
+                  modProfitValues = profitValues.slice(profitValues.length-10, profitValues.length)
+
+
+                  modOrderLabels = orderLabels.slice(orderLabels.length-10, orderLabels.length)
+                  modOrderValues = orderValues.slice(orderValues.length-10, orderValues.length)
+                  modItemValues = itemValues.slice(itemValues.length-10, itemValues.length)
+                  
+                  this.createSalesProfitLineChart(modSaleslabels, modSalesValues, modProfitValues);
+                  this.createCorpOrderLineChart(modOrderLabels, modOrderValues, modItemValues);
+                }
+
+            })
+
+          }
+          else{
+            console.log('some kind of connection issue - you might want to get that looked at')
+          }
+
+        })
+
+      }, 10000);
+    },
+    getTopStoresMetrics(){
+      clearInterval(this.pollingTopStoresMetrics)
+      this.pollingTopStoresMetrics = setInterval(() => {
+        fetch("/corp/stores")
+        .then((response) => response.json())
+        .then((data) => {
+          if(data.e === 0){
+            this.getPerStoreMetrics(data.payload)
+          }
+          else{
+            console.log('some kind of connection issue - you might want to get that looked at')
+          }
+
+        })
+
+
+      }, 10000)
+    },
+    getPerStoreMetrics(stores){
+      console.log(stores)
+
+
+
+    },
+    createOrderLineChart(labels, totals, prevTotals){
       this.chartData= {
         labels:labels,
         datasets: [
@@ -276,9 +441,10 @@ export default {
             borderColor:'rgb(112, 162, 255)',
             backgroundColor: 'rgba(112, 162, 255, .05)',
             data: totals
-          },
+          }
+          ,
           {
-            label: `PREVIOUS 10 ${this.orderChartSegmentName}`,
+            label: `PREVIOUS 10`,
             borderColor:'rgb(227, 121, 0)',
             backgroundColor: 'rgba(227, 121, 0, .05)',
             data: prevTotals
@@ -323,6 +489,65 @@ export default {
         // maintainAspectRatio: false
       };
       this.loaded = true;
+    },
+    createCorpOrderLineChart(labels, orders, items){
+
+      this.corpChartData= {
+        labels:labels,
+        datasets: [
+          {
+            label: 'ORDERS',
+            borderColor:'rgb(214, 31, 255)',
+            backgroundColor: 'rgba(214, 31, 255, .05)',
+            data: orders
+          },
+          {
+            label: 'ITEMS',
+            borderColor:'rgb(255, 153, 36)',
+            backgroundColor: 'rgba(255, 153, 36, .05)',
+            data: items
+          }
+        ]
+      };
+
+      this.corpChartOptions = {
+        legend: {
+            display: true,
+            position: 'bottom'
+         },
+         scales: {
+          yAxes: [{
+            ticks: {
+              // stepSize: 2,
+              // min:0,
+              autoSkip: true,
+              //reverse: false,
+              beginAtZero: false,
+              padding: 14
+            },
+            gridLines: {
+              display: true,
+              color: "rgba(150,150,150, .05)"
+            },
+          }],
+          xAxes: [{
+            ticks: {
+              autoSkip: true,
+              maxRotation: 90,
+              minRotation: 90,
+              padding: 14
+            },
+            gridLines: {
+              display: true ,
+              color: "rgba(150,150,150, .05)"
+            },
+          }]
+        },
+        responsive: true,
+        // maintainAspectRatio: false
+      };
+      this.corpLoaded = true;
+
     },
     createSalesProfitLineChart(labels, salesValues, profitValues){
       this.salesChartData= {
@@ -381,6 +606,9 @@ export default {
       };
       this.salesChartLoaded = true;
 
+    },
+    createCorpTopSalesChart(labels, valuesArr){
+
     }
 
   },
@@ -393,10 +621,12 @@ export default {
   },
   beforeDestroy() {
     
-    clearInterval(this.pollingOrderMetrics);
-    clearInterval(this.pollingInflight);
-    clearInterval(this.orderChartInterval);
-    
+    clearInterval(this.pollingOrderMetrics)
+    clearInterval(this.pollingInflight)
+    clearInterval(this.orderChartInterval)
+    clearInterval(this.pollingSalesProfit)
+    clearInterval(this.pollingSalesProfitCorp)
+    clearInterval(this.pollingTopStoresMetrics)
     
     if (this.$rtl.isRTL) {
       this.i18n.locale = "en";
@@ -404,21 +634,28 @@ export default {
     }
   },
   created() {
-    var corpVal = JSON.stringify(process.env.VUE_APP_IS_CORP)
-    console.log(`corp to string is ${corpVal}`)
-    console.log()
+
     if (process.env.VUE_APP_IS_CORP === true || process.env.VUE_APP_IS_CORP === 'true'){
+      
       this.isCorp = true;
       this.getAccountingOrderMetrics();
+      this.getSalesProfitMetricsCorp();
+      this.getTopStoresMetrics();
       this.cardClass="card-trans-corp"
+
     }
     else{
+
       this.isCorp = false;
-      this.getOrderChart();
+      this.storeId = process.env.VUE_APP_STORE_ID 
+      this.getOrderChartBranch();
       this.getAccountingOrderMetrics();
+      this.getSalesProfitMetricsBranch();
       this.getCurrentOrders();
       this.cardClass="card-trans-branch"
+
     }
+
   },
 };
 </script>

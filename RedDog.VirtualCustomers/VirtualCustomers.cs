@@ -14,8 +14,8 @@ namespace RedDog.VirtualCustomers
     {
         private const string OrderServiceDaprId = "order-service";
         private static readonly string storeId = Environment.GetEnvironmentVariable("STORE_ID") ?? "Redmond";
-        public static readonly int maxItemQuantity = int.Parse(Environment.GetEnvironmentVariable("MAX_ITEM_QUANTITY") ?? "5");
-        public static readonly int maxUniqueItemsPerOrder = int.Parse(Environment.GetEnvironmentVariable("MAX_UNIQUE_ITEMS_PER_ORDER") ?? "20");
+        public static readonly int maxItemQuantity = int.Parse(Environment.GetEnvironmentVariable("MAX_ITEM_QUANTITY") ?? "1");
+        public static readonly int maxUniqueItemsPerOrder = int.Parse(Environment.GetEnvironmentVariable("MAX_UNIQUE_ITEMS_PER_ORDER") ?? "10");
         public static readonly int minSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_TO_PLACE_ORDER") ?? "1");
         public static readonly int maxSecondsToPlaceOrder = int.Parse(Environment.GetEnvironmentVariable("MAX_SEC_TO_PLACE_ORDER") ?? "3");
         public static readonly int minSecondsBetweenOrders = int.Parse(Environment.GetEnvironmentVariable("MIN_SEC_BETWEEN_ORDERS") ?? "1");
@@ -32,7 +32,7 @@ namespace RedDog.VirtualCustomers
         private Random _random;
 
         private static readonly (int, string, string)[] customers = {
-            (1,"Bruce", "Wayne"),
+            (1,"Bruce","Wayne"),
             (2,"Lou","Redwood"),
             (3,"Allan","Austin"),
             (4,"Rusty","Ryan"),
@@ -203,7 +203,7 @@ namespace RedDog.VirtualCustomers
             (169,"Kayla","Smith"),
             (170,"Theo","Morris"),
             (171,"Edith","Carpenter"),
-            (172,"Jackie","Treehorn"),
+            (172,"Sherlock","Holmes"),
             (173,"David","Bowman"),
             (174,"Clark","Griswold"),
             (175,"Marilou","Park"),

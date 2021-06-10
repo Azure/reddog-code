@@ -88,6 +88,7 @@ namespace RedDog.AccountingService.Controllers
 
             return Ok();
         }
+        
         [HttpGet("/Orders/{period}/{timeSpan}")]
         public async Task<OrdersTimeSeries> GetOrderCountOverTime(string storeId, string period, string timeSpan, [FromServices] AccountingContext dbContext)
         {
@@ -123,7 +124,23 @@ namespace RedDog.AccountingService.Controllers
 
             return totalOrdersByMinute;
 
+
+
         }
+
+
+        [HttpGet("/Corp/Stores")]
+        public async Task<List<String>> GetUniqueStores([FromServices] AccountingContext dbContext)
+        {
+            var distinctStores =    from o in dbContext.Orders
+                                    select  o.StoreId;
+            var storeNames =        await distinctStores.Distinct().ToListAsync();
+
+            return storeNames;
+        }
+
+
+
 
         [HttpGet("/Corp/SalesProfit/PerStore")]
         public async Task<List<SalesProfitMetric>> GetCorpSalesAndProfitPerStore([FromServices] AccountingContext dbContext)
@@ -134,7 +151,8 @@ namespace RedDog.AccountingService.Controllers
                                      StoreId = oi.Order.StoreId,
                                      OrderYear = oi.Order.PlacedDate.Year,
                                      OrderMonth = oi.Order.PlacedDate.Month,
-                                     OrderDay = oi.Order.PlacedDate.Day
+                                     OrderDay = oi.Order.PlacedDate.Day,
+                                     OrderHour = oi.Order.PlacedDate.Hour
                                  }
                                  into g
                                  select new
@@ -143,6 +161,7 @@ namespace RedDog.AccountingService.Controllers
                                      OrderYear = g.Key.OrderYear,
                                      OrderMonth = g.Key.OrderMonth,
                                      OrderDay = g.Key.OrderDay,
+                                     OrderHour = g.Key.OrderHour,
                                      TotalOrderItems = g.Count(),
                                      TotalSales = g.Sum(i => i.UnitPrice * i.Quantity),
                                      TotalProfit = g.Sum(i => (i.UnitPrice - i.UnitCost) * i.Quantity)
@@ -154,7 +173,8 @@ namespace RedDog.AccountingService.Controllers
                                   StoreId = o.StoreId,
                                   OrderYear = o.PlacedDate.Year,
                                   OrderMonth = o.PlacedDate.Month,
-                                  OrderDay = o.PlacedDate.Day
+                                  OrderDay = o.PlacedDate.Day,
+                                  OrderHour = o.PlacedDate.Hour
                               }
                               into g
                               select new
@@ -163,6 +183,7 @@ namespace RedDog.AccountingService.Controllers
                                   OrderYear = g.Key.OrderYear,
                                   OrderMonth = g.Key.OrderMonth,
                                   OrderDay = g.Key.OrderDay,
+                                  OrderHour = g.Key.OrderHour,
                                   TotalOrders = g.Count()
                               };
 
@@ -170,17 +191,20 @@ namespace RedDog.AccountingService.Controllers
                                      join oc in orderCounts on new { StoreId = sap.StoreId, 
                                                                      OrderYear = sap.OrderYear, 
                                                                      OrderMonth = sap.OrderMonth, 
-                                                                     OrderDay = sap.OrderDay }
+                                                                     OrderDay = sap.OrderDay,
+                                                                     OrderHour = sap.OrderHour }
                                      equals new { StoreId = oc.StoreId, 
                                                   OrderYear = oc.OrderYear, 
                                                   OrderMonth = oc.OrderMonth, 
-                                                  OrderDay = oc.OrderDay }
+                                                  OrderDay = oc.OrderDay,
+                                                  OrderHour = oc.OrderHour }
                                      select new SalesProfitMetric
                                      {
                                          StoreId = sap.StoreId,
                                          OrderYear = sap.OrderYear,
                                          OrderMonth = sap.OrderMonth,
                                          OrderDay = sap.OrderDay,
+                                         OrderHour = sap.OrderHour,
                                          TotalOrders = oc.TotalOrders,
                                          TotalOrderItems = sap.TotalOrderItems,
                                          TotalSales = sap.TotalSales,
@@ -191,9 +215,79 @@ namespace RedDog.AccountingService.Controllers
                                            .ThenBy(s => s.OrderYear)
                                            .ThenBy(s => s.OrderMonth)
                                            .ThenBy(s => s.OrderDay)
+                                           .ThenBy(s => s.OrderHour)
                                            .ToListAsync();
         }
 
+        [HttpGet("/Corp/SalesProfit/Total")]
+        public async Task<List<SalesProfitMetric>> GetCorpSalesAndProfitTotal([FromServices] AccountingContext dbContext)
+        {
+            var salesAndProfit = from oi in dbContext.OrderItems
+                                 group oi by new
+                                 {
+                                     OrderYear = oi.Order.PlacedDate.Year,
+                                     OrderMonth = oi.Order.PlacedDate.Month,
+                                     OrderDay = oi.Order.PlacedDate.Day,
+                                     OrderHour = oi.Order.PlacedDate.Hour
+                                 }
+                                 into g
+                                 select new
+                                 {
+                                     OrderYear = g.Key.OrderYear,
+                                     OrderMonth = g.Key.OrderMonth,
+                                     OrderDay = g.Key.OrderDay,
+                                     OrderHour = g.Key.OrderHour,
+                                     TotalOrderItems = g.Count(),
+                                     TotalSales = g.Sum(i => i.UnitPrice * i.Quantity),
+                                     TotalProfit = g.Sum(i => (i.UnitPrice - i.UnitCost) * i.Quantity)
+                                 };
+
+            var orderCounts = from o in dbContext.Orders
+                              group o by new
+                              {
+                                  OrderYear = o.PlacedDate.Year,
+                                  OrderMonth = o.PlacedDate.Month,
+                                  OrderDay = o.PlacedDate.Day,
+                                  OrderHour = o.PlacedDate.Hour
+                              }
+                              into g
+                              select new
+                              {
+                                  OrderYear = g.Key.OrderYear,
+                                  OrderMonth = g.Key.OrderMonth,
+                                  OrderDay = g.Key.OrderDay,
+                                  OrderHour = g.Key.OrderHour,
+                                  TotalOrders = g.Count()
+                              };
+
+            var salesProfitMetrics = from sap in salesAndProfit
+                                     join oc in orderCounts on new { OrderYear = sap.OrderYear, 
+                                                                     OrderMonth = sap.OrderMonth, 
+                                                                     OrderDay = sap.OrderDay,
+                                                                     OrderHour = sap.OrderHour }
+                                     equals new { OrderYear = oc.OrderYear, 
+                                                  OrderMonth = oc.OrderMonth, 
+                                                  OrderDay = oc.OrderDay,
+                                                  OrderHour = oc.OrderHour }
+                                     select new SalesProfitMetric
+                                     {
+                                         StoreId = "CORP",
+                                         OrderYear = sap.OrderYear,
+                                         OrderMonth = sap.OrderMonth,
+                                         OrderDay = sap.OrderDay,
+                                         OrderHour = sap.OrderHour,
+                                         TotalOrders = oc.TotalOrders,
+                                         TotalOrderItems = sap.TotalOrderItems,
+                                         TotalSales = sap.TotalSales,
+                                         TotalProfit = sap.TotalProfit
+                                     };
+
+            return await salesProfitMetrics.OrderBy(s => s.OrderYear)
+                                           .ThenBy(s => s.OrderMonth)
+                                           .ThenBy(s => s.OrderDay)
+                                           .ThenBy(s => s.OrderHour)
+                                           .ToListAsync();
+        }
 
         [HttpGet("/OrderMetrics")]
         public async Task<List<OrderMetric>> GetOrderMetricsAsync(string storeId, [FromServices] AccountingContext dbContext)
@@ -258,7 +352,7 @@ namespace RedDog.AccountingService.Controllers
                               OrderDate = o.OrderDate,
                               OrderHour = o.OrderHour,
                               OrderCount = o.OrderCount,
-                              AvgFulfillmentTimeSec = (int)o.AverageFulfillmentTime,
+                              // TODO Uncomment this :: AvgFulfillmentTimeSec = (int)o.AverageFulfillmentTime,
                               OrderItemCount = oi.OrderItemCount,
                               TotalCost = oi.TotalCost,
                               TotalPrice = oi.TotalPrice
