@@ -5,6 +5,8 @@ metadata:
   namespace: reddog-branch
   labels:
     app: accounting-service
+  annotations:
+    fluxcd.io/automated: "true"
 spec:
   replicas: 1
   selector:
