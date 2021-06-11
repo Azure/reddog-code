@@ -2,7 +2,7 @@
   position: relative;
   top: 0;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
   width: 100%;
   // color:rgb(27, 51, 82);
   background: url("/img/hex-back-pat.png");
@@ -38,10 +38,22 @@
 
 .logo-simple-text{
   color: #ffffff;
-  font-size: 14px;
+  font-size: 18px;
   font-family: good-times, sans-serif;
   font-weight: 300;
   font-style: normal;
+}
+.logo-simple-text > small{
+  font-size:10px;
+  color:#00ab91;
+  letter-spacing: 1px;
+  padding-left: 10px;
+}
+.logo-simple-text > small.branch{
+  font-size:10px;
+  color:#ce65c6;
+  letter-spacing: 1px;
+  padding-left: 10px;
 }
 
 .logo-content {
@@ -427,7 +439,7 @@
     }
 
     &[data="corp"] {
-      background:  #222222;
+      background:  #0B0B0B;
     }
 
     .user{

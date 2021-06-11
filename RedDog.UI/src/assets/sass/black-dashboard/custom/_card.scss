@@ -235,9 +235,20 @@
   border-radius: 8px;
   background: #101b34;
 }
+.card-trans-branch > .card-header-title {
+  color:#648fbd;
+  font-weight: 400;
+}
+
+
+
 .card-trans-corp {
   border-radius: 8px;
-  background: #222222;
+  background: #0C0C0C;
+}
+.card-trans-corp > .card-header-title {
+  color:#656565;
+  font-weight: 400;
 }
 
 .card-big-category {
@@ -326,16 +337,23 @@
   margin-top: 12px;
   padding-left: 10px;
   padding-top: 4px;
-  color: #4a5c8c; //GRULIO
-  font-size: clamp(16px, 20px, 28px);
+  color: #4a5c8c; 
+  font-size: clamp(12px, 18px, 24px);
   margin-bottom: 4px;
   font-weight: 300;
-  font-family: good-times, sans-serif;
+  font-family: "Exo", sans-serif;
 }
 .card-header-title i{
   font-size: clamp(10px, 16px, 20px);
   padding-bottom: 6px;
   padding-right: 6px !important;
+}
+.card-header-title > small{
+  padding-left: 3px;
+  font-size: clamp(10px, 12px, 14px);
+  color: #989898;
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
 }
 .card-header-subtitle{
   font-size: 11px;
