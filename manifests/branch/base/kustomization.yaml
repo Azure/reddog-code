@@ -1,13 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- ./components/reddog.binding.receipt.yaml
-- ./components/reddog.binding.virtualworker.yaml
-- ./components/reddog.config.yaml
-- ./components/reddog.pubsub.yaml
-- ./components/reddog.secretstore.yaml
-- ./components/reddog.state.loyalty.yaml
-- ./components/reddog.state.makeline.yaml
+- ./deployments/namespace.yaml
 - ./deployments/rbac.yaml
 - ./deployments/accounting-service.yaml
 - ./deployments/bootstrapper.yaml
@@ -18,3 +12,10 @@ resources:
 - ./deployments/ui.yaml
 - ./deployments/virtual-customers.yaml
 - ./deployments/virtual-worker.yaml
+- ./components/reddog.binding.receipt.yaml
+- ./components/reddog.binding.virtualworker.yaml
+- ./components/reddog.config.yaml
+- ./components/reddog.pubsub.yaml
+- ./components/reddog.secretstore.yaml
+- ./components/reddog.state.loyalty.yaml
+- ./components/reddog.state.makeline.yaml
