@@ -6,7 +6,7 @@
           <div class="col-lg-12" v-if="isCorp === true || isCorp === 'true'">
             <div class="card" :class="[cardClass]">
               <div class="card-header-title">
-                ORDERS / ITEMS OVER TIME
+                ORDERS / ITEMS OVER TIME <small>ALL LOCATIONS</small>
               </div>
               <div class="card-body chart-body">
                 <StreamChart v-if="corpLoaded" :chartData="corpChartData" :options="corpChartOptions"/>
@@ -16,7 +16,7 @@
            <div class="col-lg-12" v-else>
             <div class="card" :class="[cardClass]">
               <div class="card-header-title">
-                ORDERS OVER TIME
+                ORDERS OVER TIME <small>VERSUS 10 MINUTES AGO</small>
               </div>
               <div class="card-body chart-body">
                 <StreamChart v-if="loaded" :chartData="chartData" :options="chartOptions"/>
@@ -31,8 +31,11 @@
        <div class="row">
           <div class="col-lg-12">
             <div class="card" :class="[cardClass]">
-              <div class="card-header-title">
-                SALES AND PROFIT
+              <div class="card-header-title" v-if="isCorp === true || isCorp === 'true'">
+                SALES AND PROFIT <small>ALL LOCATIONS</small>
+              </div>
+              <div class="card-header-title" v-else>
+                SALES AND PROFIT <small>FOR {{storeId.toUpperCase()}} LOCATION</small>
               </div>
               <div class="card-body chart-body">
                 <StreamChart v-if="salesChartLoaded" :chartData="salesChartData" :options="salesChartOptions"/>
@@ -48,7 +51,7 @@
           <div class="col-lg-12" v-if="isCorp === true || isCorp === 'true'">
             <div class="card" :class="[cardClass]">
              <div class="card-header-title">
-                TOP STORE SALES
+                TOP STORE SALES <small>OVER TIME</small>
               </div>
               <div class="card-body chart-body">
                 <StreamChart v-if="topStoreSalesLoaded" :chartData="topSalesChartData" :options="topSalesChartOptions"/>
@@ -58,7 +61,7 @@
           <div class="col-lg-12" v-else>
            <div class="card" :class="[cardClass]">
               <div class="card-header-title">
-                ORDER QUEUE
+                ORDER QUEUE <small>BEING PREPARED</small>
               </div>
               <div class="card-table-par">
                 <div class="table-responsive">
@@ -95,7 +98,7 @@
           <div class="col-lg-12">
             <div class="card" :class="[cardClass]">
               <div class="card-header-title">
-                PROFIT PER ORDER
+                PROFIT / ORDER <small>LAST HOUR</small>
               </div>
               <div class="card-body">
                 <div class="card-big-detail text-center">{{ profitPerOrderFormatted }}</div>
@@ -109,7 +112,7 @@
           <div class="col-lg-12">
             <div class="card" :class="[cardClass]">
               <div class="card-header-title">
-                AVG FULFILLMENT 
+                FULFILLMENT <small>AVG TIME</small>
               </div>
               <div class="card-body">
                 <div class="card-big-detail text-center">{{ avgFulfillmentSec }}{{ fulfillmentTimeDesc }}</div>
@@ -126,9 +129,9 @@ import moment from 'moment'
 import currency from 'currency.js'
 import Chart from 'chart.js'
 
-Chart.defaults.global.defaultFontColor = '#e6fff9';
+Chart.defaults.global.defaultFontColor = '#c0c0c0';
 Chart.defaults.global.defaultFontFamily = "'Exo', sans-serif";
-Chart.defaults.global.defaultFontSize = 14;
+Chart.defaults.global.defaultFontSize = 11;
 Chart.defaults.global.defaultFontStyle = 500;
 // Chart.defaults.global.gridLines.display = false;
 // Chart.defaults.plugins.legend.display = false;
@@ -196,7 +199,7 @@ export default {
       
       previousArr = data.values.slice(data.values.length-20, data.values.length-10)
       lastArr = data.values.slice(data.values.length-10, data.values.length) 
-
+      
       lastArr.forEach((lt,li) => {
         minuteLabels.push(moment(lt.pointInTime).add(-4, 'hours').format("h:mmA"))
         dataValues.push(lt.value)
@@ -248,7 +251,7 @@ export default {
 
                   // FOR DEMO ONLY
                   // console.log(`Fulfillment Time: ${this.totalFulfillmentTime}`)
-                  // TODO: Fix to handle less than 1 minute completion time
+                  // TODO: LYNN ORRELL DEMO 
                   this.avgFulfillmentSec = moment.duration((this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0), "seconds").seconds();
                   if(this.avgFulfillmentSec > 60){
                     this.fulfillmentTimeDesc = ' min'
@@ -427,9 +430,34 @@ export default {
       }, 10000)
     },
     getPerStoreMetrics(stores){
-      console.log(stores)
+      let arrDatasets = [], arrLabels = [], payloadData = []
+      fetch("/corp/salesprofitbranch")
+        .then((response) => response.json())
+        .then((data) => {
 
+          if(data.e === 0){
+            payloadData = data.payload
+            stores.forEach((storeId, index) => {
+              var filterDs = payloadData.filter(e=>e.storeId === storeId);
+              var lastTen
+              if(filterDs.length >= 10){
+                lastTen = filterDs.slice(filterDs.length -10, filterDs.length)
+                arrLabels = filterDs.slice(filterDs.length -10, filterDs.length)
+              }
+              else{
+                lastTen = filterDs
+              }
+              arrDatasets.push(lastTen)
 
+              if(index === stores.length-1){
+                this.createCorpTopSalesChart(arrLabels, arrDatasets)
+              }
+            })
+          }
+          else{
+            console.log('some kind of connection issue - you might want to get that looked at')
+          }
+        })
 
     },
     createOrderLineChart(labels, totals, prevTotals){
@@ -458,7 +486,7 @@ export default {
             position: 'bottom'
          },
          scales: {
-          yAxes: [{
+          yAxes: {
             ticks: {
               // stepSize: 2,
               // min:0,
@@ -471,8 +499,8 @@ export default {
               display: true,
               color: "rgba(150,150,150, .05)"
             },
-          }],
-          xAxes: [{
+          },
+          xAxes: {
             ticks: {
               autoSkip: true,
               maxRotation: 90,
@@ -483,7 +511,7 @@ export default {
               display: true ,
               color: "rgba(150,150,150, .05)"
             },
-          }]
+          }
         },
         responsive: true,
         // maintainAspectRatio: false
@@ -516,7 +544,7 @@ export default {
             position: 'bottom'
          },
          scales: {
-          yAxes: [{
+          yAxes: {
             ticks: {
               // stepSize: 2,
               // min:0,
@@ -529,8 +557,8 @@ export default {
               display: true,
               color: "rgba(150,150,150, .05)"
             },
-          }],
-          xAxes: [{
+          },
+          xAxes: {
             ticks: {
               autoSkip: true,
               maxRotation: 90,
@@ -541,7 +569,7 @@ export default {
               display: true ,
               color: "rgba(150,150,150, .05)"
             },
-          }]
+          }
         },
         responsive: true,
         // maintainAspectRatio: false
@@ -574,7 +602,7 @@ export default {
             position: 'bottom'
          },
          scales: {
-          yAxes: [{
+          yAxes: {
             ticks: {
               // stepSize: 2,
               // min:0,
@@ -587,8 +615,8 @@ export default {
               display: true,
               color: "rgba(150,150,150, .05)"
             },
-          }],
-          xAxes: [{
+          },
+          xAxes: {
             ticks: {
               autoSkip: true,
               maxRotation: 90,
@@ -599,7 +627,7 @@ export default {
               display: true ,
               color: "rgba(150,150,150, .05)"
             },
-          }]
+          }
         },
         responsive: true,
         // maintainAspectRatio: false
@@ -609,8 +637,82 @@ export default {
     },
     createCorpTopSalesChart(labels, valuesArr){
 
-    }
+      var tmpSalesOptions = {
+        legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+                fontColor: 'rgb(220, 220, 220)'
+            }
+         },
+         scales: {
+          yAxes: {
+            ticks: {
+              autoSkip: true,
+              beginAtZero: false,
+            },
+            gridLines: {
+              display: false
+            },
+          },
+          xAxes: {
+            ticks: {
+              autoSkip: false,
+              maxRotation: 90,
+              minRotation: 90,
 
+            },
+            gridLines: {
+              display: false
+            },
+          }
+        },
+        responsive: true,
+        // maintainAspectRatio: false
+      }
+
+      var tmpSalesChartData = {
+        labels:null,
+        datasets: []
+      }
+
+      let labelStrings = []
+      labels.forEach((lb, ind) =>{
+        var dtString = moment(`${lb.orderMonth}-${lb.orderDay}-${lb.orderYear}`, "MM-DD-YYYY").add(lb.orderHour, 'hours').add(-4, 'hours').format('M/D hA')
+        labelStrings.push(dtString)
+        if(ind === labels.length -1){
+          tmpSalesChartData.labels = labelStrings.slice(labelStrings.length-10, labelStrings.length)
+        }
+      })
+
+      valuesArr.forEach((val, valInd)=>{
+        var chartColor = this.getRGBColorForChart(valInd)
+        var chartDs = {label: val[0].storeId, borderColor: chartColor.borderColor, backgroundColor: chartColor.backgroundColor, data: val.map(v=>v.totalSales)  }
+        tmpSalesChartData.datasets.push(chartDs)
+        if(valInd === valuesArr.length -1){
+          this.topSalesChartData = tmpSalesChartData;
+          this.topSalesChartOptions = tmpSalesOptions;
+          this.topStoreSalesLoaded = true;
+        }
+      })
+      
+
+    },
+    getRGBColorForChart(index){
+      let colors = [
+        {borderColor:'rgb(43, 255, 227)', backgroundColor:'transparent'},
+        {borderColor:'rgb(176, 33, 121)', backgroundColor:'transparent'},
+        {borderColor:'rgb(0, 150, 48)', backgroundColor:'transparent'},
+        {borderColor:'rgb(135, 102, 36)', backgroundColor:'transparent'},
+        {borderColor:'rgb(143, 0, 191)', backgroundColor:'transparent'},
+        {borderColor:'rgb(217, 215, 115)', backgroundColor:'transparent'},
+        {borderColor:'rgb(77, 28, 255)', backgroundColor:'transparent'},
+        {borderColor:'rgb(252, 182, 129)', backgroundColor:'transparent'},
+        {borderColor:'rgb(62, 133, 163)', backgroundColor:'transparent'},
+        {borderColor:'rgb(109, 33, 176)', backgroundColor:'transparent'}
+      ];
+      return colors[index]
+    }
   },
   mounted() {
     this.i18n = this.$i18n;

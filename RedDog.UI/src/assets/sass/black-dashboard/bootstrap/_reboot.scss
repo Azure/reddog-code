@@ -47,9 +47,9 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 }
 body{
   margin: 0; // 1
-  font-family: "Quicksand", sans-serif;
+  font-family: "Exo", sans-serif;
   font-size: $font-size-base;
-  font-weight: $font-weight-base;
+  font-weight: 300;
   line-height: $line-height-base;
   color: #DAE2DF;
   text-align: left; 
@@ -61,7 +61,7 @@ body.branch {
 
 //corp look and feel
 body.corp {
-  background-color: #25292c; 
+  background-color: #111; 
 }
 
 // Suppress the focus outline on elements that cannot be accessed via keyboard.
