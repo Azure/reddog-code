@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - 'contoso-health'
-    paths:
-      - 'RedDog.AccountingService/**'
+#     paths:
+#       - 'RedDog.AccountingService/**'
 
   workflow_dispatch:
 
