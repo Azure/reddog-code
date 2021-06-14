@@ -68,18 +68,21 @@ jobs:
         uses: fjogeleit/yaml-update-action@master
         with:
           valueFile: 'manifests/branch/base/deployments/accounting-service.yaml'
-          propertyPath: 'spec.template.spec.containers.image'
+          propertyPath: 'spec.template.spec.containers.0.image'
           value: ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:${{ needs.set-env.outputs.version }}
-          commitChange: 'false'
-          updateFile: 'true' 
+          commitChange: 'true'
+          branch: 'contoso-health'
+          message: 'Updated accounting service deployment manifest.'
+          createPR: 'false'
+          updateFile: 'true'
       - name: Echo yaml
         run: |
           cat manifests/branch/base/deployments/accounting-service.yaml
-      - name: Commit and push deployment yaml
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Updated accounting service deployment manifest
-          status_options: '--untracked-files=no'
+#       - name: Commit and push deployment yaml
+#         uses: stefanzweifel/git-auto-commit-action@v4
+#         with:
+#           commit_message: Updated accounting service deployment manifest
+#           status_options: '--untracked-files=no'
           
           
       
