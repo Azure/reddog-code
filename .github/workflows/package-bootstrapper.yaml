@@ -1,4 +1,4 @@
-name: package-accounting-services
+name: package-bootstrapper
 
 on:
   push:
