@@ -72,11 +72,13 @@ jobs:
           value: ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:${{ needs.set-env.outputs.version }}
           commitChange: 'false'
           updateFile: 'true' 
+      - name: Echo yaml
+        run: |
+          cat manifests/branch/base/deployments/accounting-service.yaml
       - name: Commit and push deployment yaml
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Updated accounting service deployment manifest
-          file_pattern: accounting-service.yaml
           status_options: '--untracked-files=no'
           
           
