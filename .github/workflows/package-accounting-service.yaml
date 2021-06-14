@@ -71,5 +71,8 @@ jobs:
           propertyPath: 'spec.template.spec.containers.image'
           value: ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:${{ needs.set-env.outputs.version }}
           commitChange: 'true'
-          updateFile: 'true' 
           branch: 'contoso-health'
+          message: 'Updated deployment manifest.'
+          createPR: 'false'
+          updateFile: 'true' 
+          
