@@ -70,10 +70,15 @@ jobs:
           valueFile: 'manifests/branch/base/deployments/accounting-service.yaml'
           propertyPath: 'spec.template.spec.containers.image'
           value: ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:${{ needs.set-env.outputs.version }}
-          commitChange: 'true'
-          branch: 'contoso-health'
-          targetBranch: 'contoso-health'
-          message: 'Updated deployment manifest.'
-          createPR: 'false'
+          commitChange: 'false'
           updateFile: 'true' 
+      - name: Commit and push deployment yaml
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Updated accounting service deployment manifest
+          file_pattern: accounting-service.yaml
+          status_options: '--untracked-files=no'
+          
+          
+      
           
