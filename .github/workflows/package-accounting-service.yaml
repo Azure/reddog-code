@@ -3,7 +3,7 @@ name: package-accounting-services
 on:
   push:
     branches:
-      - 'master'
+      - 'glo-contoso-health'
     paths:
       - 'RedDog.AccountingService/**'
 
@@ -26,8 +26,8 @@ jobs:
           echo ::set-output name=services::[\"AccountingService accounting-service\"]
           echo ::set-output name=repositories::[\"ghcr.io/lynn-orrell/reddog\", \"ghcr.io/cloudnativegbb/paas-vnext\"]
 
-  package-services:
-    name: Package Services
+  package-accounting-service:
+    name: Package Accounting Service
     runs-on: ubuntu-latest
     needs: set-env
     strategy:
@@ -63,3 +63,15 @@ jobs:
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
 
+  update-accounting-service-deployment:
+    name: Update Accounting Service Deployment
+    runs-on: ubuntu-latest
+    needs: package-accounting-service
+    steps:
+      - uses: fjogeleit/yaml-update-action@master
+        with:
+          valueFile: 'manifests/branch/base/deployments/accounting-service.yaml'
+          propertyPath: 'spec.template.spec.containers.image'
+          value: ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:${{ needs.set-env.outputs.version }}
+          commitChange: 'true'
+          updateFile: 'true' 
