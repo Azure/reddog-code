@@ -1,0 +1,27 @@
+name: package-accounting-services
+
+on:
+  push:
+    branches:
+      - 'contoso-health'
+    paths:
+      - 'RedDog.Bootstrapper/**'
+
+  workflow_dispatch:
+
+jobs:
+  set-env:
+    name: Set Environment Variables
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.main.outputs.version }}
+      created: ${{ steps.main.outputs.created }}
+      services: ${{ steps.main.outputs.services }}
+      repositories: ${{ steps.main.outputs.repositories }}  
+    steps:
+      - id: main
+        run: |
+          echo ::set-output name=version::$(echo ${GITHUB_SHA} | cut -c1-7)
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          echo ::set-output name=services::[\"Bootstrapper bootstrapper\"]
+          echo ::set-output name=repositories::[\"ghcr.io/lynn-orrell/reddog\", \"ghcr.io/cloudnativegbb/paas-vnext\"]
