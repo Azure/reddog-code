@@ -3,7 +3,7 @@ name: package-accounting-services
 on:
   push:
     branches:
-      - 'glo-contoso-health'
+      - 'contoso-health'
     paths:
       - 'RedDog.AccountingService/**'
 
@@ -72,4 +72,4 @@ jobs:
           value: ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:${{ needs.set-env.outputs.version }}
           commitChange: 'true'
           updateFile: 'true' 
-          branch: 'glo-contoso-health'
+          branch: 'contoso-health'
