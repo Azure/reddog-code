@@ -36,3 +36,7 @@ GET http://{{accounting-service}}/Corp/SalesProfit/Total
 ### Readiness probe
 GET http://{{accounting-service}}/Probes/ready
 
+
+###
+GET http://corp.accounting.brianredmond.io/Corp/SalesProfit/PerStore
+

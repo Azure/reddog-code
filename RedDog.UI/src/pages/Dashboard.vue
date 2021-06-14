@@ -213,9 +213,6 @@ export default {
         }
       });
     },
-    fillCorpOrderChart(data){
-
-    },
     getCurrentDateTime() {
       var current = new Date();
       this.currentDateTime = current.toLocaleString();
@@ -387,14 +384,14 @@ export default {
 
 
 
-                  modSaleslabels = salesLabels.slice(salesLabels.length-10, salesLabels.length)
-                  modSalesValues = salesValues.slice(salesValues.length-10, salesValues.length)
-                  modProfitValues = profitValues.slice(profitValues.length-10, profitValues.length)
+                  modSaleslabels = salesLabels.slice(salesLabels.length-11, salesLabels.length-1)
+                  modSalesValues = salesValues.slice(salesValues.length-11, salesValues.length-1)
+                  modProfitValues = profitValues.slice(profitValues.length-11, profitValues.length-1)
 
 
-                  modOrderLabels = orderLabels.slice(orderLabels.length-10, orderLabels.length)
-                  modOrderValues = orderValues.slice(orderValues.length-10, orderValues.length)
-                  modItemValues = itemValues.slice(itemValues.length-10, itemValues.length)
+                  modOrderLabels = orderLabels.slice(orderLabels.length-11, orderLabels.length-1)
+                  modOrderValues = orderValues.slice(orderValues.length-11, orderValues.length-1)
+                  modItemValues = itemValues.slice(itemValues.length-11, itemValues.length-1)
                   
                   this.createSalesProfitLineChart(modSaleslabels, modSalesValues, modProfitValues);
                   this.createCorpOrderLineChart(modOrderLabels, modOrderValues, modItemValues);
@@ -441,8 +438,8 @@ export default {
               var filterDs = payloadData.filter(e=>e.storeId === storeId);
               var lastTen
               if(filterDs.length >= 10){
-                lastTen = filterDs.slice(filterDs.length -10, filterDs.length)
-                arrLabels = filterDs.slice(filterDs.length -10, filterDs.length)
+                lastTen = filterDs.slice(filterDs.length -11, filterDs.length-1)
+                arrLabels = filterDs.slice(filterDs.length -11, filterDs.length-1)
               }
               else{
                 lastTen = filterDs
