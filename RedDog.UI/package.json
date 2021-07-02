@@ -18,7 +18,7 @@
     "@vue/cli-service": "^4.5.12",
     "async": "^2.6.3",
     "cache-loader": "^4.1.0",
-    "chart.js": "2.8",
+    "chart.js": "2.9",
     "chartjs-plugin-streaming": "1.8",
     "currency.js": "^2.0.3",
     "dotenv-webpack": "^7.0.2",
