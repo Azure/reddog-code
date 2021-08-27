@@ -11,6 +11,7 @@ on:
 
 jobs:
   echo-success:
-    - name: echo
-        run: |
-          echo "It worked!"
+    steps:
+      - name: echo
+          run: |
+            echo "It worked!"
