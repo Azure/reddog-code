@@ -13,5 +13,5 @@ jobs:
   echo-success:
     steps:
       - name: echo
-          run: |
-            echo "It worked!"
+        run: |
+          echo "It worked!"
