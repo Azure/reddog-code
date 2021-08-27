@@ -3,7 +3,7 @@ name: package-accounting-service
 on:
   push:
     branches:
-      - 'contoso-health'
+      - 'master'
     paths:
       - 'RedDog.AccountingService/**'
 
@@ -16,33 +16,25 @@ jobs:
     outputs:
       version: ${{ steps.main.outputs.version }}
       created: ${{ steps.main.outputs.created }}
-      services: ${{ steps.main.outputs.services }}
-      repositories: ${{ steps.main.outputs.repositories }}  
+      project: ${{ steps.main.outputs.project }}
+      image: ${{ steps.main.outputs.image }}
+      repository: ${{ steps.main.outputs.repository }}  
     steps:
       - id: main
         run: |
           echo ::set-output name=version::$(echo ${GITHUB_SHA} | cut -c1-7)
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-          echo ::set-output name=services::[\"AccountingService accounting-service\"]
-          echo ::set-output name=repositories::[\"ghcr.io/lynn-orrell/reddog\", \"ghcr.io/cloudnativegbb/paas-vnext\"]
+          echo ::set-output name=project::AccountingService
+          echo ::set-output name=image::reddog-accounting-service
+          echo ::set-output name=repository::ghcr.io/cloudnativegbb/paas-vnext
 
   package-service:
     name: Package Service
     runs-on: ubuntu-latest
     needs: set-env
-    strategy:
-      matrix:
-        service: ${{ fromJSON(needs.set-env.outputs.services) }}
-        repository: ${{ fromJSON(needs.set-env.outputs.repositories) }}
     steps:
-      - uses: jungwinter/split@v1
-        id: service-split
-        with:
-          msg: ${{ matrix.service }}
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: contoso-health
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to GitHub Container Registry
@@ -55,23 +47,23 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: RedDog.${{ steps.service-split.outputs._0 }}/Dockerfile
+          file: RedDog.${{ needs.set-env.outputs.project }}/Dockerfile
           push: true
           tags: |
-            ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:latest
-            ${{ matrix.repository }}/reddog-${{ steps.service-split.outputs._1 }}:${{ needs.set-env.outputs.version }}
+            ${{ needs.set-env.outputs.repository }}/${{ needs.set-env.outputs.image }}:latest
+            ${{ needs.set-env.outputs.repository }}/${{ needs.set-env.outputs.image }}:${{ needs.set-env.outputs.version }}
           labels: |
-            org.opencontainers.image.source=${{ github.event.repository.html_url }}
-            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=${{ github.repositoryUrl }}
+            org.opencontainers.image.created=${{ needs.set-env.outputs.created }}
+            org.opencontainers.image.revision=${{ needs.set-env.outputs.version }}
       - name: Update deployment yaml
         uses: fjogeleit/yaml-update-action@master
         with:
           valueFile: 'manifests/branch/base/deployments/accounting-service.yaml'
           propertyPath: 'spec.template.spec.containers.0.image'
-          value: ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:${{ needs.set-env.outputs.version }}
+          value: ${{ needs.set-env.outputs.repository }}/${{ needs.set-env.outputs.image }}:${{ needs.set-env.outputs.version }}
           commitChange: 'true'
-          branch: 'contoso-health'
+          branch: 'master'
           message: 'Updated accounting service deployment manifest.'
           createPR: 'false'
           updateFile: 'true'
