@@ -62,7 +62,7 @@ jobs:
           valueFile: 'manifests/branch/base/deployments/accounting-service.yaml'
           propertyPath: 'spec.template.spec.containers.0.image'
           value: ${{ needs.set-env.outputs.repository }}/${{ needs.set-env.outputs.image }}:${{ needs.set-env.outputs.version }}
-          commitChange: 'true'
+          commitChange: 'false'
           branch: 'master'
           message: 'Updated accounting service deployment manifest.'
           createPR: 'false'
@@ -70,6 +70,16 @@ jobs:
       - name: Echo yaml
         run: |
           cat manifests/branch/base/deployments/accounting-service.yaml
+      - name: Promote deployment
+        uses: dmnemec/copy_file_to_another_repo_action
+        env: 
+          API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
+        with:
+          source_file: manifests/branch/base/deployments/accounting-service.yaml
+          destination_repo: Azure/reddog-retail-demo
+          destination_folder: manifests/branch/base/deployments
+          user_email: lynn.orrell@gmail.com
+          user_name: lynn-orrell
           
           
       

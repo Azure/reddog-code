@@ -5,8 +5,6 @@ metadata:
   namespace: reddog-branch
   labels:
     app: accounting-service
-  annotations:
-    fluxcd.io/automated: 'true'
 spec:
   replicas: 1
   selector:
@@ -17,14 +15,14 @@ spec:
       labels:
         app: accounting-service
       annotations:
-        dapr.io/enabled: 'true'
-        dapr.io/app-id: accounting-service
-        dapr.io/app-port: '80'
-        dapr.io/config: reddog.config
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "accounting-service"
+        dapr.io/app-port: "80"
+        dapr.io/config: "reddog.config"
     spec:
       containers:
         - name: accounting-service
-          image: ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:9156904
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-accounting-service:latest"
           ports:
             - containerPort: 80
           imagePullPolicy: Always
