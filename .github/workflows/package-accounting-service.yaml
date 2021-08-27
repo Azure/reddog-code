@@ -71,7 +71,7 @@ jobs:
         run: |
           cat manifests/branch/base/deployments/accounting-service.yaml
       - name: Promote deployment
-        uses: dmnemec/copy_file_to_another_repo_action
+        uses: dmnemec/copy_file_to_another_repo_action@main
         env: 
           API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
         with:
