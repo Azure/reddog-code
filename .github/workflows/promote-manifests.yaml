@@ -1,0 +1,16 @@
+name: promote-manifests
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'manifests/**'
+
+  workflow_dispatch:
+
+jobs:
+  echo-success:
+    - name: echo
+        run: |
+          echo "It worked!"
