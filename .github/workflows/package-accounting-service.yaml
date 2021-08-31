@@ -25,7 +25,7 @@ jobs:
           echo ::set-output name=version::$(echo ${GITHUB_SHA} | cut -c1-7)
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           echo ::set-output name=project::AccountingService
-          echo ::set-output name=image::reddog-accounting-service
+          echo ::set-output name=image::reddog-retail-accounting-service
           echo ::set-output name=repository::ghcr.io/azure/reddog-retail-demo
 
   package-service:
