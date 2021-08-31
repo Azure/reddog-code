@@ -26,7 +26,7 @@ jobs:
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           echo ::set-output name=project::AccountingService
           echo ::set-output name=image::reddog-accounting-service
-          echo ::set-output name=repository::ghcr.io/cloudnativegbb/paas-vnext
+          echo ::set-output name=repository::ghcr.io/Azure/reddog-retail-demo
 
   package-service:
     name: Package Service
@@ -78,7 +78,7 @@ jobs:
           source_file: manifests/branch/base/deployments/accounting-service.yaml
           destination_repo: Azure/reddog-retail-demo
           destination_folder: manifests/branch/base/deployments
-          user_email: lynn.orrell@gmail.com
+          user_email: lynn.orrell@microsoft.com
           user_name: lynn-orrell
           
           
