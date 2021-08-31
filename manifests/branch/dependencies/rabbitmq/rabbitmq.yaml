@@ -5,9 +5,23 @@ metadata:
   namespace: rabbitmq
 spec:
   releaseName: rabbitmq
+  targetNamespace: rabbitmq
+  timeout: 300
+  resetValues: false
+  wait: false
+  forceUpgrade: false
   chart:
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://marketplace.azurecr.io/helm/v1/repo
     name: rabbitmq
-    version: 8.9.2
+    version: 8.20.2
   values:
     replicaCount: 3
+    service:
+      type: LoadBalancer
+    auth:
+      username: contosoadmin
+      password: MyPassword123
+    podSecurityContext:
+      enabled: true
+      fsGroup: 2000
+      runAsUser: 0
