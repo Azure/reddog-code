@@ -73,7 +73,7 @@ jobs:
       - name: Update corporate deployment yaml
         uses: fjogeleit/yaml-update-action@master
         with:
-          valueFile: 'manifests/corporate/base/deployments/accounting-service.yaml'
+          valueFile: 'manifests/corporate/deployments/accounting-service.yaml'
           propertyPath: 'spec.template.spec.containers.0.image'
           value: ${{ needs.set-env.outputs.repository }}/${{ needs.set-env.outputs.image }}:${{ needs.set-env.outputs.version }}
           commitChange: 'false'
@@ -83,7 +83,7 @@ jobs:
           updateFile: 'true'
       - name: Echo corporate yaml
         run: |
-          cat manifests/corporate/base/deployments/accounting-service.yaml
+          cat manifests/corporate/deployments/accounting-service.yaml
       - name: Promote deployment
         uses: dmnemec/copy_file_to_another_repo_action@main
         env: 
@@ -99,8 +99,8 @@ jobs:
         env: 
           API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
         with:
-          source_file: manifests/corporate/base/deployments/accounting-service.yaml
+          source_file: manifests/corporate/deployments/accounting-service.yaml
           destination_repo: Azure/reddog-retail-demo
-          destination_folder: manifests/corporate/base/deployments
+          destination_folder: manifests/corporate/deployments
           user_email: lynn.orrell@microsoft.com
           user_name: lynn-orrell
