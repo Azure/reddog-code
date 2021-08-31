@@ -64,7 +64,7 @@ jobs:
           value: ${{ needs.set-env.outputs.repository }}/${{ needs.set-env.outputs.image }}:${{ needs.set-env.outputs.version }}
           commitChange: 'false'
           branch: 'master'
-          message: 'Updated accounting service deployment manifest.'
+          message: 'Updated bootstrapper deployment manifest.'
           createPR: 'false'
           updateFile: 'true'
       - name: Echo yaml
@@ -80,7 +80,3 @@ jobs:
           destination_folder: manifests/branch/base/deployments
           user_email: lynn.orrell@microsoft.com
           user_name: lynn-orrell
-          
-          
-      
-          

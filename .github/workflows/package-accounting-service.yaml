@@ -80,7 +80,3 @@ jobs:
           destination_folder: manifests/branch/base/deployments
           user_email: lynn.orrell@microsoft.com
           user_name: lynn-orrell
-          
-          
-      
-          
