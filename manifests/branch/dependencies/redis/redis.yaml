@@ -5,7 +5,29 @@ metadata:
   namespace: redis
 spec:
   releaseName: redis
+  targetNamespace: redis
+  timeout: 300
+  resetValues: false
+  wait: false
+  forceUpgrade: false
   chart:
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://marketplace.azurecr.io/helm/v1/repo
     name: redis
-    version: 12.7.4
+    version: 15.0.0
+  values:
+    auth:
+      password: MyPassword123
+    master:
+      podSecurityContext:
+        enabled: true
+        fsGroup: 2000
+      containerSecurityContext:
+        runAsUser: 0
+        enabled: true
+    replica:
+      podSecurityContext:
+        enabled: true
+        fsGroup: 2000
+      containerSecurityContext:
+        runAsUser: 0
+        enabled: true
