@@ -8,4 +8,4 @@ spec:
   chart:
     repository: https://dapr.github.io/helm-charts/
     name: dapr
-    version: 1.0.0
+    version: 1.3.0
