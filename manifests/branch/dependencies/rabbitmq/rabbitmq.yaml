@@ -21,7 +21,7 @@ spec:
     auth:
       username: contosoadmin
       password: MyPassword123
-    podSecurityContext:
-      enabled: true
-      fsGroup: 2000
-      runAsUser: 0
+    # podSecurityContext:
+    #   enabled: true
+    #   fsGroup: 2000
+    #   runAsUser: 0
