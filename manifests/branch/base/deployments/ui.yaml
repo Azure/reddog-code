@@ -29,7 +29,11 @@ spec:
           - name: IS_CORP
             value: "false"          
           - name: STORE_ID
-            value: Denver
+            valueFrom:
+              secretKeyRef:
+                  name: branch.config
+                  key: storeid
+
 ---
 apiVersion: v1
 kind: Service
