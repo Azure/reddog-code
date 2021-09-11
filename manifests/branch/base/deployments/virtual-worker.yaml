@@ -32,7 +32,10 @@ spec:
             periodSeconds: 10
           env:
           - name: STORE_ID
-            value: Denver
+            valueFrom:
+              secretKeyRef:
+                  name: branch.config
+                  key: store_id
           - name: MIN_SECONDS_TO_COMPLETE_ITEM
             value: "2"
           - name: MAX_SECONDS_TO_COMPLETE_ITEM

@@ -32,7 +32,7 @@ spec:
             valueFrom:
               secretKeyRef:
                   name: branch.config
-                  key: storeid
+                  key: store_id
 
 ---
 apiVersion: v1
