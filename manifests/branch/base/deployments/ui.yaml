@@ -26,9 +26,9 @@ spec:
             - containerPort: 8080
           imagePullPolicy: Always
           env:
-          - name: IS_CORP
+          - name: VUE_APP_IS_CORP
             value: "false"          
-          - name: STORE_ID
+          - name: VUE_APP_STORE_ID
             valueFrom:
               secretKeyRef:
                   name: branch.config
