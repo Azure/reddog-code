@@ -33,6 +33,16 @@ spec:
               secretKeyRef:
                   name: branch.config
                   key: store_id
+          - name: VUE_APP_MAKELINE_BASE_URL
+            valueFrom:
+              secretKeyRef:
+                  name: branch.config
+                  key: makeline_base_url
+          - name: VUE_APP_ACCOUNTING_BASE_URL
+            valueFrom:
+              secretKeyRef:
+                  name: branch.config
+                  key: accounting_base_url
 
 ---
 apiVersion: v1
