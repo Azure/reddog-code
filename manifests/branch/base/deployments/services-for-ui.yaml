@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: make-line-service
+  namespace: reddog-retail
+  labels:
+    name: make-line-service
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8082
+    targetPort: 80
+  selector:
+    app: make-line-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounting-service
+  namespace: reddog-retail
+  labels:
+    name: accounting-service
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8083
+    targetPort: 80
+  selector:
+    app: accounting-service  
