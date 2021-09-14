@@ -9,7 +9,7 @@ namespace RedDog.OrderService.Models
 {
     public class Product
     {
-        private static string _productDefinitionFilename =  Environment.GetEnvironmentVariable("PRODUCT_DEFINITION_FILENAME") ?? "DrugStoreProducts.json";
+        private static string _productDefinitionFilename =  Environment.GetEnvironmentVariable("PRODUCT_DEFINITION_FILENAME") ?? "DrugStoreProducts-categorized.json";
         private static List<Product> _products;
 
         [JsonPropertyName("productId")]
@@ -29,6 +29,9 @@ namespace RedDog.OrderService.Models
 
         [JsonPropertyName("imageUrl")]
         public string ImageUrl { get; set; }
+
+        [JsonPropertyName("categoryId")]
+        public string CategoryId { get; set; }
 
         public static async Task<List<Product>> GetAllAsync()
         {
