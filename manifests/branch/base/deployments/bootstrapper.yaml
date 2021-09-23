@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: bootstrapper
-  namespace: reddog-branch
+  namespace: reddog-retail
   labels:
     app: bootstrapper
 spec:
