@@ -70,7 +70,8 @@ namespace RedDog.OrderService.Controllers
                     ProductName = product.ProductName,
                     Quantity = orderItem.Quantity,
                     UnitCost = product.UnitCost,
-                    UnitPrice = product.UnitPrice
+                    UnitPrice = product.UnitPrice,
+                    ImageUrl = product.ImageUrl
                 });
             }
 
