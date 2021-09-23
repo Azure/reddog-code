@@ -18,5 +18,8 @@ namespace RedDog.MakeLineService.Models
 
         [JsonPropertyName("unitPrice")]
         public decimal UnitPrice { get; set; }
+        
+        [JsonPropertyName("imageUrl")]
+        public string ImageUrl { get; set; }
     }
 }
