@@ -2,7 +2,7 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: reddog.pubsub
-  namespace: reddog-corp
+  namespace: reddog-retail
 spec:
   type: pubsub.azure.servicebus
   version: v1  

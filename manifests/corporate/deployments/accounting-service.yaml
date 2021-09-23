@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: accounting-service
-  namespace: reddog-corp
+  namespace: reddog-retail
   labels:
     app: accounting-service
 spec:

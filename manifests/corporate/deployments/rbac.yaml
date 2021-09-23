@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: secret-reader
-  namespace: reddog-corp
+  namespace: reddog-retail
 rules:
 - apiGroups: [""]
   resources: ["secrets"]
@@ -14,7 +14,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: dapr-secret-reader
-  namespace: reddog-corp
+  namespace: reddog-retail
 subjects:
 - kind: ServiceAccount
   name: default
