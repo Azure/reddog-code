@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 namespace RedDog.MakeLineService
@@ -20,6 +21,10 @@ namespace RedDog.MakeLineService
         {
             services.AddHttpClient();
             services.AddControllers().AddDapr();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RedDog.MakeLineService", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -29,6 +34,8 @@ namespace RedDog.MakeLineService
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RedDog.MakeLineService v1"));
             app.UseSerilogRequestLogging();
             app.UseRouting();
             app.UseCloudEvents();
