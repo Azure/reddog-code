@@ -60,7 +60,8 @@ namespace RedDog.AccountingService.Controllers
                     ProductName = orderItemSummary.ProductName,
                     Quantity = orderItemSummary.Quantity,
                     UnitCost = orderItemSummary.UnitCost,
-                    UnitPrice = orderItemSummary.UnitPrice
+                    UnitPrice = orderItemSummary.UnitPrice,
+                    ImageUrl = orderItemSummary.ImageUrl
                 });
             }
 
