@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: corp-transfer-service
-  namespace: reddog-branch    
+  namespace: reddog-retail
   labels:
     app: corp-transfer-service
 spec:

@@ -41,10 +41,10 @@ namespace RedDog.AccountingService
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RedDog.AccountingService v1"));
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RedDog.AccountingService v1"));
             app.UseSerilogRequestLogging();
             app.UseRouting();
             app.UseCloudEvents();

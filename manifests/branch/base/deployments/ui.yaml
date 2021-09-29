@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ui
-  namespace: reddog-branch
+  namespace: reddog-retail
   labels:
     app: ui
 spec:
