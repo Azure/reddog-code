@@ -43,20 +43,3 @@ spec:
               secretKeyRef:
                   name: branch.config
                   key: accounting_base_url
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: reddog-branch-ui
-  namespace: reddog-branch  
-  labels:
-    name: reddog-branch-ui
-spec:
-  type: LoadBalancer
-  ports:
-  - name: http
-    port: 80
-    targetPort: 8080
-  selector:
-    app: ui          
