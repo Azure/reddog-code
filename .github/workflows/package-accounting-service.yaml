@@ -99,8 +99,8 @@ jobs:
         env: 
           API_TOKEN_GITHUB: ${{ secrets.CR_PAT }}
         with:
-          source_file: manifests/corporate/base/deployments/accounting-service.yaml
+          source_file: manifests/corporate/deployments/accounting-service.yaml
           destination_repo: Azure/reddog-retail-demo
-          destination_folder: manifests/corporate/deployments
+          destination_folder: manifests/corporate/base/deployments
           user_email: lynn.orrell@microsoft.com
           user_name: lynn-orrell
