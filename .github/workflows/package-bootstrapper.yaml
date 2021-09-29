@@ -101,6 +101,6 @@ jobs:
         with:
           source_file: manifests/corporate/deployments/bootstrapper.yaml
           destination_repo: Azure/reddog-retail-demo
-          destination_folder: manifests/corporate/deployments
+          destination_folder: manifests/corporate/base/deployments
           user_email: lynn.orrell@microsoft.com
           user_name: lynn-orrell
