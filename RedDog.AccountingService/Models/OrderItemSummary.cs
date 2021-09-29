@@ -20,6 +20,6 @@ namespace RedDog.AccountingService.Models
         public decimal UnitPrice { get; set; }
         
         [JsonPropertyName("imageUrl")]
-        public string imageUrl { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
