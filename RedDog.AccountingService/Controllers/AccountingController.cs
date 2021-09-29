@@ -352,7 +352,7 @@ namespace RedDog.AccountingService.Controllers
                               OrderDate = o.OrderDate,
                               OrderHour = o.OrderHour,
                               OrderCount = o.OrderCount,
-                              // TODO Uncomment this :: AvgFulfillmentTimeSec = (int)o.AverageFulfillmentTime,
+                              AvgFulfillmentTimeSec = (int)o.AverageFulfillmentTime,
                               OrderItemCount = oi.OrderItemCount,
                               TotalCost = oi.TotalCost,
                               TotalPrice = oi.TotalPrice
