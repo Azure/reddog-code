@@ -195,6 +195,7 @@ export default {
   },
   methods: {
     fillBranchOrderChart(data){
+      console.log(data);
       let minuteLabels = [], dataValues = [], dataValuesPrev = [], previousArr = [], lastArr = []
       
       previousArr = data.values.slice(data.values.length-20, data.values.length-10)
@@ -423,6 +424,7 @@ export default {
       }, 10000)
     },
     getPerStoreMetrics(stores){
+      console.log(stores)
       let arrDatasets = [], arrLabels = [], payloadData = []
       fetch("/corp/salesprofitbranch")
         .then((response) => response.json())

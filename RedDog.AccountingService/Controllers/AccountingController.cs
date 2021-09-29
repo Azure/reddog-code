@@ -60,7 +60,8 @@ namespace RedDog.AccountingService.Controllers
                     ProductName = orderItemSummary.ProductName,
                     Quantity = orderItemSummary.Quantity,
                     UnitCost = orderItemSummary.UnitCost,
-                    UnitPrice = orderItemSummary.UnitPrice
+                    UnitPrice = orderItemSummary.UnitPrice,
+                    ImageUrl = orderItemSummary.ImageUrl
                 });
             }
 
@@ -352,7 +353,7 @@ namespace RedDog.AccountingService.Controllers
                               OrderDate = o.OrderDate,
                               OrderHour = o.OrderHour,
                               OrderCount = o.OrderCount,
-                              // TODO Uncomment this :: AvgFulfillmentTimeSec = (int)o.AverageFulfillmentTime,
+                              AvgFulfillmentTimeSec = (int)o.AverageFulfillmentTime,
                               OrderItemCount = oi.OrderItemCount,
                               TotalCost = oi.TotalCost,
                               TotalPrice = oi.TotalPrice
