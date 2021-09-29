@@ -24,6 +24,9 @@ namespace RedDog.AccountingModel
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
 
+        [Column(TypeName = "nvarchar(255)")]
+        public string ImageUrl { get; set; }
+
         public Guid OrderId { get; set; }
 
         public Order Order { get; set; }

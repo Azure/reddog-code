@@ -245,9 +245,6 @@ export default {
                   // this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
                   // this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
                   
-
-                  // FOR DEMO ONLY
-                  // console.log(`Fulfillment Time: ${this.totalFulfillmentTime}`)
                   // TODO: LYNN ORRELL DEMO 
                   this.avgFulfillmentSec = moment.duration((this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0), "seconds").seconds();
                   if(this.avgFulfillmentSec > 60){
@@ -340,7 +337,6 @@ export default {
                   this.createSalesProfitLineChart(modSaleslabels, modSalesValues, modProfitValues);
                 }
             })
-
           }
           else{
             console.log('some kind of connection issue - you might want to get that looked at')

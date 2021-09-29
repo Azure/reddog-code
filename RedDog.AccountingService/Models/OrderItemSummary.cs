@@ -18,5 +18,8 @@ namespace RedDog.AccountingService.Models
 
         [JsonPropertyName("unitPrice")]
         public decimal UnitPrice { get; set; }
+        
+        [JsonPropertyName("imageUrl")]
+        public string imageUrl { get; set; }
     }
 }
