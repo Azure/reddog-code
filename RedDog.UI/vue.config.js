@@ -122,7 +122,6 @@ module.exports = {
         fetch(ACCOUNTING_BASE_URL + "/Corp/SalesProfit/PerStore")
         .then(response => response.json())
         .then(data => {
-          console.log(data)
           res.json({e: 0, payload:data}).status(200)
         })
         .catch(error=>{

@@ -245,9 +245,6 @@ export default {
                   // this.profitPerOrder = (this.totalProfit / this.fulfilledOrders).toFixed(2) /// PROFIT PER ORDER 
                   // this.profitPerOrderFormatted = currency(this.profitPerOrder, {precision:2}).format(); /// PROFIT PER ORDER FORMATTED 
                   
-
-                  // FOR DEMO ONLY
-                  // console.log(`Fulfillment Time: ${this.totalFulfillmentTime}`)
                   // TODO: LYNN ORRELL DEMO 
                   this.avgFulfillmentSec = moment.duration((this.totalFulfillmentTime / this.fulfilledOrders).toFixed(0), "seconds").seconds();
                   if(this.avgFulfillmentSec > 60){
@@ -326,15 +323,10 @@ export default {
               // "totalProfit": 489346.5500
             
             data.payload.forEach((ord, index) => {
-              console.log("Store ID: " + this.storeId)
                 if(ord.storeId === this.storeId){
-                  console.log(ord);
-
                   salesLabels.push(moment(`${ord.orderMonth}-${ord.orderDay}-${ord.orderYear}`, "MM-DD-YYYY").add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
                   salesValues.push(ord.totalSales.toFixed(0))
                   profitValues.push(ord.totalProfit.toFixed(0))
-                  console.log('Total Profit');
-                  console.log(ord.totalProfit);
                   this.profitPerOrderFormatted = currency((ord.totalProfit / ord.totalOrders), {precision:2}).format()
                 }
                 if (index === data.payload.length - 1) {
@@ -345,7 +337,6 @@ export default {
                   this.createSalesProfitLineChart(modSaleslabels, modSalesValues, modProfitValues);
                 }
             })
-
           }
           else{
             console.log('some kind of connection issue - you might want to get that looked at')
