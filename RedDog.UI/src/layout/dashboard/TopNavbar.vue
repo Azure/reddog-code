@@ -14,7 +14,7 @@
           </button>
         </div>
         <div class="logo-content">
-          <div class="left-logo"><img src="img/contoso-pharmacy-tl-logo.png" width="184px"/></div>
+          <div class="left-logo"><img src="img/reddog-logo-text.png" width="184px"/></div>
           <div class="right-logo logo-simple-text" v-if="isCorp === true || isCorp === 'true'">CORP<small>headquarters</small></div>
           <div class="right-logo logo-simple-text" v-else>{{ storeId }}<small class="branch">branch</small></div>
         </div>

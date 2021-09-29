@@ -7,7 +7,7 @@ const IS_CORP = JSON.stringify(IS_CORP_TMP);
 
 const STORE_ID = (process.env.VUE_APP_STORE_ID || "Redmond");
 const SITE_TYPE = (process.env.VUE_APP_SITE_TYPE || "Pharmacy");
-const SITE_TITLE = (process.env.VUE_APP_SITE_TITLE || "Contoso :: Pharmacy & Convenience Store");
+const SITE_TITLE = (process.env.VUE_APP_SITE_TITLE || "Red Dog Bodega :: Market fresh food, pharmaceuticals, and fireworks!");
 const MAKELINE_BASE_URL = (process.env.VUE_APP_MAKELINE_BASE_URL || "http://austin.makeline.brianredmond.io");
 const ACCOUNTING_BASE_URL = (process.env.VUE_APP_ACCOUNTING_BASE_URL || "http://austin.accounting.brianredmond.io");
 
@@ -122,6 +122,7 @@ module.exports = {
         fetch(ACCOUNTING_BASE_URL + "/Corp/SalesProfit/PerStore")
         .then(response => response.json())
         .then(data => {
+          console.log(data)
           res.json({e: 0, payload:data}).status(200)
         })
         .catch(error=>{
