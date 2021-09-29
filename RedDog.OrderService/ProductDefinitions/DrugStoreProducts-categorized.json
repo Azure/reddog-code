@@ -2,7 +2,7 @@
   {
     "productId": 1,
     "productName": "Furosemide_Oral Soln 50mg / 5ml S / F",
-    "unitCost": "35.99",
+    "unitCost":   35.99,
     "unitPrice": 39.99,
     "imageUrl": "https://m.media-amazon.com/images/I/51XVIhvjZXL._UY218_.jpg",
     "categoryId": "High Blood Pressure"
@@ -10,7 +10,7 @@
   {
     "productId": 2,
     "productName": "Propranolol HCl_Oral Soln 50mg / 5ml S / F",
-    "unitCost": "11.69",
+    "unitCost": 11.69.
     "unitPrice": 12.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31X7e7p-iaL.jpg",
     "categoryId": "High Blood Pressure"
@@ -18,7 +18,7 @@
   {
     "productId": 3,
     "productName": "Sotalol HCl_Tab 80mg",
-    "unitCost": "15.29",
+    "unitCost": 15.29,
     "unitPrice": 16.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21mOGipJzhL.jpg",
     "categoryId": "High Blood Pressure"
@@ -26,7 +26,7 @@
   {
     "productId": 4,
     "productName": "Carvedilol_Tab 12mg",
-    "unitCost": "12.59",
+    "unitCost": 12.59,
     "unitPrice": 13.99,
     "imageUrl": "https://m.media-amazon.com/images/I/11muMMwUo8S.jpg",
     "categoryId": "High Blood Pressure"
@@ -34,7 +34,7 @@
   {
     "productId": 5,
     "productName": "Hydralazine HCl_Tab 10mg",
-    "unitCost": "4.49",
+    "unitCost": 4.49,
     "unitPrice": 4.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31902D1tpIS.jpg",
     "categoryId": "High Blood Pressure"
@@ -42,7 +42,7 @@
   {
     "productId": 6,
     "productName": "Clonidine HCl_Tab 100mcg",
-    "unitCost": "7.19",
+    "unitCost": 7.19,
     "unitPrice": 7.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21rkDOpD0hS.jpg",
     "categoryId": "High Blood Pressure"
@@ -50,7 +50,7 @@
   {
     "productId": 7,
     "productName": "Methyldopa_Tab 250mg",
-    "unitCost": "14.39",
+    "unitCost": 14.39,
     "unitPrice": 15.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21VMJimHpML.jpg",
     "categoryId": "High Blood Pressure"
@@ -58,7 +58,7 @@
   {
     "productId": 8,
     "productName": "Doxazosin Mesil_Tab 1mg",
-    "unitCost": "4.49",
+    "unitCost": 4.49,
     "unitPrice": 4.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21AtYTQlyBL.jpg",
     "categoryId": "High Blood Pressure"
@@ -66,7 +66,7 @@
   {
     "productId": 9,
     "productName": "Lisinopril_Tab 10mg",
-    "unitCost": "14.39",
+    "unitCost": 14.39,
     "unitPrice": 15.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21AIwMRHaYL.jpg",
     "categoryId": "High Blood Pressure"
@@ -74,7 +74,7 @@
   {
     "productId": 10,
     "productName": "Ramipril_Cap 10mg",
-    "unitCost": "5.39",
+    "unitCost": 5.39,
     "unitPrice": 5.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31-CrZCuAbL.jpg",
     "categoryId": "High Blood Pressure"
@@ -82,7 +82,7 @@
   {
     "productId": 11,
     "productName": "Losartan Pot_Tab 25mg",
-    "unitCost": "2.69",
+    "unitCost": 2.69,
     "unitPrice": 2.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21A9n5H8cpS.jpg",
     "categoryId": "High Blood Pressure"
@@ -90,7 +90,7 @@
   {
     "productId": 12,
     "productName": "Verapamil HCl_Tab 40mg",
-    "unitCost": "3.59",
+    "unitCost": 3.59,
     "unitPrice": 3.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21lQQb6Wg2L.jpg",
     "categoryId": "High Blood Pressure"
@@ -98,7 +98,7 @@
   {
     "productId": 13,
     "productName": "Amitriptyline HCl_Tab 10mg",
-    "unitCost": "5.39",
+    "unitCost": 5.39,
     "unitPrice": 5.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31XMqtZQswL.jpg",
     "categoryId": "Depression"
@@ -106,7 +106,7 @@
   {
     "productId": 14,
     "productName": "Imipramine HCl_Tab 10mg",
-    "unitCost": "17.09",
+    "unitCost": 17.09,
     "unitPrice": 18.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21zh+GK9FtL.jpg",
     "categoryId": "Depression"
@@ -114,7 +114,7 @@
   {
     "productId": 15,
     "productName": "Nortriptyline_Tab 10mg",
-    "unitCost": "2.69",
+    "unitCost": 2.69,
     "unitPrice": 2.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21LYM-WofdS.jpg",
     "categoryId": "Depression"
@@ -122,7 +122,7 @@
   {
     "productId": 16,
     "productName": "Trazodone HCl_Cap 50mg",
-    "unitCost": "13.49",
+    "unitCost": 13.49,
     "unitPrice": 14.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21tACu5BblL.jpg",
     "categoryId": "Depression"
@@ -130,7 +130,7 @@
   {
     "productId": 17,
     "productName": "Fluoxetine HCl_Cap 10mg",
-    "unitCost": "9.89",
+    "unitCost": 9.89,
     "unitPrice": 10.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31GEJZodigL.jpg",
     "categoryId": "Depression"
@@ -138,7 +138,7 @@
   {
     "productId": 18,
     "productName": "Sertraline HCl_Tab 25mg",
-    "unitCost": "9.89",
+    "unitCost": 9.89,
     "unitPrice": 10.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31NhFixKbVL.jpg",
     "categoryId": "Depression"
@@ -146,7 +146,7 @@
   {
     "productId": 19,
     "productName": "Mirtazapine_Orodisper Tab 15mg",
-    "unitCost": "10.79",
+    "unitCost": 10.79,
     "unitPrice": 11.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31ClUZmj+1L.jpg",
     "categoryId": "Depression"
@@ -154,7 +154,7 @@
   {
     "productId": 20,
     "productName": "Perindopril Erbumine_Tab 8mg",
-    "unitCost": "17.09",
+    "unitCost": 17.09,
     "unitPrice": 18.99,
     "imageUrl": "https://m.media-amazon.com/images/I/314F3iq1dkL.jpg",
     "categoryId": "Anxiety"
@@ -162,7 +162,7 @@
   {
     "productId": 21,
     "productName": "Diazepam_Tab 2mg",
-    "unitCost": "10.79",
+    "unitCost": 10.79,
     "unitPrice": 11.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21S9-4FGhkL.jpg",
     "categoryId": "Anxiety"
@@ -170,7 +170,7 @@
   {
     "productId": 22,
     "productName": "Quetiapine_Tab 100mg",
-    "unitCost": "4.49",
+    "unitCost": 4.49,
     "unitPrice": 4.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21hUJZaHiuL.jpg",
     "categoryId": "Anxiety"
@@ -178,7 +178,7 @@
   {
     "productId": 23,
     "productName": "Risperidone_Tab 4mg",
-    "unitCost": "15.29",
+    "unitCost": 15.29,
     "unitPrice": 16.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31u2vFqKq5L.jpg",
     "categoryId": "Anxiety"
@@ -186,7 +186,7 @@
   {
     "productId": 24,
     "productName": "Escitalopram_Tab 10mg",
-    "unitCost": "8.09",
+    "unitCost": 8.09,
     "unitPrice": 8.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21zRRWTArOL.jpg",
     "categoryId": "Anxiety"
@@ -194,7 +194,7 @@
   {
     "productId": 25,
     "productName": "Venlafaxine_Tab 225mg M / R",
-    "unitCost": "8.99",
+    "unitCost": 8.99,
     "unitPrice": 9.99,
     "imageUrl": "https://m.media-amazon.com/images/I/219Ui-K841L.jpg",
     "categoryId": "Anxiety"
@@ -202,7 +202,7 @@
   {
     "productId": 26,
     "productName": "Duloxetine HCl_Cap G / R 30mg",
-    "unitCost": "17.09",
+    "unitCost": 17.09,
     "unitPrice": 18.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31A85IHCdZL.jpg",
     "categoryId": "Anxiety"
@@ -210,7 +210,7 @@
   {
     "productId": 27,
     "productName": "Modafinil_Tab 100mg",
-    "unitCost": "4.49",
+    "unitCost": 4.49,
     "unitPrice": 4.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21dBa0ZU4PL.jpg",
     "categoryId": "Anxiety"
@@ -218,7 +218,7 @@
   {
     "productId": 28,
     "productName": "Clonazepam_Tab 2mg",
-    "unitCost": "10.79",
+    "unitCost": 10.79,
     "unitPrice": 11.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21f7iwWcjCL.jpg",
     "categoryId": "Anxiety"
@@ -226,7 +226,7 @@
   {
     "productId": 29,
     "productName": "Gabapentin_Cap 100mg",
-    "unitCost": "12.59",
+    "unitCost": 12.59,
     "unitPrice": 13.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31DBMoPKMHL.jpg",
     "categoryId": "Anxiety"
@@ -234,7 +234,7 @@
   {
     "productId": 30,
     "productName": "Atenolol_Tab 50mg",
-    "unitCost": "6.29",
+    "unitCost": 6.29,
     "unitPrice": 6.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21E0Tdbc0SL.jpg",
     "categoryId": "High Cholesterol"
@@ -242,7 +242,7 @@
   {
     "productId": 31,
     "productName": "Bisoprolol Fumar_Tab 10mg",
-    "unitCost": "5.39",
+    "unitCost": 5.39,
     "unitPrice": 5.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21xR8+vzuZL.jpg",
     "categoryId": "High Cholesterol"
@@ -250,7 +250,7 @@
   {
     "productId": 32,
     "productName": "Metoprolol Tart_Tab 25mg",
-    "unitCost": "4.49",
+    "unitCost": 4.49,
     "unitPrice": 4.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21wZePCdrpL.jpg",
     "categoryId": "High Cholesterol"
@@ -258,7 +258,7 @@
   {
     "productId": 33,
     "productName": "Lisinopril / Hydchloroth_Tab 20mg / 12.5mg",
-    "unitCost": "15.29",
+    "unitCost": 15.29,
     "unitPrice": 16.99,
     "imageUrl": "https://m.media-amazon.com/images/I/214iGsQ3jAL.jpg",
     "categoryId": "High Cholesterol"
@@ -266,7 +266,7 @@
   {
     "productId": 34,
     "productName": "Rosuvastatin Calc_Tab 10mg",
-    "unitCost": "2.69",
+    "unitCost": 2.69,
     "unitPrice": 2.99,
     "imageUrl": "https://m.media-amazon.com/images/I/419q-UevptL._UY218_.jpg",
     "categoryId": "High Cholesterol"
@@ -274,7 +274,7 @@
   {
     "productId": 35,
     "productName": "Simvastatin / Ezetimibe_Tab 80mg / 10mg",
-    "unitCost": "17.09",
+    "unitCost": 17.09,
     "unitPrice": 18.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21XVtMsrBaL.jpg",
     "categoryId": "High Cholesterol"
@@ -282,7 +282,7 @@
   {
     "productId": 36,
     "productName": "Colesevelam HCl_Tab 625mg",
-    "unitCost": "8.09",
+    "unitCost": 8.09,
     "unitPrice": 8.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31MtEJ-NeOL.jpg",
     "categoryId": "High Cholesterol"
@@ -290,7 +290,7 @@
   {
     "productId": 37,
     "productName": "Atorvastatin_Tab 10mg",
-    "unitCost": "15.29",
+    "unitCost": 15.29,
     "unitPrice": 16.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21SI+p3RaRS.jpg",
     "categoryId": "High Cholesterol"
@@ -298,7 +298,7 @@
   {
     "productId": 38,
     "productName": "Tirosint 200mcg",
-    "unitCost": "102.59",
+    "unitCost": 102.59,
     "unitPrice": 113.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21SsOKYTCvL.jpg",
     "categoryId": "Hypothyroidism"
@@ -306,7 +306,7 @@
   {
     "productId": 39,
     "productName": "Armour Thyroid 15 mcg",
-    "unitCost": "7.19",
+    "unitCost": 7.19,
     "unitPrice": 7.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21FgL8NV3TS.jpg",
     "categoryId": "Hypothyroidism"
@@ -314,7 +314,7 @@
   {
     "productId": 40,
     "productName": "Levoxyl 50mcg",
-    "unitCost": "4.49",
+    "unitCost": 4.49,
     "unitPrice": 4.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21uNNZ1LiQL.jpg",
     "categoryId": "Hypothyroidism"
@@ -322,7 +322,7 @@
   {
     "productId": 41,
     "productName": "Liothyronine 5mcg",
-    "unitCost": "10.79",
+    "unitCost": 10.79,
     "unitPrice": 11.99,
     "imageUrl": "https://m.media-amazon.com/images/I/11ChifIpf6S.jpg",
     "categoryId": "Hypothyroidism"
@@ -330,7 +330,7 @@
   {
     "productId": 42,
     "productName": "Levothyoxine 25mcg",
-    "unitCost": "8.09",
+    "unitCost": 8.09,
     "unitPrice": 8.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21DKXu905AL.jpg",
     "categoryId": "Hypothyroidism"
@@ -338,7 +338,7 @@
   {
     "productId": 43,
     "productName": "Methimazole 10mg",
-    "unitCost": "14.39",
+    "unitCost": 14.39,
     "unitPrice": 15.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21yVkvLvOAL.jpg",
     "categoryId": "Hypothyroidism"
@@ -346,7 +346,7 @@
   {
     "productId": 44,
     "productName": "Glimepiride_Tab 2mg",
-    "unitCost": "8.09",
+    "unitCost": 8.09,
     "unitPrice": 8.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31ylEIPaghL.jpg",
     "categoryId": "Diabetes"
@@ -354,7 +354,7 @@
   {
     "productId": 45,
     "productName": "Metformin HCl_Tab 1g M / R",
-    "unitCost": "9.89",
+    "unitCost": 9.89,
     "unitPrice": 10.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31D1mdp5juL.jpg",
     "categoryId": "Diabetes"
@@ -362,7 +362,7 @@
   {
     "productId": 46,
     "productName": "Glucophage SR_Tab 500mg",
-    "unitCost": "2.69",
+    "unitCost": 2.69,
     "unitPrice": 2.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21riyyYlNxL._UY218_.jpg",
     "categoryId": "Diabetes"
@@ -370,7 +370,7 @@
   {
     "productId": 47,
     "productName": "Saxagliptin_Tab 5mg",
-    "unitCost": "7.19",
+    "unitCost": 7.19,
     "unitPrice": 7.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31ctJPt4eBL.jpg",
     "categoryId": "Diabetes"
@@ -378,7 +378,7 @@
   {
     "productId": 48,
     "productName": "Pioglitazone HCl_Tab 15mg",
-    "unitCost": "14.39",
+    "unitCost": 14.39,
     "unitPrice": 15.99,
     "imageUrl": "https://m.media-amazon.com/images/I/21N6E0e1gJL.jpg",
     "categoryId": "Diabetes"
@@ -386,7 +386,7 @@
   {
     "productId": 49,
     "productName": "Pioglitazone HCl_Tab 30mg",
-    "unitCost": "12.59",
+    "unitCost": 12.59,
     "unitPrice": 13.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31IMVlwuprL._UY218_.jpg",
     "categoryId": "Diabetes"
@@ -394,7 +394,7 @@
   {
     "productId": 50,
     "productName": "Sitagliptin_Tab 100mg",
-    "unitCost": "8.99",
+    "unitCost": 8.99,
     "unitPrice": 9.99,
     "imageUrl": "https://m.media-amazon.com/images/I/511ow5lgObL._UY218_.jpg",
     "categoryId": "Diabetes"
@@ -402,7 +402,7 @@
   {
     "productId": 51,
     "productName": "Exenatide_Inj 5mcg / 0.02ml 1.2ml Pfs (60D)",
-    "unitCost": "16.19",
+    "unitCost": 16.19,
     "unitPrice": 17.99,
     "imageUrl": "https://m.media-amazon.com/images/I/51PwYJ0UMEL._UY218_.jpg",
     "categoryId": "Diabetes"
@@ -410,7 +410,7 @@
   {
     "productId": 52,
     "productName": "Dexamethzone Injectable",
-    "unitCost": "16.19",
+    "unitCost": 16.19,
     "unitPrice": 17.99,
     "imageUrl": "https://m.media-amazon.com/images/I/31C9dh-Oc4L._UY218_.jpg",
     "categoryId": "Diabetes"
