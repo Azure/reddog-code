@@ -195,7 +195,6 @@ export default {
   },
   methods: {
     fillBranchOrderChart(data){
-      console.log(data);
       let minuteLabels = [], dataValues = [], dataValuesPrev = [], previousArr = [], lastArr = []
       
       previousArr = data.values.slice(data.values.length-20, data.values.length-10)
@@ -412,7 +411,9 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           if(data.e === 0){
-            this.getPerStoreMetrics(data.payload)
+            var stores = data.payload
+            stores = stores.filter(e => e !== 'string');
+            this.getPerStoreMetrics(stores)
           }
           else{
             console.log('some kind of connection issue - you might want to get that looked at')
@@ -424,12 +425,10 @@ export default {
       }, 10000)
     },
     getPerStoreMetrics(stores){
-      console.log(stores)
       let arrDatasets = [], arrLabels = [], payloadData = []
       fetch("/corp/salesprofitbranch")
         .then((response) => response.json())
         .then((data) => {
-
           if(data.e === 0){
             payloadData = data.payload
             stores.forEach((storeId, index) => {
@@ -632,6 +631,7 @@ export default {
     },
     createCorpTopSalesChart(labels, valuesArr){
 
+
       var tmpSalesOptions = {
         legend: {
             display: true,
@@ -681,6 +681,7 @@ export default {
       })
 
       valuesArr.forEach((val, valInd)=>{
+
         var chartColor = this.getRGBColorForChart(valInd)
         var chartDs = {label: val[0].storeId, borderColor: chartColor.borderColor, backgroundColor: chartColor.backgroundColor, data: val.map(v=>v.totalSales)  }
         tmpSalesChartData.datasets.push(chartDs)
