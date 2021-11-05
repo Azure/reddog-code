@@ -92,6 +92,7 @@ jobs:
           source_file: manifests/branch/base/deployments/bootstrapper.yaml
           destination_repo: Azure/reddog-retail-demo
           destination_folder: manifests/branch/base/deployments
+          github_server: github.com
           user_email: lynn.orrell@microsoft.com
           user_name: lynn-orrell
       - name: Promote corporate deployment
@@ -102,5 +103,6 @@ jobs:
           source_file: manifests/corporate/deployments/bootstrapper.yaml
           destination_repo: Azure/reddog-retail-demo
           destination_folder: manifests/corporate/base/deployments
+          github_server: github.com
           user_email: lynn.orrell@microsoft.com
           user_name: lynn-orrell
