@@ -42,7 +42,7 @@ namespace RedDog.OrderService.Controllers
             }
             catch(Exception e)
             {
-                _logger.LogError("Error publishing Order Summary: {@OrderSummary}, Message: {Message}", orderSummary, e.Message);
+                _logger.LogError("Error publishing Order Summary: {@OrderSummary}, Message: {Message}", orderSummary, e.InnerException?.Message ?? e.Message);
                 return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
             }
 
