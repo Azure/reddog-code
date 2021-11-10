@@ -12,7 +12,7 @@ The app is developed with .NET and Javascript and is based on a microservices ar
 
 Below are some example scenarios for deploying the application. Each scenario is in its own repo.
 
-* [Local Deployment](docs/local-dev.md)
+* [Codespaces "Local" Development](docs/local-dev.md)
 * [Hybrid / Arc Deployment](https://github.com/Azure/reddog-hybrid-arc)
 * [Container Apps](https://github.com/Azure/reddog-containerapps)
 * AKS (coming soon)
@@ -22,10 +22,6 @@ Below are some example scenarios for deploying the application. Each scenario is
 Logical Application Architecture
 
 ![Logical Application Architecture Diagram](assets/architecture.png)
-
-Example Deployment (Hybrid)
-
-![Example Deployment (Hybrid)](assets/hybrid.png)
 
 ### Release Schedule
 
