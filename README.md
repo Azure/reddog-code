@@ -23,10 +23,6 @@ Logical Application Architecture
 
 ![Logical Application Architecture Diagram](assets/architecture.png)
 
-### Release Schedule
-
-We are tracking updates in the [Release Schedule](docs/releases.md)
-
 ### Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
