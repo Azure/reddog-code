@@ -56,7 +56,7 @@ namespace RedDog.MakeLineService.Controllers
         [HttpGet("/orders/{storeId}")]
         public async Task<IActionResult> GetOrders(string storeId)
         {
-            var orders = await GetAllOrders(storeId);
+            var orders = await GetAllOrders(storeId) ?? new List<OrderSummary>();
             return new OkObjectResult(orders.OrderBy(o => o.OrderDate));
         }
 
