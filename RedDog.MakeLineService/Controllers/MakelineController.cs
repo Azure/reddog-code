@@ -46,7 +46,7 @@ namespace RedDog.MakeLineService.Controllers
             }
             catch(Exception e)
             {
-                _logger.LogError("Error saving order summaries. Message: {Content}", e.Message);
+                _logger.LogError("Error saving order summaries. Message: {Content}", e.InnerException?.Message ?? e.Message);
                 return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
             }
 
@@ -81,7 +81,7 @@ namespace RedDog.MakeLineService.Controllers
                 }
                 catch(Exception e)
                 {
-                    _logger.LogError("Error saving order summaries. Message: {Content}", e.Message);
+                    _logger.LogError("Error saving order summaries. Message: {Content}", e.InnerException?.Message ?? e.Message);
                     return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
                 }
             }

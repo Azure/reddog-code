@@ -37,7 +37,7 @@ namespace RedDog.ReceiptGenerationService.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError("Error saving receipt: {@OrderSummary}, Message: {Message}", orderSummary, e.Message);
+                _logger.LogError("Error saving receipt: {@OrderSummary}, Message: {Message}", orderSummary, e.InnerException?.Message ?? e.Message);
                 return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
             }
 
