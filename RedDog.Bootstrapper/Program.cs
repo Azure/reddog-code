@@ -28,9 +28,7 @@ namespace RedDog.Bootstrapper
 
         public AccountingContext CreateDbContext(string[] args)
         {
-            EnsureDaprOrTerminate().Wait();
             string connectionString = GetDbConnectionString().Result;
-            ShutdownDapr();
 
             DbContextOptionsBuilder<AccountingContext> optionsBuilder = new DbContextOptionsBuilder<AccountingContext>().UseSqlServer(connectionString, b =>
             {
@@ -95,6 +93,8 @@ namespace RedDog.Bootstrapper
 
             if (connectionString == null)
             {
+                EnsureDaprOrTerminate().Wait();
+
                 Console.WriteLine("Attempting to retrieve connection string from Dapr secret store...");
                 var daprClient = new DaprClientBuilder().Build();
 
@@ -116,6 +116,7 @@ namespace RedDog.Bootstrapper
                     }
                 } while (connectionString == null);
                 connectionString = connectionStringSecret["reddog-sql"];
+                ShutdownDapr();
             }
 
             return connectionString;
