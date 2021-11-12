@@ -105,6 +105,7 @@ namespace RedDog.Bootstrapper
                 catch (Exception e)
                 {
                     Console.WriteLine($"An exception occured while retrieving the secret from the Dapr sidecar. Retrying in 5 seconds...");
+                    Console.WriteLine(e.InnerException?.Message ?? e.Message);
                     Console.WriteLine(e.StackTrace);
                     Task.Delay(5000).Wait();
                 }
