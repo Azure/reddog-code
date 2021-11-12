@@ -22,7 +22,7 @@ namespace RedDog.Bootstrapper
 
             using AccountingContext context = p.CreateDbContext(null);
             await context.Database.MigrateAsync();
-            
+
             Console.WriteLine("Migrations complete.");
         }
 
@@ -48,7 +48,7 @@ namespace RedDog.Bootstrapper
                 var response = await _httpClient.GetAsync($"http://localhost:{DaprHttpPort}/v1.0/healthz");
                 response.EnsureSuccessStatusCode();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Error communicating with Dapr sidecar. Exiting...", e.InnerException?.Message ?? e.Message);
                 Environment.Exit(1);
@@ -91,26 +91,34 @@ namespace RedDog.Bootstrapper
 
         private async Task<string> GetDbConnectionString()
         {
-            var daprClient = new DaprClientBuilder().Build();
+            var connectionString = Environment.GetEnvironmentVariable("reddog-sql");
 
-            Dictionary<string, string> connectionString = null;
-            do
+            if (connectionString == null)
             {
-                try
+                Console.WriteLine("Attempting to retrieve connection string from Dapr secret store...");
+                var daprClient = new DaprClientBuilder().Build();
+
+                Dictionary<string, string> connectionStringSecret = null;
+                do
                 {
-                    Console.WriteLine("Attempting to retrieve database connection string from Dapr...");
-                    connectionString = await daprClient.GetSecretAsync(SecretStoreName, "reddog-sql");
-                    Console.WriteLine("Successfully retrieved database connection string.");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"An exception occured while retrieving the secret from the Dapr sidecar. Retrying in 5 seconds...");
-                    Console.WriteLine(e.InnerException?.Message ?? e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    Task.Delay(5000).Wait();
-                }
-            } while (connectionString == null);
-            return connectionString["reddog-sql"];
+                    try
+                    {
+                        Console.WriteLine("Attempting to retrieve database connection string from Dapr...");
+                        connectionStringSecret = await daprClient.GetSecretAsync(SecretStoreName, "reddog-sql");
+                        Console.WriteLine("Successfully retrieved database connection string.");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"An exception occured while retrieving the secret from the Dapr sidecar. Retrying in 5 seconds...");
+                        Console.WriteLine(e.InnerException?.Message ?? e.Message);
+                        Console.WriteLine(e.StackTrace);
+                        Task.Delay(5000).Wait();
+                    }
+                } while (connectionString == null);
+                connectionString = connectionStringSecret["reddog-sql"];
+            }
+
+            return connectionString;
         }
     }
 }
