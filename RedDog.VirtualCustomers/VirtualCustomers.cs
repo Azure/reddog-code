@@ -245,18 +245,18 @@ namespace RedDog.VirtualCustomers
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"http://localhost:{DaprHttpPort}/v1.0/healthz", stoppingToken);
-                response.EnsureSuccessStatusCode();
-            }
-            catch(Exception e)
-            {
-                _logger.LogError("Error communicating with Dapr sidecar. Exiting...", e.InnerException?.Message ?? e.Message);
-                _lifetime.StopApplication();
-            }
+            // try
+            // {
+            //     var response = await _httpClient.GetAsync($"http://localhost:{DaprHttpPort}/v1.0/healthz", stoppingToken);
+            //     response.EnsureSuccessStatusCode();
+            // }
+            // catch(Exception e)
+            // {
+            //     _logger.LogError("Error communicating with Dapr sidecar. Exiting...", e.InnerException?.Message ?? e.Message);
+            //     _lifetime.StopApplication();
+            // }
 
-            _logger.LogInformation($"The customers are ready to place their orders!");
+            // _logger.LogInformation($"The customers are ready to place their orders!");
 
             stoppingToken.Register(() =>
             {
