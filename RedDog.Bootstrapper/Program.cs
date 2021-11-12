@@ -114,7 +114,7 @@ namespace RedDog.Bootstrapper
                         Console.WriteLine(e.StackTrace);
                         Task.Delay(5000).Wait();
                     }
-                } while (connectionString == null);
+                } while (connectionStringSecret == null);
                 connectionString = connectionStringSecret["reddog-sql"];
                 ShutdownDapr();
             }
