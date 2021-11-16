@@ -17,11 +17,9 @@ Below are some example scenarios for deploying the application. Each scenario is
 * [Container Apps](https://github.com/Azure/reddog-containerapps)
 * AKS (coming soon)
 
-### Architecture Diagrams
+### Architecture Diagram
 
-Logical Application Architecture
-
-![Logical Application Architecture Diagram](assets/architecture.png)
+![Logical Application Architecture Diagram](assets/reddog_code.png)
 
 ### Contributing
 
