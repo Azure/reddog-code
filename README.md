@@ -2,11 +2,11 @@
 
 ### Background
 
-The purpose of this demo application is to show all of the great capabilities of the Azure Cloud for modern, cloud native applications. The app architecture includes common scenarios most organizations face such as Pub/Sub, integration, etc. 
+Microservices can be hard. But, while being exceedingly difficult to architect they have become an increasingly popular architecture pattern. As developers begin to migrate their existing monolithic code bases to a microservices system, they spend a lot of their time dealing with the inherent challenges presented by distributed applications, such as state management and service invocation.
 
-The application can be deployed in many different ways including Local development, Hybrid Cloud (Arc), AKS, Container Apps, etc. It can also be easily adapted to new cool stuff in the future. 
+Enter Dapr - The Distributed Application Runtime built with developers in mind. Dapr aims to solve some of these microservice-related challenges by providing consistent building blocks in the form of http/gRPC APIs that can be called natively or using one of the dapr language SDKs.
 
-The app is developed with .NET and Javascript and is based on a microservices architecture. It utilizes Dapr ([Distributed Application Runtime](https://dapr.io)) so it can easily be adapted to multiple scenarios. 
+We have created this repository in order to provide a more comprehensive, code-first example of a microservices-based application that leverages the power of dapr. This codebase can be run on your local development machine or on a platform of your choosing. In an effort to help you best leverage the codebase, we have also created examples of how to deploy reddog-code to the Azure platform. The deployment options we have developed thus far are detailed in the section below. 
 
 ### Deployment Options
 
@@ -20,6 +20,8 @@ Below are some example scenarios for deploying the application. Each scenario is
 ### Architecture Diagram
 
 ![Logical Application Architecture Diagram](assets/reddog_code.png)
+
+The reddog application is developed with .NET and Javascript. As mentioned above, it utilizes Dapr ([Distributed Application Runtime](https://dapr.io)) so it can easily be adapted to multiple scenarios. 
 
 ### Contributing
 
