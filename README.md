@@ -26,10 +26,10 @@ The reddog application is developed with .NET and Javascript. As mentioned above
 
 | Service          | Description                                                                                                 |
 |------------------|-------------------------------------------------------------------------------------------------------------|                               
-| AccountingService | Service used to process, store and aggregate order data, transforming customer orders into meaningful sales metrics showcased via the Hub and Corporate Dashboards |
+| AccountingService | Service used to process, store and aggregate order data, transforming customer orders into meaningful sales metrics that can be showcased via the UI |
 | Bootstrapper | A service that leverages Entity Framework Core Migrations to initialize the tables within Azure SQL DB based on the data model found in Reddog.AccountingModel |
 | LoyaltyService | Manages the loyalty program by modifying customer reward points based on spend |
-| MakeLineService | Responsible for simulating and coordinating a 'queue' of current orders. Monitors the processing and completion of each order in the 'queue' 
+| MakeLineService | Responsible for simulating and coordinating a 'queue' of current orders. Monitors the processing and completion of each order in the 'queue' | 
 | OrderService | Basic CRUD API that is used to place and manage orders |
 | ReceiptGenerationService | Archival program that generates and stores order receipts for auditing and historical purposes  |
 | UI | Dashboard showcasing order/sales data related to a single hub location and/or for visibility across Hubs via the Corporate Dashboard |
