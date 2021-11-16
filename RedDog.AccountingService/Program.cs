@@ -50,12 +50,23 @@ namespace RedDog.AccountingService
                 .UseSerilog()
                 .ConfigureAppConfiguration(config =>
                 {
-                    var daprClient = new DaprClientBuilder().Build();
-                    var secretDescriptors = new List<DaprSecretDescriptor>
+                    var connectionString = Environment.GetEnvironmentVariable("reddog-sql");
+                    if (connectionString != null)
+                    {
+                        config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>("reddog-sql", connectionString)
+                        });
+                    }
+                    else
+                    {
+                        var daprClient = new DaprClientBuilder().Build();
+                        var secretDescriptors = new List<DaprSecretDescriptor>
                     {
                         new DaprSecretDescriptor("reddog-sql")
                     };
-                    config.AddDaprSecretStore(SecretStoreName, secretDescriptors, daprClient);
+                        config.AddDaprSecretStore(SecretStoreName, secretDescriptors, daprClient);
+                    }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
