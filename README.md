@@ -4,7 +4,7 @@
 
 Microservices can be hard. But, while being exceedingly difficult to architect they have become an increasingly popular architecture pattern. As developers begin to migrate their existing monolithic codebases to a microservices system, they spend a lot of their time dealing with the inherent challenges presented by distributed applications, such as state management and service invocation.
 
-Enter Dapr - The Distributed Application Runtime built with developers in mind. Dapr aims to solve some of these microservice-related challenges by providing consistent building blocks in the form of http/gRPC APIs that can be called natively or using one of the dapr language SDKs.
+Enter [Dapr](https://www.dapr.io) - The Distributed Application Runtime built with developers in mind. Dapr aims to solve some of these microservice-related challenges by providing consistent building blocks in the form of http/gRPC APIs that can be called natively or using one of the dapr language SDKs.
 
 This comprehensive code repository was created as a resource for software developers who are looking to gain a deeper understanding of how to build cloud-native, distributed applications powered by dapr. The codebase can be run on your local development machine or deployed to a container hosting platform of your choosing. In an effort to help you best leverage the codebase, we have also created a series of examples showcasing how to deploy the app using key services and capabilities of the Azure platform. The deployment options we have developed thus far are detailed in the section below. 
 
