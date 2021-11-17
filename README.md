@@ -32,7 +32,7 @@ The reddog application is developed with .NET and Javascript. As mentioned above
 | MakeLineService | Responsible for simulating and coordinating a 'queue' of current orders. Monitors the processing and completion of each order in the 'queue' | 
 | OrderService | Basic CRUD API that is used to place and manage orders |
 | ReceiptGenerationService | Archival program that generates and stores order receipts for auditing and historical purposes  |
-| UI | Dashboard showcasing order/sales data related to a single hub location and/or for visibility across Hubs via the Corporate Dashboard |
+| UI | Dashboard showcasing order/sales data related to a single hub location and/or for visibility across Hubs via the Corporate Dashboard in Hybrid scenario |
 | VirtualCustomers | 'Customer simulation' program that simulates customers placing orders |
 | VirtualWorker | 'Worker simulation' program that simulates the completion of customer orders |
 | CorporateTransferService* | Azure Function responsible for monitoring order activity via RabbitMQ i.e. order placement and order completion within the context of a specific hub location and propogating these order activities to an Azure Service Bus for Corporate Hub consumption and visibility |
