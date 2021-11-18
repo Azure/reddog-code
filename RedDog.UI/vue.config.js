@@ -8,8 +8,10 @@ const IS_CORP = JSON.stringify(IS_CORP_TMP);
 const STORE_ID = (process.env.VUE_APP_STORE_ID || "Redmond");
 const SITE_TYPE = (process.env.VUE_APP_SITE_TYPE || "Pharmacy");
 const SITE_TITLE = (process.env.VUE_APP_SITE_TITLE || "Red Dog Bodega :: Market fresh food, pharmaceuticals, and fireworks!");
-const MAKELINE_BASE_URL = (process.env.VUE_APP_MAKELINE_BASE_URL || "http://austin.makeline.brianredmond.io");
-const ACCOUNTING_BASE_URL = (process.env.VUE_APP_ACCOUNTING_BASE_URL || "http://austin.accounting.brianredmond.io");
+const MAKELINE_DAPR_PORT = (process.env.VUE_APP_MAKELINE_DAPR_PORT || "3500");
+const MAKELINE_BASE_URL = (process.env.VUE_APP_MAKELINE_BASE_URL + ":" + MAKELINE_DAPR_PORT + "/v1.0/invoke/make-line-service/method");
+const ACCOUNTING_DAPR_PORT = (process.env.VUE_APP_ACCOUNTING_DAPR_PORT || "3500");
+const ACCOUNTING_BASE_URL = (process.env.VUE_APP_ACCOUNTING_BASE_URL + ":" + ACCOUNTING_DAPR_PORT + "/v1.0/invoke/accounting-service/method");
 
 let variables = {
   IS_CORP: IS_CORP,
