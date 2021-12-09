@@ -121,6 +121,23 @@ Now that you have the dapr configs adjusted, try running a few services.  For ex
 - Switch to the "Run and Debug" screen
 - From the dropdown, choose to `Debug OrderService`
 
-You should now be able to call endpoints exposed by the OrderService.  Try posting an order to `http:localhost:5100/order`.  If successful (and other Dapr services are running) you should see the OrderService receive the posted order and then utilize the pubsub component to publish an OrderSummary message.
+You should now be able to call endpoints exposed by the OrderService.  Try posting an order to `http:localhost:5100/order` (you can use [Postman](https://www.postman.com/downloads/) or [HTTP Rest](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)).  If successful (and other Dapr services are running) you should see the OrderService receive the posted order and then utilize the pubsub component to publish an OrderSummary message.
+
+An example order POST body is below:
+
+```
+{
+    "storeId": "Redmond",
+    "firstName": "John",
+    "lastName": "Smith",
+    "loyaltyId": "12342",
+    "orderItems": [
+        {
+            "productId": 2,
+            "quantity": 2
+        }
+    ]
+}
+```
 
 You can follow the steps above to begin running other services (MakeLine, Loyalty, ReceiptGeneration or VirtualWorker) and observe the new dapr configs working with their new configuration.
