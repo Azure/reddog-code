@@ -1,6 +1,6 @@
 ## Local development setup
 
-GitHub Codespaces makes local development incredibly easy to get up and running.  
+GitHub Codespaces makes local development incredibly easy to get up and running.  Under the "Code" menu at the root of the repo, instead of choosing to clone the repository, switch to the Codespaces option and choose to create a "New Codespace".  Choose your desired machine size and wait for the development environment to spin up.  After your Codespaces environment is running, follow the steps below to transition to running locally.
 
 ## Overview
 
