@@ -15,7 +15,7 @@ Below are some example scenarios for deploying the application. Each scenario is
 * [Codespaces "Local" Development](docs/local-dev.md)
 * [Hybrid / Arc Deployment](https://github.com/Azure/reddog-hybrid-arc)
 * [Container Apps](https://github.com/Azure/reddog-containerapps)
-* AKS (coming soon)
+* [AKS](https://github.com/Azure/reddog-aks)
 
 ### Architecture Diagram and Service Descriptions
 
