@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: make-line-service
+  namespace: reddog-retail
+  labels:
+    app: make-line-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: make-line-service
+  template:
+    metadata:
+      labels:
+        app: make-line-service
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "make-line-service"
+        dapr.io/app-port: "80"
+        dapr.io/config: "reddog.config"
+    spec:
+      containers:
+        - name: make-line-service
+          image: "ghcr.io/cloudnativegbb/paas-vnext/reddog-make-line-service:latest"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+          startupProbe:
+            httpGet:
+              path: /probes/healthz
+              port: 80
+            failureThreshold: 6
+            periodSeconds: 10

@@ -1,0 +1,23 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: reddog.state.makeline
+  namespace: reddog-retail
+spec:
+  type: state.azure.cosmosdb
+  version: v1
+  metadata:
+    - name: url
+      value: https://reddogdemocorp.documents.azure.com:443/
+    - name: database
+      value: reddog
+    - name: collection
+      value: loyalty
+    - name: masterKey
+      secretKeyRef:
+        name: cosmos-primary-rw-key
+        key: cosmos-primary-rw-key
+scopes:
+  - make-line-service
+auth:
+  secretStore: reddog.secretstore  
