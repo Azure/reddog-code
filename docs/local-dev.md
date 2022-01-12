@@ -1,115 +1,38 @@
-## Local development setup
-
-GitHub Codespaces makes local development incredibly easy to get up and running.  Under the "Code" menu at the root of the repo, instead of choosing to clone the repository, switch to the Codespaces option and choose to create a "New Codespace".  Choose your desired machine size and wait for the development environment to spin up.  After your Codespaces environment is running, follow the steps below to transition to running locally.
-
 ## Overview
 
-One of the nice things about Dapr is the ability to make the transition from executing against different backing services without ever having to change a line of code.  This is especially important if you would like to run completely locally without any reliance on cloud-based services.  The steps below will guide you through altering the Dapr configs to be able to run Daprized services completely locally for a branch location.
+One of the nice things about Dapr is the ability to make the transition from executing against different backing services without ever having to change a line of code.  This is especially important if you would like to run completely locally without any reliance on cloud-based services.  You will notice in the `/manifests/branch/local` location that a number of dapr configs have been provided.  These dapr configs will allow you to run each of the dapr-ized services in a "local" manner without relying on any cloud-based services.
 
-### Getting started
+With that said, there are a few short steps you will need to perform in order to set up your local development environment.  The instructions below will guide you through setting up a GitHub Codespace and subsequently running one of the Reddog dapr services.
 
-1. Before attempting to run anything, trust local certs:
+
+## Create Codespace
+
+1. Browse to the Codespaces page in the repo: https://github.com/Azure/reddog-code/codespaces
+2. Select "New codespace"
+3. On the "master" branch, select "Create codespace"
+
+        ![New Codespace](../assets/new-codespace.png)
+4. Pick a size for your Codespace environment
+5. Wait for the environment to be ready
+    
+        ![New Codespace](../assets/codespace-create.png)
+
+Once complete, VS Code will be running in your browser with the master branch cloned.
+
+
+## Setup Reddog Environment
+
+1. In a VS Code terminal window, run the following to trust local certs:
 `dotnet dev-certs https --trust`
-2. Copy the following dapr configs from `/manifests/branch/base/components`:
-  - reddog.binding.receipt.yaml
-  - reddog.binding.virtualworker.yaml
-  - reddog.pubsub.yaml
-  - reddog.secretstore.yaml
-  - reddog.state.loyalty.yaml
-  - reddog.state.makeline.yaml
-3. Follow the steps below to make adjustments for each configuration.  These adjustments will allow you to run completely locally.
+2. Switch to the Run and Debug screen and debug the Bootstrapper.  Upon completion, you should now have a "reddogdemo" database in the given SQL Server instance.
 
-### Adjust reddog.binding.receipt.yaml
+>The Accounting Service within Reddog relies on SQL Server for persistent storage.  As such, you will notice that the `.devcontainer` configuration for Codespaces (located withing the `.devcontainer` folder) points at a Docker compose file that includes a container image reference to SQL Server.  While the image will be pulled into your Codespace for you, the database itself will still need to be provisioned.  Included in the Reddog repo is an EF Core migration that can be run to provision the database.    (If you would like to connect to the SQL Server instance and verify the migration, it is easiest to connect via `sqlcmd` in the VS Code terminal.  [Installation instructions](https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility?view=sql-server-ver15))
 
-For the receipt component, we will switch this from relying on a storage account in Azure to local storage.
-
-Replace the dapr component configuration with the following:
-
-```
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: reddog.binding.receipt
-  namespace: reddog-retail
-spec:
-  type: bindings.localstorage
-  version: v1
-  metadata:
-    - name: rootPath
-      value: /tmp/receipts
-scopes:
-  - receipt-generation-service
-```
-
-### Adjust reddog.pubsub.yaml
-
-For the pubsub component, we will switch this from relying on rabbitmq to utilize redis streams (that exists as a result of `dapr init`).
-
-Replace the dapr component configuration with the following:
-
-```
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: reddog.pubsub
-  namespace: reddog-retail
-spec:
-  type: pubsub.redis
-  version: v1
-  metadata: 
-    - name: redisHost
-      value: dapr_redis_dapr-dev-container:6379
-scopes:
-  - order-service
-  - make-line-service
-  - loyalty-service
-  - receipt-generation-service
-  - accounting-service
-```
-
-### Adjust reddog.state.loyalty.yaml
-
-For the loyalty component, we are only making a small adjustment to no longer specify a pulling of redis password from Azure Key Vault.
-
-Replace the dapr component configuration with the following:
-
-```
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: reddog.state.loyalty
-  namespace: reddog-retail
-spec:
-  type: state.redis
-  version: v1
-  metadata:
-  - name: redisHost
-    value: dapr_redis_dapr-dev-container:6379
-scopes:
-  - loyalty-service
-```
-
-### Adjust reddog.state.makeline.yaml
-
-For the makeline component, we are only making a small adjustment to no longer specify the reliance on Azure Key Vault for a password.
-
-Replace the dapr component configuration with the following:
-
-```
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: reddog.state.makeline
-  namespace: reddog-retail
-spec:
-  type: state.redis
-  version: v1
-  metadata:
-    - name: redisHost
-      value: dapr_redis_dapr-dev-container:6379
-scopes:
-  - make-line-service
-```
+>If desired, execute the following to connect via sqlcmd:<br> 
+>sqlcmd -S reddog-code_devcontainer_db_1,1433 -U SA -P "pass@word1" -d reddogdemo<br><br>
+>Execute the following to verify that Reddog tables have been created:<br>
+> ```1>SELECT Name FROM sys.tables```<br>
+> ```2>GO```
 
 ## Test it Out
 
@@ -140,4 +63,4 @@ An example order POST body is below:
 }
 ```
 
-You can follow the steps above to begin running other services (MakeLine, Loyalty, ReceiptGeneration or VirtualWorker) and observe the new dapr configs working with their new configuration.
+You can follow the steps above to begin running other services (MakeLine, Loyalty, ReceiptGeneration, VirtualWorker or AccountingService) and observe as the local dapr configs allow you to run against local storage, local Redis and a local secret store.
