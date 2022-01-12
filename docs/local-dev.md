@@ -10,12 +10,8 @@ With that said, there are a few short steps you will need to perform in order to
 1. Browse to the Codespaces page in the repo: https://github.com/Azure/reddog-code/codespaces
 2. Select "New codespace"
 3. On the "master" branch, select "Create codespace"
-
-        ![New Codespace](../assets/new-codespace.png)
 4. Pick a size for your Codespace environment
 5. Wait for the environment to be ready
-    
-        ![New Codespace](../assets/codespace-create.png)
 
 Once complete, VS Code will be running in your browser with the master branch cloned.
 
