@@ -1,6 +1,6 @@
 ## Overview
 
-One of the nice things about Dapr is the ability to make the transition from executing against different backing services without ever having to change a line of code.  This is especially important if you would like to run completely locally without any reliance on cloud-based services.  You will notice in the `/manifests/branch/local` location that a number of dapr configs have been provided.  These dapr configs will allow you to run each of the dapr-ized services in a "local" manner without relying on any cloud-based services.
+One of the nice things about Dapr is the ability to make the transition from executing against different backing services without ever having to change a line of code.  This is especially important if you would like to run completely locally without any reliance on cloud-based services.  You will notice in the `/manifests/branch/local` location that a number of dapr configs have been provided.  These dapr configs will allow you to run each of the dapr-ized services in a local manner relying on local storage, local Redis and a local secret store.
 
 With that said, there are a few short steps you will need to perform in order to set up your local development environment.  The instructions below will guide you through setting up a GitHub Codespace and subsequently running one of the Reddog dapr services.
 
