@@ -40,7 +40,7 @@ DAPR_HTTP_PORT=5880
 
 ## Test it Out
 
-Now that you have the dapr configs adjusted, try running a few services.  For example, you can try running the OrderService by utilizing the provided VS Code tasks and doing the following:
+Now that everything is in place, try running a few services.  For example, you can try running the OrderService by utilizing the provided VS Code tasks and doing the following:
 
 - Open the Command Palette
 - Select `Tasks: Run Task`
