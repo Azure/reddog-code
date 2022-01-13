@@ -24,13 +24,13 @@ Once complete, VS Code will be running in your browser with the master branch cl
     1. Open the Command Palette
     2. Select `Tasks: Run Task`
     3. Select `Dapr Bootstrapper`
-3. Set an environment variable for the Bootstrapper's Dapr HTTP Port
+3. In a VS Code terminal window, set an environment variable for the Bootstrapper's Dapr HTTP Port
 ```
 DAPR_HTTP_PORT=5880
 ```
 5. Switch to the Run and Debug screen and debug the Bootstrapper.  Upon completion, you should now have a "reddogdemo" database in the given SQL Server instance.
 
->The Accounting Service within Reddog relies on SQL Server for persistent storage.  As such, you will notice that the `.devcontainer` configuration for Codespaces (located withing the `.devcontainer` folder) points at a Docker compose file that includes a container image reference to SQL Server.  While the image will be pulled into your Codespace for you, the database itself will still need to be provisioned.  Included in the Reddog repo is an EF Core migration that can be run to provision the database.    (If you would like to connect to the SQL Server instance and verify the migration, it is easiest to connect via `sqlcmd` in the VS Code terminal.  [Installation instructions](https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility?view=sql-server-ver15))
+>The Accounting Service within Reddog relies on SQL Server for persistent storage.  As such, you will notice that the `.devcontainer` configuration for Codespaces (located withing the `.devcontainer` folder) points at a Docker compose file that includes a container image reference to SQL Server.  While the image will be pulled into your Codespace for you, the database itself will still need to be provisioned.  Included in the Reddog repo is an EF Core migration that can be run to provision the database.  This migration functionality is located within Reddog.Bootstrapper. (If you would like to connect to the SQL Server instance and verify the migration, it is easiest to connect via `sqlcmd` in the VS Code terminal.  [Installation instructions](https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility?view=sql-server-ver15))
 
 >If desired, execute the following to connect via sqlcmd:<br> 
 >sqlcmd -S reddog-code_devcontainer_db_1,1433 -U SA -P "pass@word1" -d reddogdemo<br><br>
