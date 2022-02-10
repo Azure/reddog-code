@@ -1,0 +1,13 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: reddog.state.loyalty
+  namespace: reddog-retail
+spec:
+  type: state.redis
+  version: v1
+  metadata:
+  - name: redisHost
+    value: dapr_redis_dapr-dev-container:6379
+scopes:
+  - loyalty-service

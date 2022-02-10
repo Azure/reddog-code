@@ -1,0 +1,19 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: reddog.pubsub
+  namespace: reddog-retail
+spec:
+  type: pubsub.redis
+  version: v1
+  metadata: 
+    - name: redisHost
+      value: dapr_redis_dapr-dev-container:6379
+scopes:
+  - order-service
+  - make-line-service
+  - loyalty-service
+  - receipt-generation-service
+  - accounting-service
+auth:
+  secretStore: reddog.secretstore
