@@ -27,7 +27,6 @@ namespace RedDog.AccountingService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
             services.AddHttpClient();
             services.AddControllers().AddDapr();
             services.AddSwaggerGen(c =>
@@ -42,13 +41,6 @@ namespace RedDog.AccountingService
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseCors(builder =>
-                {
-                    builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-                });
             }
 
             app.UseSwagger();
