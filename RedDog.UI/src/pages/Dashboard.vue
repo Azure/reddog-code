@@ -323,7 +323,7 @@ export default {
               // "totalProfit": 489346.5500
             
             data.payload.forEach((ord, index) => {
-                if(ord.storeId === this.storeId){
+                if(ord.storeId.toLowerCase() === this.storeId.toLowerCase()){
                   salesLabels.push(moment(`${ord.orderMonth}-${ord.orderDay}-${ord.orderYear}`, "MM-DD-YYYY").add(ord.orderHour, 'hours').add(-4, 'hours').format('M/D hA'))
                   salesValues.push(ord.totalSales.toFixed(0))
                   profitValues.push(ord.totalProfit.toFixed(0))
@@ -716,6 +716,7 @@ export default {
       this.i18n.locale = "ar";
       this.$rtl.enableRTL();
     }
+    document.title = 'Red Dog - ' + (process.env.VUE_APP_STORE_ID || 'Redmond');
   },
   beforeDestroy() {
     
@@ -745,7 +746,7 @@ export default {
     else{
 
       this.isCorp = false;
-      this.storeId = process.env.VUE_APP_STORE_ID 
+      this.storeId = process.env.VUE_APP_STORE_ID || 'redmond'
       this.getOrderChartBranch();
       this.getAccountingOrderMetrics();
       this.getSalesProfitMetricsBranch();
