@@ -1,4 +1,4 @@
-name: package-order-service
+name: package-corp-transfer-service
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
           echo ::set-output name=version::$(echo ${GITHUB_SHA} | cut -c1-7)
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           echo ::set-output name=project::CorporateTransferService
-          echo ::set-output name=image::reddog-retail-coporate-transfer-service
+          echo ::set-output name=image::reddog-retail-corp-transfer-service
           echo ::set-output name=repository::ghcr.io/mikelapierre/reddog-code
 
   package-service:
