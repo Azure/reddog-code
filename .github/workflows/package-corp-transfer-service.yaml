@@ -43,6 +43,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.CR_PAT }}
+      - name: List files
+        run: |           
+           ls -R          
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
