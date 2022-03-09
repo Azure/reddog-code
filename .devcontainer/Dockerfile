@@ -23,18 +23,24 @@ ARG USERNAME=vscode
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your
 # own dependencies. A user of "automatic" attempts to reuse an user ID if one already exists.
 COPY library-scripts/docker-debian.sh /tmp/library-scripts/
-RUN apt-get update \
+    # Add ubuntu repo for mssql-tools install
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ 
+    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | tee /etc/apt/sources.list.d/msprod.list \ 
+    apt-get update \
     # Use Docker script from script library to set things up
     && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}" \
     # Install Dapr
     && wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | /bin/bash \
     # Install Python 2.7
     && apt-get -y install python2-minimal \
+    # Install mssql-tools for sqlcmd usage
+    && ACCEPT_EULA=y apt-get -y install mssql-tools unixodbc-dev \
     # Clean up
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
 
 # Add daprd to the path for the VS Code Dapr extension.
-ENV PATH "$PATH:/home/${USERNAME}/.dapr/bin"
+# Add mssql-tools to the path so that sqlcmd is ready to use.
+ENV PATH "$PATH:/home/${USERNAME}/.dapr/bin:/opt/mssql-tools/bin"
 
 # Setting the ENTRYPOINT to docker-init.sh will configure non-root access 
 # to the Docker socket. The script will also execute CMD as needed.
