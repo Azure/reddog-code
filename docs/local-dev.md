@@ -2,7 +2,7 @@
 
 One of the nice things about Dapr is the ability to make the transition from executing against different backing services without ever having to change a line of code.  This is especially important if you would like to run completely locally without any reliance on cloud-based services.  You will notice in the `/manifests/branch/local` location that a number of dapr configs have been provided.  These dapr configs will allow you to run each of the dapr-ized services in a local manner relying on local storage, local Redis and a local secret store.
 
-With that said, there are a few short steps you will need to perform in order to set up your local development environment.  The instructions below will guide you through setting up a GitHub Codespace and subsequently running one of the Reddog dapr services.
+With that said, there are a few short steps you will need to perform in order to set up your local development environment.  The instructions below will guide you through setting up a GitHub Codespace and subsequently running all RedDog services.
 
 
 ## Create Codespace
@@ -16,10 +16,12 @@ With that said, there are a few short steps you will need to perform in order to
 Once complete, VS Code will be running in your browser with the master branch cloned.
 
 
-## Setup Reddog Environment
+## Setup RedDog Environment
 
 1. In a VS Code terminal window, run the following to trust local certs:
-`dotnet dev-certs https --trust`
+```
+dotnet dev-certs https --trust
+```
 2. Start the Bootstrapper Dapr sidecar by doing the following:
     1. Open the Command Palette
     2. Select `Tasks: Run Task`
@@ -28,13 +30,13 @@ Once complete, VS Code will be running in your browser with the master branch cl
 ```
 DAPR_HTTP_PORT=5880
 ```
-5. Switch to the Run and Debug screen and debug the Bootstrapper.  Upon completion, you should now have a "reddogdemo" database in the given SQL Server instance.
+4. Switch to the Run and Debug screen and debug the Bootstrapper.  Upon completion, you should now have a "reddogdemo" database in the given SQL Server instance.
 
->The Accounting Service within Reddog relies on SQL Server for persistent storage.  As such, you will notice that the `.devcontainer` configuration for Codespaces (located withing the `.devcontainer` folder) points at a Docker compose file that includes a container image reference to SQL Server.  While the image will be pulled into your Codespace for you, the database itself will still need to be provisioned.  Included in the Reddog repo is an EF Core migration that can be run to provision the database.  This migration functionality is located within Reddog.Bootstrapper. (If you would like to connect to the SQL Server instance and verify the migration, it is easiest to connect via `sqlcmd` in the VS Code terminal.  [Installation instructions](https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility?view=sql-server-ver15))
+>The Accounting Service within RedDog relies on SQL Server for persistent storage.  As such, you will notice that the `.devcontainer` configuration for Codespaces (located withing the `.devcontainer` folder) points at a Docker compose file that includes a container image reference to SQL Server.  While the image will be pulled into your Codespace for you, the database itself will still need to be provisioned.  Included in the RedDog repo is an EF Core migration that can be run to provision the database.  This migration functionality is located within RedDog.Bootstrapper. 
 
->If desired, execute the following to connect via sqlcmd:<br> 
+>The SQL Server command-line tools have been installed for you.  If desired, execute the following to connect via sqlcmd:<br> 
 >sqlcmd -S reddog-code_devcontainer_db_1,1433 -U SA -P "pass@word1" -d reddogdemo<br><br>
->Execute the following to verify that Reddog tables have been created:<br>
+>Execute the following to verify that RedDog tables have been created:<br>
 > ```1>SELECT Name FROM sys.tables```<br>
 > ```2>GO```
 
@@ -48,7 +50,7 @@ Now that everything is in place, try running a few services.  For example, you c
 - Switch to the "Run and Debug" screen
 - From the dropdown, choose to `Debug OrderService`
 
-You should now be able to call endpoints exposed by the OrderService.  Try posting an order to `http:localhost:5100/order` (you can use [Postman](https://www.postman.com/downloads/) or [HTTP Rest](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)).  If successful (and other Dapr services are running) you should see the OrderService receive the posted order and then utilize the pubsub component to publish an OrderSummary message.
+You should now be able to call endpoints exposed by the OrderService.  Try posting an order to `http:localhost:5100/order`.  To do so, a series of .rest files have been provided for you in the root of the RedDog solution in a folder named "rest-samples"  (Install the [HTTP Rest](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension to easily execute these requests.).  If successful (and other Dapr services are running) you should see the OrderService receive the posted order and then utilize the pubsub component to publish an OrderSummary message.
 
 An example order POST body is below:
 
@@ -68,3 +70,40 @@ An example order POST body is below:
 ```
 
 You can follow the steps above to begin running other services (MakeLine, Loyalty, ReceiptGeneration, VirtualWorker or AccountingService) and observe as the local dapr configs allow you to run against local storage, local Redis and a local secret store.
+
+
+## Running All Services and the RedDog UI
+
+A few helpful VS Code tasks and launch configurations have been provided to help you run all services and the RedDog UI at the same time.  To do so, follow these instructions:
+
+### Running All Dapr-ized Services
+
+1. Run all Dapr services by doing the following:
+    - Open the Command Palette
+    - Select `Tasks: Run Task`
+    - Select `Dapr (All Services)`
+2. Debug all services by doing the following:
+    - Switch to the Run and Debug screen
+    - From the dropdown, choose to `Debug All Services`
+3. After all services are running, switch to the `Ports` tab within VS Code (likely located to the right of your Terminal window) and find ports 5200 and 5700.  These two ports are for the MakeLine Service and the Accounting Service, respectively.  For both of these ports, set the Visibility to Public.  This will allow the RedDog.UI to make calls to each of these services to retrieve necessary data for display purposes.
+
+### Running the RedDog.UI
+1. In the terminal window, navigate into the RedDog.UI folder
+2. Perform an npm install to install necessary dependencies for the UI
+```
+npm install
+```
+3. Before running the RedDog.UI, we need to create a .env file in the root of this web app to set the base URL for the MakeLine and Accounting services.  To do so, create a file named `.env` in the RedDog.UI folder. Execute the following to easily create the file:
+```
+touch .env
+```
+4. In this file, place the following contents:
+```
+VUE_APP_MAKELINE_BASE_URL=http://localhost:5200
+VUE_APP_ACCOUNTING_BASE_URL=http://localhost:5700
+```
+8. Switch to the Run and Debug Screen and, from the dropdown, choose `Debug UI` and begin debugging the UI.
+9. After a few moments, you will notice port 8080 show up in the Ports window.  Set this port to public.
+10. Launch the UI by clicking on the VS code pop-up in the lower-right of your screen or by clicking on the "Open in Browser" icon on the port 8080 line within the "Ports" window.
+
+At this point, you should have all dapr services running as well as the RedDog.UI.  After a few moments, the RedDog.UI will begin showing metrics related to orders being created and worked by the VirtualCustomer and VirtualWorker services.  All of the services within RedDog will be exercised by the VirtualCustomer creating orders.  Take a peek at the various debug windows for each of the services to see data being processed in real-time.
