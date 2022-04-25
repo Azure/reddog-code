@@ -9,6 +9,7 @@ namespace RedDog.OrderService.Models
 {
     public class Product
     {
+        // Note: Use Products with category field
         private static string _productDefinitionFilename =  Environment.GetEnvironmentVariable("PRODUCT_DEFINITION_FILENAME") ?? "DrugStoreProducts-categorized.json";
         private static List<Product> _products;
 
