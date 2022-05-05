@@ -80,6 +80,32 @@
             "group": "build"
         },
         {
+            "label": "Optimize DBContext",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "ef",
+                "dbcontext",
+                "optimize",
+                "-p",
+                "RedDog.AccountingService",
+                "-n",
+                "RedDog.AccountingModel",
+                "-o",
+                "${workspaceFolder}/RedDog.AccountingModel/CompiledModels",
+                "-c",
+                "AccountingContext"
+            ],
+            "options": {
+                "env": {
+                    "DAPR_GRPC_PORT": "5701"
+                }
+            },
+            "problemMatcher": "$msCompile",
+            "dependsOn": "Dapr AccountingService",
+            "group": "build"
+        },
+        {
             "label": "Build AccountingService",
             "command": "dotnet",
             "type": "process",
@@ -90,6 +116,7 @@
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile",
+            "dependsOn": "Optimize DBContext",
             "group": "build"
         },
         {
@@ -209,7 +236,29 @@
                 "--dapr-http-port",
                 "5780"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
+        },
+        {
+            "label": "Dapr Stop AccountingService",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "accounting-service"
+            ]
         },
         {
             "label": "Dapr AccountingService (Corp)",

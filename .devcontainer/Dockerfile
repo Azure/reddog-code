@@ -1,5 +1,5 @@
 # [Choice] .NET version: 5.0, 3.1, 2.1
-ARG VARIANT=5.0
+ARG VARIANT=6.0
 FROM mcr.microsoft.com/vscode/devcontainers/dotnet:0-${VARIANT}
 
 # [Option] Install Node.js
@@ -40,7 +40,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 
 # Add daprd to the path for the VS Code Dapr extension.
 # Add mssql-tools to the path so that sqlcmd is ready to use.
-ENV PATH "$PATH:/home/${USERNAME}/.dapr/bin:/opt/mssql-tools/bin"
+ENV PATH "$PATH:/home/${USERNAME}/.dapr/bin:/opt/mssql-tools/bin:/home/vscode/.dotnet/tools"
 
 # Setting the ENTRYPOINT to docker-init.sh will configure non-root access 
 # to the Docker socket. The script will also execute CMD as needed.

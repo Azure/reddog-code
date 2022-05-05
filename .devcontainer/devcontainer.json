@@ -20,14 +20,15 @@
 	"extensions": [
 		"ms-azuretools.vscode-dapr",
 		"ms-azuretools.vscode-docker",
-		"ms-dotnettools.csharp"
+		"ms-dotnettools.csharp",
+		"humao.rest-client"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Ensure Dapr is running on opening the container
-	"postCreateCommand": "dapr uninstall --all && dapr init",
+	"postCreateCommand": "dapr uninstall --all && dapr init && dotnet tool install --global dotnet-ef",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"

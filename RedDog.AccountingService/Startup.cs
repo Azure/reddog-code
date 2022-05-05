@@ -33,7 +33,11 @@ namespace RedDog.AccountingService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RedDog.AccountingService", Version = "v1" });
             });
-            services.AddDbContext<AccountingContext>(options => options.UseSqlServer(Configuration["reddog-sql"]));
+            services.AddDbContext<AccountingContext>(options => 
+            {
+                options.UseModel(RedDog.AccountingModel.AccountingContextModel.Instance);
+                options.UseSqlServer(Configuration["reddog-sql"]);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

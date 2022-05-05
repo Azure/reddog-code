@@ -37,10 +37,15 @@ namespace RedDog.MakeLineService.Controllers
 
             try
             {
-                var state = await _daprClient.GetStateEntryAsync<List<OrderSummary>>(MakeLineStateStoreName, orderSummary.StoreId);
-                state.Value ??= new List<OrderSummary>();
-                state.Value.Add(orderSummary);
-                await state.SaveAsync();
+                bool isSuccess;
+
+                do
+                {
+                    var state = await _daprClient.GetStateEntryAsync<List<OrderSummary>>(MakeLineStateStoreName, orderSummary.StoreId);
+                    state.Value ??= new List<OrderSummary>();
+                    state.Value.Add(orderSummary);
+                    isSuccess = await state.TrySaveAsync(new StateOptions(){ Concurrency = ConcurrencyMode.FirstWrite, Consistency = ConsistencyMode.Eventual });
+                } while(!isSuccess);
 
                 _logger.LogInformation("Successfully added Order to Make Line: {OrderId}", orderSummary.OrderId);
             }
@@ -56,7 +61,7 @@ namespace RedDog.MakeLineService.Controllers
         [HttpGet("/orders/{storeId}")]
         public async Task<IActionResult> GetOrders(string storeId)
         {
-            var orders = await GetAllOrders(storeId) ?? new List<OrderSummary>();
+            var orders = (await GetAllOrders(storeId)).Value ?? new List<OrderSummary>();
             return new OkObjectResult(orders.OrderBy(o => o.OrderDate));
         }
 
@@ -65,34 +70,64 @@ namespace RedDog.MakeLineService.Controllers
         {
             _logger.LogInformation("Completing Order: {OrderId}", orderId);
 
-            var orders = await GetAllOrders(storeId);
+            bool isSuccess;
+            OrderSummary order;
+            DateTime orderCompletedDate = DateTime.UtcNow;
 
-            // Look up the order and remove it from the store
-            var order = orders.FirstOrDefault(o => o.OrderId == orderId);
+            var orders = await GetAllOrders(storeId);
+            order = orders.Value.FirstOrDefault(o => o.OrderId == orderId);
+            order.OrderCompletedDate = orderCompletedDate;
+            
             if (order != null)
             {
-                orders.Remove(order);
                 try
                 {
-                    order.OrderCompletedDate = DateTime.UtcNow;
-                    await _daprClient.SaveStateAsync<List<OrderSummary>>(MakeLineStateStoreName, storeId, orders);
                     await _daprClient.PublishEventAsync<OrderSummary>(PubSubName, OrderCompletedTopic, order);
-                    _logger.LogInformation("Completed Order: {@OrderSummary}", order);
+                    _logger.LogInformation("Published order completed message for OrderId: {orderId}");
                 }
                 catch(Exception e)
                 {
-                    _logger.LogError("Error saving order summaries. Message: {Content}", e.InnerException?.Message ?? e.Message);
+                    _logger.LogError("Error publishing order completed message for OrderId: {orderId}. Message: {Content}", e.InnerException?.Message ?? e.Message);
                     return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
                 }
             }
 
+            do
+            {
+                if (order != null)
+                {
+                    orders.Value.Remove(order);
+                    try
+                    {
+                        isSuccess = await orders.TrySaveAsync(new StateOptions(){ Concurrency = ConcurrencyMode.FirstWrite, Consistency = ConsistencyMode.Eventual });
+                        if(!isSuccess)
+                        {
+                            orders = await GetAllOrders(storeId);
+                            order = orders.Value.FirstOrDefault(o => o.OrderId == orderId);
+                            order.OrderCompletedDate = orderCompletedDate;
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        _logger.LogError("Error saving order summaries. Message: {Content}", e.InnerException?.Message ?? e.Message);
+                        return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
+                    }
+                }
+                else
+                {
+                    isSuccess = true;
+                }
+            }
+            while(!isSuccess);
+
+            _logger.LogInformation("Completed Order: {@OrderSummary}", order);
+
             return new OkResult();
         }
 
-        private async Task<List<OrderSummary>> GetAllOrders(string storeId)
+        private async Task<StateEntry<List<OrderSummary>>> GetAllOrders(string storeId)
         {
-            var state = await _daprClient.GetStateEntryAsync<List<OrderSummary>>(MakeLineStateStoreName, storeId);
-            return state.Value;
+            return await _daprClient.GetStateEntryAsync<List<OrderSummary>>(MakeLineStateStoreName, storeId);
         }
     }
 }
