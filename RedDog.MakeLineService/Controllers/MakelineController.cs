@@ -43,7 +43,7 @@ namespace RedDog.MakeLineService.Controllers
 
                 do
                 {
-                    state = await _daprClient.GetStateEntryAsync<List<OrderSummary>>(MakeLineStateStoreName, orderSummary.StoreId);
+                    state = await GetAllOrdersAsync(orderSummary.StoreId);
                     state.Value ??= new List<OrderSummary>();
                     state.Value.Add(orderSummary);
                     isSuccess = await state.TrySaveAsync(_stateOptions);
@@ -63,7 +63,7 @@ namespace RedDog.MakeLineService.Controllers
         [HttpGet("/orders/{storeId}")]
         public async Task<IActionResult> GetOrders(string storeId)
         {
-            var orders = (await GetAllOrders(storeId)).Value ?? new List<OrderSummary>();
+            var orders = (await GetAllOrdersAsync(storeId)).Value ?? new List<OrderSummary>();
             return new OkObjectResult(orders.OrderBy(o => o.OrderDate));
         }
 
@@ -76,7 +76,7 @@ namespace RedDog.MakeLineService.Controllers
             OrderSummary order;
             DateTime orderCompletedDate = DateTime.UtcNow;
 
-            var orders = await GetAllOrders(storeId);
+            var orders = await GetAllOrdersAsync(storeId);
             order = orders.Value.FirstOrDefault(o => o.OrderId == orderId);
             order.OrderCompletedDate = orderCompletedDate;
             
@@ -104,7 +104,7 @@ namespace RedDog.MakeLineService.Controllers
                         isSuccess = await orders.TrySaveAsync(_stateOptions);
                         if(!isSuccess)
                         {
-                            orders = await GetAllOrders(storeId);
+                            orders = await GetAllOrdersAsync(storeId);
                             order = orders.Value.FirstOrDefault(o => o.OrderId == orderId);
                             order.OrderCompletedDate = orderCompletedDate;
                         }
@@ -127,7 +127,7 @@ namespace RedDog.MakeLineService.Controllers
             return new OkResult();
         }
 
-        private async Task<StateEntry<List<OrderSummary>>> GetAllOrders(string storeId)
+        private async Task<StateEntry<List<OrderSummary>>> GetAllOrdersAsync(string storeId)
         {
             return await _daprClient.GetStateEntryAsync<List<OrderSummary>>(MakeLineStateStoreName, storeId);
         }
