@@ -22,6 +22,7 @@ namespace RedDog.MakeLineService.Controllers
         private const string MakeLineStateStoreName = "reddog.state.makeline";
         private readonly ILogger<MakelineController> _logger;
         private readonly DaprClient _daprClient;
+        private readonly StateOptions _stateOptions = new StateOptions(){ Concurrency = ConcurrencyMode.FirstWrite, Consistency = ConsistencyMode.Eventual };
 
         public MakelineController(ILogger<MakelineController> logger, DaprClient daprClient)
         {
@@ -35,16 +36,17 @@ namespace RedDog.MakeLineService.Controllers
         {
             _logger.LogInformation("Received Order: {@OrderSummary}", orderSummary);
 
+            StateEntry<List<OrderSummary>> state = null;
             try
             {
                 bool isSuccess;
 
                 do
                 {
-                    var state = await _daprClient.GetStateEntryAsync<List<OrderSummary>>(MakeLineStateStoreName, orderSummary.StoreId);
+                    state = await _daprClient.GetStateEntryAsync<List<OrderSummary>>(MakeLineStateStoreName, orderSummary.StoreId);
                     state.Value ??= new List<OrderSummary>();
                     state.Value.Add(orderSummary);
-                    isSuccess = await state.TrySaveAsync(new StateOptions(){ Concurrency = ConcurrencyMode.FirstWrite, Consistency = ConsistencyMode.Eventual });
+                    isSuccess = await state.TrySaveAsync(_stateOptions);
                 } while(!isSuccess);
 
                 _logger.LogInformation("Successfully added Order to Make Line: {OrderId}", orderSummary.OrderId);
@@ -99,7 +101,7 @@ namespace RedDog.MakeLineService.Controllers
                     orders.Value.Remove(order);
                     try
                     {
-                        isSuccess = await orders.TrySaveAsync(new StateOptions(){ Concurrency = ConcurrencyMode.FirstWrite, Consistency = ConsistencyMode.Eventual });
+                        isSuccess = await orders.TrySaveAsync(_stateOptions);
                         if(!isSuccess)
                         {
                             orders = await GetAllOrders(storeId);

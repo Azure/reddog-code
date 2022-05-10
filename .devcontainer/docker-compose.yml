@@ -35,6 +35,8 @@ services:
     environment:
         MSSQL_SA_PASSWORD: "pass@word1"
         ACCEPT_EULA: "Y"
+    container_name: reddog-sql-server
+    restart: on-failure
 networks: 
   default:
     name: dapr-dev-container

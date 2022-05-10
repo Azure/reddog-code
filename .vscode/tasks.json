@@ -11,6 +11,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
+            "dependsOn": "Dapr OrderService",
             "problemMatcher": "$msCompile",
             "group": "build"
         },
@@ -24,6 +25,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
+            "dependsOn": "Dapr MakeLineService",
             "problemMatcher": "$msCompile",
             "group": "build"
         },
@@ -37,6 +39,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
+            "dependsOn": "Dapr ReceiptGenerationService",
             "problemMatcher": "$msCompile",
             "group": "build"
         },
@@ -50,6 +53,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
+            "dependsOn": "Dapr LoyaltyService",
             "problemMatcher": "$msCompile",
             "group": "build"
         },
@@ -63,6 +67,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
+            "dependsOn": "Dapr VirtualWorker",
             "problemMatcher": "$msCompile",
             "group": "build"
         },
@@ -76,6 +81,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
+            "dependsOn": "Dapr VirtualCustomers",
             "problemMatcher": "$msCompile",
             "group": "build"
         },
@@ -129,6 +135,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
+            "dependsOn": "Dapr Bootstrapper",
             "problemMatcher": "$msCompile",
             "group": "build"
         },
@@ -164,7 +171,21 @@
                 "--dapr-http-port",
                 "5180"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
         },
         {
             "label": "Dapr MakeLineService",
@@ -182,7 +203,21 @@
                 "--dapr-http-port",
                 "5280"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
         },
         {
             "label": "Dapr ReceiptGenerationService",
@@ -200,7 +235,21 @@
                 "--dapr-http-port",
                 "5380"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
         },
         {
             "label": "Dapr LoyaltyService",
@@ -218,7 +267,21 @@
                 "--dapr-http-port",
                 "5480"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
         },
         {
             "label": "Dapr AccountingService",
@@ -253,14 +316,6 @@
             }
         },
         {
-            "label": "Dapr Stop AccountingService",
-            "command": "dapr",
-            "args": [
-                "stop",
-                "accounting-service"
-            ]
-        },
-        {
             "label": "Dapr AccountingService (Corp)",
             "command": "dapr",
             "args": [
@@ -276,7 +331,21 @@
                 "--dapr-http-port",
                 "6780"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
         },
         {
             "label": "Dapr VirtualWorker",
@@ -294,7 +363,21 @@
                 "--dapr-http-port",
                 "5580"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
         },
         {
             "label": "Dapr VirtualCustomers",
@@ -310,7 +393,21 @@
                 "--dapr-http-port",
                 "5680"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
         },
         {
             "label": "Dapr UI",
@@ -326,7 +423,21 @@
                 "--dapr-http-port",
                 "5980"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
         },
         {
             "label": "Dapr Bootstrapper",
@@ -342,7 +453,93 @@
                 "--dapr-http-port",
                 "5880"
             ],
-            "problemMatcher": []
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": ".",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "beginsPattern": "^.*Starting Dapr.*",
+                    "endsPattern": "^.*You're up and running!.*"
+                }
+            }
+        },
+        {
+            "label": "Dapr Stop OrderService",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "order-service"
+            ]
+        },
+        {
+            "label": "Dapr Stop MakeLineService",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "make-line-service"
+            ]
+        },
+        {
+            "label": "Dapr Stop LoyaltyService",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "loyalty-service"
+            ]
+        },
+        {
+            "label": "Dapr Stop ReceiptGenerationService",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "receipt-generation-service"
+            ]
+        },
+        {
+            "label": "Dapr Stop AccountingService",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "accounting-service"
+            ]
+        },
+        {
+            "label": "Dapr Stop VirtualWorker",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "virtual-worker"
+            ]
+        },
+        {
+            "label": "Dapr Stop VirtualCustomers",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "virtual-customers"
+            ]
+        },
+        {
+            "label": "Dapr Stop UI",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "reddog-ui"
+            ]
+        },
+        {
+            "label": "Dapr Stop Bootstrapper",
+            "command": "dapr",
+            "args": [
+                "stop",
+                "bootstrapper"
+            ]
         },
         {
             "label": "Dapr (All Services)",
