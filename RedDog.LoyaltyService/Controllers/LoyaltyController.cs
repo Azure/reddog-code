@@ -17,6 +17,7 @@ namespace RedDog.LoyaltyService.Controllers
         private const string LoyaltyStateStoreName = "reddog.state.loyalty";
         private readonly ILogger<LoyaltyController> _logger;
         private readonly DaprClient _daprClient;
+        private readonly StateOptions _stateOptions = new StateOptions(){ Concurrency = ConcurrencyMode.FirstWrite, Consistency = ConsistencyMode.Eventual };
 
         public LoyaltyController(ILogger<LoyaltyController> logger, DaprClient daprClient)
         {
@@ -36,17 +37,24 @@ namespace RedDog.LoyaltyService.Controllers
             StateEntry<LoyaltySummary> stateEntry = null;
             try
             {
-                stateEntry = await _daprClient.GetStateEntryAsync<LoyaltySummary>(LoyaltyStateStoreName, orderSummary.LoyaltyId);
-                stateEntry.Value ??= new LoyaltySummary()
+                bool isSuccess;
+
+                do
                 {
-                    FirstName = orderSummary.FirstName,
-                    LastName = orderSummary.LastName,
-                    LoyaltyId = orderSummary.LoyaltyId,
-                    PointTotal = 0
-                };
-                stateEntry.Value.PointsEarned = loyaltyPointsEarned;
-                stateEntry.Value.PointTotal += loyaltyPointsEarned;
-                await stateEntry.SaveAsync();
+                    stateEntry = await _daprClient.GetStateEntryAsync<LoyaltySummary>(LoyaltyStateStoreName, orderSummary.LoyaltyId);
+                    stateEntry.Value ??= new LoyaltySummary()
+                    {
+                        FirstName = orderSummary.FirstName,
+                        LastName = orderSummary.LastName,
+                        LoyaltyId = orderSummary.LoyaltyId,
+                        PointTotal = 0
+                    };
+                    stateEntry.Value.PointsEarned = loyaltyPointsEarned;
+                    stateEntry.Value.PointTotal += loyaltyPointsEarned;
+                    isSuccess = await stateEntry.TrySaveAsync(_stateOptions);
+                }
+                while(!isSuccess);
+
                 _logger.LogInformation("Successfully updated loyalty points: {@LoyaltySummary}", stateEntry.Value);
             }
             catch(Exception e)

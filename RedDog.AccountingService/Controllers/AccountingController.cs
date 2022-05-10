@@ -84,8 +84,11 @@ namespace RedDog.AccountingService.Controllers
                 return NotFound();
             }
 
-            order.CompletedDate = orderSummary.OrderCompletedDate;
-            await dbContext.SaveChangesAsync();
+            if(order.CompletedDate == null)
+            {
+                order.CompletedDate = orderSummary.OrderCompletedDate;
+                await dbContext.SaveChangesAsync();
+            }
 
             return Ok();
         }
