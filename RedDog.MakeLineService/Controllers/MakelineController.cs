@@ -89,7 +89,7 @@ namespace RedDog.MakeLineService.Controllers
                 }
                 catch(Exception e)
                 {
-                    _logger.LogError("Error publishing order completed message for OrderId: {orderId}. Message: {Content}", e.InnerException?.Message ?? e.Message);
+                    _logger.LogError("Error publishing order completed message for OrderId: {orderId}. Message: {Content}", orderId, e.InnerException?.Message ?? e.Message);
                     return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
                 }
             }
