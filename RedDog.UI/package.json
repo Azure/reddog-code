@@ -16,7 +16,7 @@
     "@vue/cli-plugin-eslint": "^4.4.6",
     "@vue/cli-plugin-pwa": "^4.4.6",
     "@vue/cli-service": "^4.5.12",
-    "async": "^2.6.3",
+    "async": "^2.6.4",
     "cache-loader": "^4.1.0",
     "chart.js": "2.8",
     "chartjs-plugin-streaming": "1.8",
