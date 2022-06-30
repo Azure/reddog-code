@@ -46,7 +46,7 @@ Now that everything is in place, try running a few services.  For example, you c
 - Switch to the "Run and Debug" screen
 - From the dropdown, choose to `Debug OrderService`
 
-You should now be able to call endpoints exposed by the OrderService.  Try posting an order to `http:localhost:5100/order`.  To do so, a series of .rest files have been provided for you in the root of the RedDog solution in a folder named "rest-samples"  (Install the [HTTP Rest](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension to easily execute these requests.).  If successful (and other Dapr services are running) you should see the OrderService receive the posted order and then utilize the pubsub component to publish an OrderSummary message.
+You should now be able to call endpoints exposed by the OrderService.  Try posting an order to `http://localhost:5100/order`.  To do so, a series of .rest files have been provided for you in the root of the RedDog solution in a folder named "rest-samples".  If successful (and other Dapr services are running) you should see the OrderService receive the posted order and then utilize the pubsub component to publish an OrderSummary message.
 
 An example order POST body is below:
 
