@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ namespace RedDog.OrderService.Controllers
         private readonly DaprClient _daprClient;
         private const string OrderTopic = "orders";
         private const string PubSubName = "reddog.pubsub";
+        private const string OrderCreatedEventType = "com.microsoft.reddog.ordercreated";
 
         public OrderController(ILogger<OrderController> logger, DaprClient daprClient)
         {
@@ -37,7 +39,8 @@ namespace RedDog.OrderService.Controllers
 
             try
             {
-                await _daprClient.PublishEventAsync<OrderSummary>(PubSubName, OrderTopic, orderSummary);
+                var cloudEvent = new CloudEvent<OrderSummary>(orderSummary) { Type = OrderCreatedEventType };
+                await _daprClient.PublishEventAsync<CloudEvent<OrderSummary>>(PubSubName, OrderTopic, cloudEvent);
                 _logger.LogInformation("Published Order Summary: {@OrderSummary}", orderSummary);
             }
             catch(Exception e)

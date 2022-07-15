@@ -15,6 +15,7 @@ namespace RedDog.ReceiptGenerationService.Controllers
     {
         private const string OrderTopic = "orders";
         private const string PubSubName = "reddog.pubsub";
+        private const string OrderCreatedEventType = "com.microsoft.reddog.ordercreated";
         private const string ReceiptBindingName = "reddog.binding.receipt";
         private readonly ILogger<ReceiptGenerationConsumerController> _logger;
 
@@ -23,7 +24,7 @@ namespace RedDog.ReceiptGenerationService.Controllers
             _logger = logger;
         }
 
-        [Topic(PubSubName, OrderTopic)]
+        [Topic(PubSubName, OrderTopic, $"event.type == \"{OrderCreatedEventType}\"", 1)]
         [HttpPost("orders")]
         public async Task<IActionResult> GenerateReceipt(OrderSummary orderSummary, [FromServices] DaprClient daprClient)
         {

@@ -14,6 +14,7 @@ namespace RedDog.LoyaltyService.Controllers
     {
         private const string OrderTopic = "orders";
         private const string PubSubName = "reddog.pubsub";
+        private const string OrderCreatedEventType = "com.microsoft.reddog.ordercreated";
         private const string LoyaltyStateStoreName = "reddog.state.loyalty";
         private readonly ILogger<LoyaltyController> _logger;
         private readonly DaprClient _daprClient;
@@ -25,7 +26,7 @@ namespace RedDog.LoyaltyService.Controllers
             _daprClient = daprClient;
         }
 
-        [Topic(PubSubName, OrderTopic)]
+        [Topic(PubSubName, OrderTopic, $"event.type == \"{OrderCreatedEventType}\"", 1)]
         [HttpPost("orders")]
         public async Task<IActionResult> UpdateLoyalty(OrderSummary orderSummary)
         {

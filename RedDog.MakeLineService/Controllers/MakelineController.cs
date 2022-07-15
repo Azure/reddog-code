@@ -17,8 +17,10 @@ namespace RedDog.MakeLineService.Controllers
     public class MakelineController : ControllerBase
     {
         private const string OrderTopic = "orders";
-        private const string OrderCompletedTopic = "ordercompleted";
         private const string PubSubName = "reddog.pubsub";
+        private const string OrderCreatedEventType = "com.microsoft.reddog.ordercreated";
+        private const string OrderStatusChangedEventType = "com.microsoft.reddog.orderstatuschanged";
+        private const string OrderCompletedEventType = "com.microsoft.reddog.ordercompleted";
         private const string MakeLineStateStoreName = "reddog.state.makeline";
         private readonly ILogger<MakelineController> _logger;
         private readonly DaprClient _daprClient;
@@ -30,7 +32,14 @@ namespace RedDog.MakeLineService.Controllers
             _daprClient = daprClient;
         }
 
-        [Topic(PubSubName, OrderTopic)]
+        [HttpGet("/orders/{storeId}")]
+        public async Task<IActionResult> GetOrders(string storeId)
+        {
+            var orders = (await GetAllOrdersAsync(storeId)).Value ?? new List<OrderSummary>();
+            return new OkObjectResult(orders.OrderBy(o => o.OrderDate));
+        }
+
+        [Topic(PubSubName, OrderTopic, $"event.type == \"{OrderCreatedEventType}\"", 1)]
         [HttpPost("/orders")]
         public async Task<IActionResult> AddOrderToMakeLine(OrderSummary orderSummary)
         {
@@ -60,65 +69,59 @@ namespace RedDog.MakeLineService.Controllers
             return new OkResult();
         }
 
-        [HttpGet("/orders/{storeId}")]
-        public async Task<IActionResult> GetOrders(string storeId)
+        [Topic(PubSubName, OrderTopic, $"event.type == \"{OrderStatusChangedEventType}\"", 2)]
+        [HttpPost("/orderCompleted")]
+        public async Task<IActionResult> CompleteOrder(OrderStatusChanged orderStatusChanged)
         {
-            var orders = (await GetAllOrdersAsync(storeId)).Value ?? new List<OrderSummary>();
-            return new OkObjectResult(orders.OrderBy(o => o.OrderDate));
-        }
-
-        [HttpDelete("/orders/{storeId}/{orderId}")]
-        public async Task<IActionResult> CompleteOrder(string storeId, Guid orderId)
-        {
-            _logger.LogInformation("Completing Order: {OrderId}", orderId);
+            _logger.LogInformation("Completing Order: {OrderId}", orderStatusChanged.OrderId);
 
             bool isSuccess;
-            OrderSummary order;
             DateTime orderCompletedDate = DateTime.UtcNow;
 
-            var orders = await GetAllOrdersAsync(storeId);
-            order = orders.Value.FirstOrDefault(o => o.OrderId == orderId);
-            order.OrderCompletedDate = orderCompletedDate;
-            
-            if (order != null)
+            var orders = await GetAllOrdersAsync("Redmond");
+            var order = orders?.Value.FirstOrDefault(o => o.OrderId == orderStatusChanged.OrderId);
+
+            if(order == null)
             {
-                try
-                {
-                    await _daprClient.PublishEventAsync<OrderSummary>(PubSubName, OrderCompletedTopic, order);
-                    _logger.LogInformation("Published order completed message for OrderId: {orderId}");
-                }
-                catch(Exception e)
-                {
-                    _logger.LogError("Error publishing order completed message for OrderId: {orderId}. Message: {Content}", orderId, e.InnerException?.Message ?? e.Message);
-                    return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
-                }
+                _logger.LogWarning("Unable to find existing order for OrderId: {orderId}", orderStatusChanged.OrderId);
+                return new OkObjectResult(new { status = "RETRY"});
             }
+            
+
+            order.OrderCompletedDate = orderCompletedDate;
+
+            try
+            {
+                var cloudEvent = new CloudEvent<OrderSummary>(order) { Type = OrderCompletedEventType };
+                await _daprClient.PublishEventAsync<CloudEvent<OrderSummary>>(PubSubName, OrderTopic, cloudEvent);
+                _logger.LogInformation("Published order completed message for OrderId: {orderId}", order.OrderId);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError("Error publishing order completed message for OrderId: {orderId}. Message: {Content}", order.OrderId, e.InnerException?.Message ?? e.Message);
+                return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
+            }
+
 
             do
             {
-                if (order != null)
+                orders.Value.Remove(order);
+                try
                 {
-                    orders.Value.Remove(order);
-                    try
+                    isSuccess = await orders.TrySaveAsync(_stateOptions);
+                    if(!isSuccess)
                     {
-                        isSuccess = await orders.TrySaveAsync(_stateOptions);
-                        if(!isSuccess)
-                        {
-                            orders = await GetAllOrdersAsync(storeId);
-                            order = orders.Value.FirstOrDefault(o => o.OrderId == orderId);
-                            order.OrderCompletedDate = orderCompletedDate;
-                        }
-                    }
-                    catch(Exception e)
-                    {
-                        _logger.LogError("Error saving order summaries. Message: {Content}", e.InnerException?.Message ?? e.Message);
-                        return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
+                        orders = await GetAllOrdersAsync("Redmond");
+                        order = orders.Value.FirstOrDefault(o => o.OrderId == order.OrderId);
+                        order.OrderCompletedDate = orderCompletedDate;
                     }
                 }
-                else
+                catch(Exception e)
                 {
-                    isSuccess = true;
+                    _logger.LogError("Error saving order summaries. Message: {Content}", e.InnerException?.Message ?? e.Message);
+                    return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
                 }
+
             }
             while(!isSuccess);
 

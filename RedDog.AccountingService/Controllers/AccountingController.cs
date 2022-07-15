@@ -19,7 +19,7 @@ namespace RedDog.AccountingService.Controllers
     {
         private const string PubSubName = "reddog.pubsub";
         private const string OrderTopic = "orders";
-        private const string OrderCompletedTopic = "ordercompleted";
+        private const string OrderCompletedEventType = "com.microsoft.reddog.ordercompleted";
         private readonly ILogger<AccountingController> _logger;
         private readonly DaprClient _daprClient;
 
@@ -29,7 +29,7 @@ namespace RedDog.AccountingService.Controllers
             _daprClient = daprClient;
         }
 
-        [Topic(PubSubName, OrderTopic)]
+        [Topic(PubSubName, OrderTopic, $"event.type == \"{OrderCompletedEventType}\"", 1)]
         [HttpPost("orders")]
         public async Task<IActionResult> UpdateMetrics(OrderSummary orderSummary, [FromServices] AccountingContext dbContext)
         {
@@ -48,6 +48,7 @@ namespace RedDog.AccountingService.Controllers
                 OrderId = orderSummary.OrderId,
                 StoreId = orderSummary.StoreId,
                 PlacedDate = orderSummary.OrderDate,
+                CompletedDate = orderSummary.OrderCompletedDate,
                 Customer = customer,
                 OrderTotal = orderSummary.OrderTotal
             };
@@ -72,26 +73,26 @@ namespace RedDog.AccountingService.Controllers
             return Ok();
         }
 
-        [Topic(PubSubName, OrderCompletedTopic)]
-        [HttpPost("ordercompleted")]
-        public async Task<IActionResult> MarkOrderComplete(OrderSummary orderSummary, [FromServices] AccountingContext dbContext)
-        {
-            _logger.LogInformation("Received Completed Order Summary: {@OrderSummary}", orderSummary);
+        // [Topic(PubSubName, OrderCompletedTopic)]
+        // [HttpPost("ordercompleted")]
+        // public async Task<IActionResult> MarkOrderComplete(OrderSummary orderSummary, [FromServices] AccountingContext dbContext)
+        // {
+        //     _logger.LogInformation("Received Completed Order Summary: {@OrderSummary}", orderSummary);
 
-            Order order = dbContext.Orders.SingleOrDefault<Order>(o => o.OrderId == orderSummary.OrderId);
-            if (order == null)
-            {
-                return NotFound();
-            }
+        //     Order order = dbContext.Orders.SingleOrDefault<Order>(o => o.OrderId == orderSummary.OrderId);
+        //     if (order == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            if(order.CompletedDate == null)
-            {
-                order.CompletedDate = orderSummary.OrderCompletedDate;
-                await dbContext.SaveChangesAsync();
-            }
+        //     if(order.CompletedDate == null)
+        //     {
+        //         order.CompletedDate = orderSummary.OrderCompletedDate;
+        //         await dbContext.SaveChangesAsync();
+        //     }
 
-            return Ok();
-        }
+        //     return Ok();
+        // }
         
         [HttpGet("/Orders/{period}/{timeSpan}")]
         public async Task<OrdersTimeSeries> GetOrderCountOverTime(string storeId, string period, string timeSpan, [FromServices] AccountingContext dbContext)
