@@ -8,9 +8,14 @@ spec:
   version: v1
   metadata: 
     - name: redisHost
-      value: dapr_redis_dapr-dev-container:6379
+      # value: dapr_redis_dapr-dev-container:6379
+      value: localhost:6379
     - name: redisMaxRetries
       value: 10
+    - name: processingTimeout 
+      value: 15s
+    - name: redeliverInterval #This is how often we check for expired messages
+      value: 5s
 scopes:
   - order-service
   - make-line-service
@@ -20,3 +25,21 @@ scopes:
   - virtual-worker
 auth:
   secretStore: reddog.secretstore
+
+# apiVersion: dapr.io/v1alpha1
+# kind: Component
+# metadata:
+#   name: reddog.pubsub
+# spec:
+#   type: pubsub.azure.servicebus
+#   version: v1
+#   metadata:
+#   - name: connectionString
+#     value: "Endpoint=sb://lyorrell-delete.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=oUUJnEf3+9Y+QwBC3psQhfI1lBp35LpHhL+ZCawSB64="
+# scopes:
+#   - order-service
+#   - make-line-service
+#   - loyalty-service
+#   - receipt-generation-service
+#   - accounting-service
+#   - virtual-worker

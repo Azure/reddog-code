@@ -33,8 +33,8 @@ namespace RedDog.VirtualWorker.Controllers
             _random = new Random();
         }
 
-        [Topic(PubSubName, OrderTopic, $"event.type == \"{OrderCreatedEventType}\"", 1)]
-        [Route("/orders")]
+        //[Topic(PubSubName, OrderTopic, $"event.type == \"{OrderCreatedEventType}\"", 1)]
+        [Route("/orderCreated")]
         public async Task<IActionResult> MakeOrder(OrderSummary orderSummary)
         {
             _logger.LogInformation($"The VirtualWorker ({StoreId}) is making an order for {orderSummary.FirstName} {orderSummary.LastName}...");

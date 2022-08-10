@@ -33,5 +33,8 @@ namespace RedDog.MakeLineService.Models
 
         [JsonPropertyName("orderTotal")]
         public decimal OrderTotal { get; set; }
+
+        [JsonPropertyName("orderStatus")]
+        public OrderStatus OrderStatus { get; set; }
     }
 }

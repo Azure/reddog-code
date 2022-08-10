@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Dapr;
 using Dapr.Client;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RedDog.MakeLineService.Models;
@@ -39,25 +38,14 @@ namespace RedDog.MakeLineService.Controllers
             return new OkObjectResult(orders.OrderBy(o => o.OrderDate));
         }
 
-        [Topic(PubSubName, OrderTopic, $"event.type == \"{OrderCreatedEventType}\"", 1)]
-        [HttpPost("/orders")]
+        [HttpPost("/orderCreated")]
         public async Task<IActionResult> AddOrderToMakeLine(OrderSummary orderSummary)
         {
-            _logger.LogInformation("Received Order: {@OrderSummary}", orderSummary);
+            _logger.LogInformation("[OrderCreatedEvent] Received Order: {@OrderSummary}", orderSummary);
 
-            StateEntry<List<OrderSummary>> state = null;
             try
             {
-                bool isSuccess;
-
-                do
-                {
-                    state = await GetAllOrdersAsync(orderSummary.StoreId);
-                    state.Value ??= new List<OrderSummary>();
-                    state.Value.Add(orderSummary);
-                    isSuccess = await state.TrySaveAsync(_stateOptions);
-                } while(!isSuccess);
-
+                await _daprClient.SaveStateAsync<OrderSummary>(MakeLineStateStoreName, orderSummary.OrderId.ToString(), orderSummary, _stateOptions, new Dictionary<string, string>{{ "ttlInSeconds", "60" }});
                 _logger.LogInformation("Successfully added Order to Make Line: {OrderId}", orderSummary.OrderId);
             }
             catch(Exception e)
@@ -66,68 +54,92 @@ namespace RedDog.MakeLineService.Controllers
                 return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
             }
 
-            return new OkResult();
+            return Ok();
         }
 
-        [Topic(PubSubName, OrderTopic, $"event.type == \"{OrderStatusChangedEventType}\"", 2)]
-        [HttpPost("/orderCompleted")]
-        public async Task<IActionResult> CompleteOrder(OrderStatusChanged orderStatusChanged)
+
+        [HttpPost("/orderStatusChangedInProgress")]
+        public async Task<IActionResult> OnOrderStatusChangedCreated(OrderStatusChanged orderStatusChanged)
         {
-            _logger.LogInformation("Completing Order: {OrderId}", orderStatusChanged.OrderId);
+            _logger.LogInformation("[OrderStatusChangedEvent=InProgress] Order: {OrderId}", orderStatusChanged.OrderId);
 
             bool isSuccess;
-            DateTime orderCompletedDate = DateTime.UtcNow;
-
-            var orders = await GetAllOrdersAsync("Redmond");
-            var order = orders?.Value.FirstOrDefault(o => o.OrderId == orderStatusChanged.OrderId);
-
-            if(order == null)
-            {
-                _logger.LogWarning("Unable to find existing order for OrderId: {orderId}", orderStatusChanged.OrderId);
-                return new OkObjectResult(new { status = "RETRY"});
-            }
-            
-
-            order.OrderCompletedDate = orderCompletedDate;
-
-            try
-            {
-                var cloudEvent = new CloudEvent<OrderSummary>(order) { Type = OrderCompletedEventType };
-                await _daprClient.PublishEventAsync<CloudEvent<OrderSummary>>(PubSubName, OrderTopic, cloudEvent);
-                _logger.LogInformation("Published order completed message for OrderId: {orderId}", order.OrderId);
-            }
-            catch(Exception e)
-            {
-                _logger.LogError("Error publishing order completed message for OrderId: {orderId}. Message: {Content}", order.OrderId, e.InnerException?.Message ?? e.Message);
-                return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
-            }
-
 
             do
             {
-                orders.Value.Remove(order);
-                try
+                var stateEntry = await _daprClient.GetStateEntryAsync<OrderSummary>(MakeLineStateStoreName, orderStatusChanged.OrderId.ToString());
+
+                if(stateEntry.Value == null)
                 {
-                    isSuccess = await orders.TrySaveAsync(_stateOptions);
-                    if(!isSuccess)
-                    {
-                        orders = await GetAllOrdersAsync("Redmond");
-                        order = orders.Value.FirstOrDefault(o => o.OrderId == order.OrderId);
-                        order.OrderCompletedDate = orderCompletedDate;
-                    }
-                }
-                catch(Exception e)
-                {
-                    _logger.LogError("Error saving order summaries. Message: {Content}", e.InnerException?.Message ?? e.Message);
-                    return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
+                    // TODO: What happens if TTL were to delete the state entry before this message was received?
+                    _logger.LogWarning("Unable to find existing order for OrderId: {orderId}", orderStatusChanged.OrderId);
+                    return Problem($"Unable to find existing order for OrderId: {orderStatusChanged.OrderId}");
                 }
 
+                if(stateEntry.Value.OrderStatus < orderStatusChanged.OrderStatus)
+                {
+                    stateEntry.Value.OrderStatus = orderStatusChanged.OrderStatus;
+                    isSuccess = await stateEntry.TrySaveAsync(_stateOptions, new Dictionary<string, string>{{ "ttlInSeconds", "60" }});
+                    _logger.LogInformation("Successfully updated order status for order: {OrderId}", orderStatusChanged.OrderId);
+                }
+                else
+                {
+                    isSuccess = true;
+                    _logger.LogInformation("OrderStatusChanged event is stale. Skipping status change for order: {OrderId}", orderStatusChanged.OrderId);
+                }
+                
+            } while(!isSuccess);
+
+            return Ok();
+        }
+
+        [HttpPost("/orderStatusChangedCompleted")]
+        public async Task<IActionResult> OnOrderStatusChangedCompleted(OrderStatusChanged orderStatusChanged)
+        {
+            _logger.LogInformation("[OrderStatusChangedEvent=Completed] Order: {OrderId}", orderStatusChanged.OrderId);
+            
+            bool isSuccess;
+            StateEntry<OrderSummary> stateEntry;
+
+            do
+            {
+                stateEntry = await _daprClient.GetStateEntryAsync<OrderSummary>(MakeLineStateStoreName, orderStatusChanged.OrderId.ToString());
+                
+                if(stateEntry.Value == null)
+                {
+                    // TODO: What happens if TTL were to delete the state entry before this message was received?
+                    _logger.LogWarning("Unable to find existing order for OrderId: {orderId}", orderStatusChanged.OrderId);
+                    return Problem($"Unable to find existing order for OrderId: {orderStatusChanged.OrderId}", null, (int)HttpStatusCode.InternalServerError);
+                }
+
+                if(stateEntry.Value.OrderStatus < orderStatusChanged.OrderStatus)
+                {
+                    stateEntry.Value.OrderStatus = orderStatusChanged.OrderStatus;
+                    stateEntry.Value.OrderCompletedDate = DateTime.UtcNow;
+                    isSuccess = await stateEntry.TrySaveAsync(_stateOptions, new Dictionary<string, string>{{ "ttlInSeconds", "60" }});
+                    _logger.LogInformation("Successfully updated order status for order: {OrderId}", orderStatusChanged.OrderId);
+                }
+                else
+                {
+                    isSuccess = true;
+                    _logger.LogInformation("OrderStatusChanged event is stale. Skipping status change for order: {OrderId}", orderStatusChanged.OrderId);
+                }
+                
+            } while(!isSuccess);
+
+            try
+            {
+                var cloudEvent = new CloudEvent<OrderSummary>(stateEntry.Value) { Type = OrderCompletedEventType };
+                await _daprClient.PublishEventAsync<CloudEvent<OrderSummary>>(PubSubName, OrderTopic, cloudEvent);
+                _logger.LogInformation("Published order completed message for OrderId: {orderId}", orderStatusChanged.OrderId);
             }
-            while(!isSuccess);
+            catch(Exception e)
+            {
+                _logger.LogError("Error publishing order completed message for OrderId: {orderId}. Message: {Content}", orderStatusChanged.OrderId, e.InnerException?.Message ?? e.Message);
+                return Problem(e.Message, null, (int)HttpStatusCode.InternalServerError);
+            }
 
-            _logger.LogInformation("Completed Order: {@OrderSummary}", order);
-
-            return new OkResult();
+            return Ok();
         }
 
         private async Task<StateEntry<List<OrderSummary>>> GetAllOrdersAsync(string storeId)

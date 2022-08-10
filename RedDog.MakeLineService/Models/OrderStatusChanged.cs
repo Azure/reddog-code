@@ -3,13 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace RedDog.MakeLineService.Models
 {
-    public enum OrderStatus
-        {
-            Created,
-            InProgress,
-            Completed
-        }
-        
     public class OrderStatusChanged
     {
         [JsonPropertyName("orderId")]        
