@@ -12,10 +12,10 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@vue/cli-plugin-babel": "^4.4.6",
-    "@vue/cli-plugin-eslint": "^4.4.6",
-    "@vue/cli-plugin-pwa": "^4.4.6",
-    "@vue/cli-service": "^4.5.12",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-plugin-pwa": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "async": "^2.6.3",
     "cache-loader": "^4.1.0",
     "chart.js": "2.8",
@@ -24,7 +24,7 @@
     "dotenv-webpack": "^7.0.2",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
-    "node-sass": "^6.0.1",
+    "node-sass": "^9.0.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",
@@ -35,10 +35,10 @@
     "vue2-transitions": "^0.3.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.4.6",
-    "@vue/cli-plugin-eslint": "^4.4.6",
-    "@vue/cli-plugin-pwa": "^4.4.6",
-    "@vue/cli-service": "^4.5.12",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-plugin-pwa": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^7.5.0",
     "sass-loader": "^10.2.0",
